@@ -1,0 +1,6 @@
+@TequipWiseServer_HostAddress = http://localhost:5144
+
+GET {{TequipWiseServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
