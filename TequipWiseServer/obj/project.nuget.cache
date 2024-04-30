@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "O2lod2LKuJhsPTlvGjXnFysDxnJL6jKbIoKHZ7N2FS1P0igF3/9IN6Y0tHwBsJYbLF9U/FiUd2HRfNabNO15Lw==",
+  "dgSpecHash": "Ql3WEinAG4a7k002mJUdxIqCCc/yOfcEljFEIQw3csgHcKDbH7zNIKo4AmeWGr4OZ1HsqTRyoC9HKJFAzEP2Sw==",
   "success": true,
   "projectFilePath": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\TequipWiseServer.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\hp\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\hp\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

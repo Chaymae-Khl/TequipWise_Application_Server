@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyAvocatApi.Models.Authentication.SignIn;
 using MyAvocatApi.Models.Authentication.SignUp;
+using TequipWiseServer.DTO;
+using TequipWiseServer.Models;
 
 namespace TequipWiseServer.Interfaces
 {
@@ -10,5 +12,8 @@ namespace TequipWiseServer.Interfaces
     {
         Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role);
         Task<IActionResult> Login([FromBody] LoginModal loginmodal);
+        Task<List<UserDetailsDTO>> GetUsers();
+        Task<IActionResult> DeleteUser(string userId);
+        Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails);
     }
 }

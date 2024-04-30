@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using TequipWiseServer.Models;
 
 namespace TequipWiseServer.Data
 {
     public class AppDbContext :IdentityDbContext<IdentityUser>
     {
+        
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Plant> Plants { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -14,6 +19,15 @@ namespace TequipWiseServer.Data
         {
             base.OnModelCreating(builder);
             SeedRoles(builder);
+            // Define the relationships
+            builder.Entity<Department>()
+                .HasOne(d => d.Plant)
+                .WithMany(p => p.Departments);
+
+            builder.Entity<Department>()
+                .HasOne(d => d.Manager)
+                .WithMany()
+                .HasForeignKey(d => d.ManagerId);
         }
 
         private void SeedRoles(ModelBuilder builder)

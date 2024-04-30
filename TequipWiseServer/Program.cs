@@ -1,17 +1,22 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using TequipWiseServer.Data;
+using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
+using TequipWiseServer.Models;
 using TequipWiseServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services.
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthentication,AuthService>();
+builder.Services.AddScoped<IOpenData, OpdenDataService>();
+builder.Services.AddAutoMapper(typeof(AutoMappers));
 
 //For EF 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -20,7 +25,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 //For Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
+
+
 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>
@@ -49,7 +57,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth API", Version = "v1" });
@@ -77,6 +84,15 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+
+
+
+
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -85,6 +101,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Cors
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
 
 app.UseHttpsRedirection();
 

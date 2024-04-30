@@ -51,14 +51,14 @@ namespace TequipWiseServer.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "13326ae9-82cf-485a-a4ce-ebea70b773d8",
+                            Id = "7cfb7a96-3c16-4d3c-8f20-bceb1f4fd9e5",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "95f8cacc-c4b7-4895-ae9e-c732adb95757",
+                            Id = "5821ae5a-61f0-49ca-be5c-5bbfd2efe33e",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
@@ -101,6 +101,11 @@ namespace TequipWiseServer.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -153,6 +158,10 @@ namespace TequipWiseServer.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -236,6 +245,78 @@ namespace TequipWiseServer.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.Department", b =>
+                {
+                    b.Property<int>("DeptId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DeptId"));
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("PlantId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("DeptId");
+
+                    b.HasIndex("ManagerId");
+
+                    b.HasIndex("PlantId");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
+                {
+                    b.Property<int>("PlantNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantNumber"));
+
+                    b.Property<int>("BuildingNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Plant_Manager")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PlantNumber");
+
+                    b.ToTable("Plants");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int?>("DepartmentDeptId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TeNum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("DepartmentDeptId");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -285,6 +366,40 @@ namespace TequipWiseServer.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Department", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId");
+
+                    b.HasOne("TequipWiseServer.Models.Plant", "Plant")
+                        .WithMany("Departments")
+                        .HasForeignKey("PlantId");
+
+                    b.Navigation("Manager");
+
+                    b.Navigation("Plant");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.Department", "Department")
+                        .WithMany("Users")
+                        .HasForeignKey("DepartmentDeptId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Department", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
+                {
+                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

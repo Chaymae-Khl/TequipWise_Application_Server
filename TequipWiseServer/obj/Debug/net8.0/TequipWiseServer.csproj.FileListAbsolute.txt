@@ -5,6 +5,7 @@ C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseS
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\TequipWiseServer.runtimeconfig.json
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\TequipWiseServer.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\TequipWiseServer.pdb
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\AutoMapper.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\Humanizer.dll

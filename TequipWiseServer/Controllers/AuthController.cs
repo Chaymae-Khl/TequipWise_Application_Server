@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyAvocatApi.Models.Authentication.SignIn;
 using MyAvocatApi.Models.Authentication.SignUp;
+using TequipWiseServer.Interfaces;
 using TequipWiseServer.Services;
 
 namespace TequipWiseServer.Controllers
@@ -10,9 +12,8 @@ namespace TequipWiseServer.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-      private readonly AuthService _authService;
-
-        public AuthController(AuthService authService)
+      private readonly IAuthentication _authService;
+        public AuthController(IAuthentication authService)
         {
             _authService = authService;
         }
@@ -28,6 +29,9 @@ namespace TequipWiseServer.Controllers
         {
             return await _authService.Login(loginmodal);
         }
+
+       
+
 
     }
 }
