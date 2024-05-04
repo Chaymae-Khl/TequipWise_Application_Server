@@ -15,5 +15,6 @@ namespace TequipWiseServer.Interfaces
         Task<List<UserDetailsDTO>> GetUsers();
         Task<IActionResult> DeleteUser(string userId);
         Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails);
+        Task<IActionResult> GetAllRoles();
     }
 }

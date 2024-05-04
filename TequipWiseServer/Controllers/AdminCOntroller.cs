@@ -36,8 +36,15 @@ namespace TequipWiseServer.Controllers
         [HttpPut("update/{userId}")]
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserDetailsDTO updatedUserDetails)
         {
+          
             var result = await _authService.UpdateUser(userId, updatedUserDetails);
             return result;
+        }
+
+        [HttpGet("allRoles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            return await _authService.GetAllRoles();
         }
     }
 }

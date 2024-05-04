@@ -14,7 +14,6 @@ using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
-
 namespace TequipWiseServer.Services
 {
     public class AuthService : IAuthentication
@@ -165,6 +164,8 @@ namespace TequipWiseServer.Services
 
         public async Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails)
         {
+
+           
             // Find the user by userId
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -175,6 +176,7 @@ namespace TequipWiseServer.Services
             // Update user properties based on updatedUserDetails
             user.Email = updatedUserDetails.Email;
             user.TeNum = updatedUserDetails.TeNum;
+            user.UserName = updatedUserDetails.UserName;
 
             // Retrieve department based on provided department name
             if (!string.IsNullOrEmpty(updatedUserDetails.DepartmentName))
@@ -215,6 +217,19 @@ namespace TequipWiseServer.Services
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to update user!" });
             }
         }
+        public async Task<IActionResult> GetAllRoles()
+        {
+            // Retrieve all roles from RoleManager
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            // Map roles to RoleDTO using AutoMapper
+            var roleDTOs = _mapper.Map<List<RoleDTO>>(roles);
+
+            return new OkObjectResult(roleDTOs);
+        }
+
+
+
 
     }
 }

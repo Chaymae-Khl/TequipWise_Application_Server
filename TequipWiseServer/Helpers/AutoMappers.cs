@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Models;
 
@@ -11,6 +12,8 @@ namespace TequipWiseServer.Helpers
             //plants,Departement mapper
             CreateMap<Plant, PlantDto>();
             CreateMap<Department, DepartmentDTO>();
+            //role mapper
+            CreateMap<IdentityRole, RoleDTO>();
 
             // Add mapping from ApplicationUser to UserDetailsDTO
             CreateMap<ApplicationUser, UserDetailsDTO>()
