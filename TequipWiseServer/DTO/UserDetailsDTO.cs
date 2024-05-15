@@ -6,8 +6,12 @@
         public string UserName { get; set; }
         public string Email { get; set; }
         public string TeNum { get; set; }
+
+        public string? plant_name { get; set; }
+        public string? Backupaprover_Name { get; set; }
+
         public List<string> Roles { get; set; }
         public string DepartmentName { get; set; }
-        public string Location { get; set; }
+        public string? Location { get; set; }
     }
 }

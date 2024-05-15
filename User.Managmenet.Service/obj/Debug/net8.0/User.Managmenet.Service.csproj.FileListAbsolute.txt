@@ -1,0 +1,13 @@
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\bin\Debug\net8.0\User.Managmenet.Service.deps.json
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\bin\Debug\net8.0\User.Managmenet.Service.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\bin\Debug\net8.0\User.Managmenet.Service.pdb
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.csproj.AssemblyReference.cache
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.AssemblyInfoInputs.cache
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.AssemblyInfo.cs
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.sourcelink.json
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\refint\User.Managmenet.Service.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\User.Managmenet.Service.pdb
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\User.Managmenet.Service\obj\Debug\net8.0\ref\User.Managmenet.Service.dll

@@ -10,11 +10,14 @@ namespace TequipWiseServer.Interfaces
 {
     public interface IAuthentication
     {
+        Task<int> GetUserCount();
         Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role);
         Task<IActionResult> Login([FromBody] LoginModal loginmodal);
         Task<List<UserDetailsDTO>> GetUsers();
         Task<IActionResult> DeleteUser(string userId);
         Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails);
         Task<IActionResult> GetAllRoles();
+        Task<IActionResult> ChangeUserPassword(string userId, string newPassword);
+
     }
 }

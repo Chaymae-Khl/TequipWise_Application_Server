@@ -9,16 +9,9 @@ namespace TequipWiseServer.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PlantNumber { get; set; }
-        public int BuildingNumber { get; set; }
-        public string location { get; set; }
-        public string Plant_Manager { get; set; }
-
-        // Collection of departments in this plant
-        public ICollection<Department>? Departments { get; set; }
-
-        public Plant()
-        {
-           this.Departments = new List<Department>();
-        }
+        public string plant_name { get; set; }
+        public string? ApproverId { get; set; }
+        public ICollection<LocationPlant> LocationPlants { get; set; }
+        public ApplicationUser? Approver { get; set; }
     }
 }

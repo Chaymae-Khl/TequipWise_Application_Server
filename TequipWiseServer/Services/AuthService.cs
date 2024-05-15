@@ -32,7 +32,10 @@ namespace TequipWiseServer.Services
             _mapper = mapper;
             _dbContext = dbContext;
         }
-
+        public async Task<int> GetUserCount()
+        {
+            return await _userManager.Users.CountAsync();
+        }
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
             
@@ -126,21 +129,39 @@ namespace TequipWiseServer.Services
 
         public async Task<List<UserDetailsDTO>> GetUsers()
         {
-            var users = await _userManager.Users.Include(u => u.Department)
-                                         .ThenInclude(d => d.Plant)
-                                         .ToListAsync();
+            var users = await _userManager.Users
+                .Include(u => u.Department)
+                    .ThenInclude(d => d.LocationDepartments)
+                        .ThenInclude(ld => ld.Location)
+                            .ThenInclude(l => l.LocationPlants)
+                                .ThenInclude(lp => lp.Plant)
+                .ToListAsync();
+
             var userDetailsList = new List<UserDetailsDTO>();
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 var userDetails = _mapper.Map<UserDetailsDTO>(user);
                 userDetails.Roles = roles.ToList();
+
+                // Assuming Department has a navigation property to LocationDepartment
+                var locationDepartment = user.Department.LocationDepartments.FirstOrDefault();
+                if (locationDepartment != null)
+                {
+                    userDetails.Location = locationDepartment.Location.LocationName; // Assuming Location has a LocationName property
+
+                    // Assuming Location has a navigation property to LocationPlant
+                    var locationPlant = locationDepartment.Location.LocationPlants.FirstOrDefault();
+                    if (locationPlant != null)
+                    {
+                        userDetails.plant_name = locationPlant.Plant.plant_name; // Assuming Plant has a plant_name property
+                    }
+                }
+
                 userDetailsList.Add(userDetails);
             }
             return userDetailsList;
-
         }
-
 
         // Method to delete a user by ID
         public async Task<IActionResult> DeleteUser(string userId)
@@ -188,7 +209,16 @@ namespace TequipWiseServer.Services
                     user.DepartmentDeptId = department.DeptId;
                 }
             }
-
+            // Find the backup approver by TeNum
+            if (!string.IsNullOrEmpty(updatedUserDetails.Backupaprover_Name))
+            {
+                var backupApprover = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.Backupaprover_Name);
+                if (backupApprover != null)
+                {
+                    user.Backupaprover = backupApprover;
+                    user.BackupaproverId = backupApprover.Id;
+                }
+            }
             // Update the user in the database
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -228,7 +258,31 @@ namespace TequipWiseServer.Services
             return new OkObjectResult(roleDTOs);
         }
 
+        public async Task<IActionResult> ChangeUserPassword(string userId, string newPassword)
+        {
+            // Find the user by userId
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new NotFoundObjectResult(new Response { Status = "Error", Message = "User not found!" });
+            }
 
+            // Generate a password reset token
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // Reset the user's password to the new password
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (result.Succeeded)
+            {
+                return new OkObjectResult(new Response { Status = "Success", Message = "Password changed successfully!" });
+            }
+            else
+            {
+                // If password reset fails, return an error response
+                return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to change password." });
+            }
+        }
 
 
     }

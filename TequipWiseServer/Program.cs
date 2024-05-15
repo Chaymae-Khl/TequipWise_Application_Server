@@ -10,14 +10,17 @@ using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using TequipWiseServer.Services;
+using User.Managmenet.Service.Models;
+using User.Managmenet.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services.
 builder.Services.AddScoped<IAuthentication,AuthService>();
 builder.Services.AddScoped<IOpenData, OpdenDataService>();
+builder.Services.AddScoped<Iplantsdept, PlantsDeptService>();
 builder.Services.AddAutoMapper(typeof(AutoMappers));
-
+builder.Services.AddScoped<IEMailService, EmailService>();
 //For EF 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -27,8 +30,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //For Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
+//add email configuration
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
+                  .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 
 
+//email send
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>

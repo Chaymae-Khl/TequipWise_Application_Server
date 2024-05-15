@@ -11,6 +11,9 @@ namespace TequipWiseServer.Data
         
         public DbSet<Department> Departments { get; set; }
         public DbSet<Plant> Plants { get; set; }
+        public DbSet<Location> Location { get; set; }
+        public DbSet<LocationPlant> LocationPlants { get; set; }
+        public DbSet<LocationDepartment> LocationDepartments { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -20,14 +23,41 @@ namespace TequipWiseServer.Data
             base.OnModelCreating(builder);
             SeedRoles(builder);
             // Define the relationships
-            builder.Entity<Department>()
-                .HasOne(d => d.Plant)
-                .WithMany(p => p.Departments);
+            builder.Entity<LocationPlant>()
+                .HasKey(lp => new { lp.LocationId, lp.PlantId });
+            builder.Entity<LocationPlant>()
+                .HasOne(lp => lp.Location)
+                .WithMany(l => l.LocationPlants)
+                .HasForeignKey(lp => lp.LocationId);
+            builder.Entity<LocationPlant>()
+                .HasOne(lp => lp.Plant)
+                .WithMany(p => p.LocationPlants)
+                .HasForeignKey(lp => lp.PlantId);
+
+            builder.Entity<LocationDepartment>()
+                .HasKey(ld => new { ld.LocationId, ld.DepartmentId });
+            builder.Entity<LocationDepartment>()
+                .HasOne(ld => ld.Location)
+                .WithMany(l => l.LocationDepartments)
+                .HasForeignKey(ld => ld.LocationId);
+            builder.Entity<LocationDepartment>()
+                .HasOne(ld => ld.Department)
+                .WithMany(d => d.LocationDepartments)
+                .HasForeignKey(ld => ld.DepartmentId);
 
             builder.Entity<Department>()
                 .HasOne(d => d.Manager)
                 .WithMany()
                 .HasForeignKey(d => d.ManagerId);
+            builder.Entity<Plant>()
+                .HasOne(p => p.Approver)
+                .WithMany()
+                .HasForeignKey(p => p.ApproverId);
+            builder.Entity<ApplicationUser>()
+             .HasOne(p => p.Backupaprover)
+             .WithMany()
+             .HasForeignKey(p => p.BackupaproverId);
+
         }
 
         private void SeedRoles(ModelBuilder builder)

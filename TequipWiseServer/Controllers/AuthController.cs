@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyAvocatApi.Models;
 using MyAvocatApi.Models.Authentication.SignIn;
 using MyAvocatApi.Models.Authentication.SignUp;
+using System.ComponentModel.DataAnnotations;
 using TequipWiseServer.Interfaces;
+using TequipWiseServer.Models;
+using TequipWiseServer.Models.Authentication;
 using TequipWiseServer.Services;
+using User.Managmenet.Service.Models;
+using User.Managmenet.Service.Services;
 
 namespace TequipWiseServer.Controllers
 {
@@ -13,9 +20,15 @@ namespace TequipWiseServer.Controllers
     public class AuthController : ControllerBase
     {
       private readonly IAuthentication _authService;
-        public AuthController(IAuthentication authService)
+      private readonly UserManager<ApplicationUser> _userManager;
+      private readonly IEMailService _emailService;
+
+
+        public AuthController(IAuthentication authService, UserManager<ApplicationUser> userManager, IEMailService emailService)
         {
             _authService = authService;
+            _userManager = userManager;
+            _emailService= emailService;
         }
 
         [HttpPost("Register")]
@@ -30,7 +43,80 @@ namespace TequipWiseServer.Controllers
             return await _authService.Login(loginmodal);
         }
 
-       
+        [HttpPost("tokenEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([Required] string Email)
+        {
+            if (string.IsNullOrEmpty(Email))
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { errors = new {Email = new[] { "The email field is required." } } });
+            }
+
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user!);
+                var forgotPasswordLink = $"http://localhost:4200/forgetPassword?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
+                //var ForgotPasswordLink = Url.Action(nameof(ResetPassword), "Auth", new { token, Email = user.Email }, Request.Scheme);
+                var message = new Message(new string[] { user.Email! }, "Forgot Password link", forgotPasswordLink!);
+                _emailService.SendEmail(message);
+                return StatusCode(StatusCodes.Status200OK,
+                    new Response { Status = "Success", Message = $"Password change request is sent to email {user.Email} successfully." });
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest,
+                new Response { Status = "Error", Message = "Could not send link to email. Please try again." });
+        }
+
+
+
+
+
+
+
+
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            var model = new ForgotPasswordModel { Token = token, Email = email };
+            return Ok(new { model });
+        }
+
+
+        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ForgotPasswordModel forgotPasswordModel)
+        {
+            var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
+            if(user != null)
+            {
+                var resetPassResult = await _userManager.ResetPasswordAsync(user, forgotPasswordModel.Token, forgotPasswordModel.Password);
+                if(!resetPassResult.Succeeded) { 
+                foreach(var error in resetPassResult.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                    return Ok(ModelState);
+                
+                }
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = $"Password Has been changed" });
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest,
+                new Response { Status = "Error", Message = $"Could not send link to email, please try again" });
+
+        }
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> Testemail()
+        //{
+        //    var message = new Message(new string[] { "khalil.ch19402@gmail.com" }, "test", "<h1>Hi????? chaymaeeeeee</h1>");
+
+        //    _emailService.SendEmail(message);
+
+        //    return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "email Sent successfully" });
+        //}
 
 
     }

@@ -7,6 +7,6 @@ namespace TequipWiseServer.Interfaces
 {
     public interface IOpenData
     {
-        Task<IEnumerable<PlantDto>> GetPlants();
+        Task<IEnumerable<LocationDTO>> GetPlants();
     }
 }

@@ -17,13 +17,18 @@ namespace TequipWiseServer.Services
         }
 
 
-        public async Task<IEnumerable<PlantDto>> GetPlants()
+        public async Task<IEnumerable<LocationDTO>> GetPlants()
         {
-            var plants = await _dbContext.Plants
-                                 .Include(p => p.Departments)
-                                 .ToListAsync();
+            var locations = await _dbContext.Location
+    .Include(l => l.LocationDepartments)
+        .ThenInclude(ld => ld.Department)
+        .ThenInclude(ld => ld.Manager)
+    .Include(l => l.LocationPlants)
+        .ThenInclude(lp => lp.Plant)
+        .ThenInclude(p => p.Approver)// Include the Approver property
+    .ToListAsync();
 
-            return _mapper.Map<IEnumerable<Plant>, IEnumerable<PlantDto>>(plants);
+            return _mapper.Map<IEnumerable<Location>, IEnumerable<LocationDTO>>(locations);
         }
     }
 }

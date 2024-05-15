@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
+using TequipWiseServer.Services;
 
 namespace TequipWiseServer.Controllers
 {
@@ -14,12 +15,15 @@ namespace TequipWiseServer.Controllers
     {
 
         private readonly IAuthentication _authService;
-
-        public AdminCOntroller(IAuthentication authService)
+        private readonly Iplantsdept _plantdept;
+        public AdminCOntroller(IAuthentication authService, Iplantsdept plantdept)
         {
             _authService = authService;
+            _plantdept = plantdept;
         }
 
+
+        //Users management
         [HttpGet("Users")]
         public async Task<ActionResult<List<UserDetailsDTO>>> GetAllUsers()
         {
@@ -31,6 +35,14 @@ namespace TequipWiseServer.Controllers
         public async Task<IActionResult> DeleteUser(string userId)
         {
             return await _authService.DeleteUser(userId);
+        }
+
+        //nuber of users
+        [HttpGet("numberofusers")]
+        public async Task<ActionResult<int>> GetNumberofUsers()
+        {
+            var numusers = await _authService.GetUserCount();
+            return Ok(numusers);
         }
 
         [HttpPut("update/{userId}")]
@@ -46,5 +58,23 @@ namespace TequipWiseServer.Controllers
         {
             return await _authService.GetAllRoles();
         }
+
+        [HttpPost("updatePassword/{userId}")]
+        public async Task<IActionResult> ChangeUserPassword(string userId, [FromBody] string newPassword)
+        {
+            var result = await _authService.ChangeUserPassword(userId, newPassword);
+            return result;
+        }
+
+
+        //deptartement and plant management
+        [HttpPost("AddPlant")]
+        public async Task<IActionResult> AddPlant([FromBody] Plant newPlant)
+        {
+            var result = await _plantdept.AddPlant(newPlant);
+            return result;
+        }
+
+
     }
 }

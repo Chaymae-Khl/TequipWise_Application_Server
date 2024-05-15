@@ -2,12 +2,11 @@
 {
     public class PlantDto
     {
-        
-
         public int PlantNumber { get; set; }
-        public int BuildingNumber { get; set; }
-        public string Location { get; set; }
-        public string Plant_Manager { get; set; }
-        public List<DepartmentDTO> Departments { get; set; }
+        public string? plant_name { get; set; }
+
+        public string? Location { get; set; }
+        public string? Approver_name { get; set; }
+
     }
 }

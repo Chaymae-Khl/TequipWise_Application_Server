@@ -144,3 +144,9 @@ C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseS
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\obj\Debug\net8.0\TequipWiseServer.genruntimeconfig.cache
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\obj\Debug\net8.0\ref\TequipWiseServer.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\MailKit.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\MimeKit.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\NETCore.MailKit.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\BouncyCastle.Crypto.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\User.Managmenet.Service.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\TequipWiseServer\bin\Debug\net8.0\User.Managmenet.Service.pdb

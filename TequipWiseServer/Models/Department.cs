@@ -14,9 +14,7 @@ namespace TequipWiseServer.Models
 
         // Foreign key to the Plant
 
-        public int? PlantId { get; set; }
-        [JsonIgnore]
-        public Plant? Plant { get; set; }
+        public ICollection<LocationDepartment> LocationDepartments { get; set; }
 
         // Foreign key to the manager (optional if using EF Core conventions)
         public string? ManagerId { get; set; }

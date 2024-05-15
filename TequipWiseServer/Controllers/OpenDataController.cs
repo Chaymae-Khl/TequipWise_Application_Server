@@ -17,7 +17,7 @@ namespace TequipWiseServer.Controllers
         }
 
         
-        [HttpGet("plants")]
+        [HttpGet("locations")]
         public async Task<IActionResult> GetPlants()
         {
             try
