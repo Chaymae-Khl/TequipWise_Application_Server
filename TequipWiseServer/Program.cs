@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 using TequipWiseServer.Data;
 using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
@@ -19,8 +20,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IAuthentication,AuthService>();
 builder.Services.AddScoped<IOpenData, OpdenDataService>();
 builder.Services.AddScoped<Iplantsdept, PlantsDeptService>();
+builder.Services.AddScoped<Isupplier, SupplierService>();
+
 builder.Services.AddAutoMapper(typeof(AutoMappers));
 builder.Services.AddScoped<IEMailService, EmailService>();
+builder.Services.AddHttpContextAccessor();
+
 //For EF 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -29,7 +34,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //For Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
+//builder.Services.AddControllers().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//    options.JsonSerializerOptions.WriteIndented = true; // If you want the JSON to be nicely formatted
+//});
 //add email configuration
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
                   .Get<EmailConfiguration>();

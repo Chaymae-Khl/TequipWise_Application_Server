@@ -23,14 +23,16 @@ namespace TequipWiseServer.Services
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly AppDbContext _dbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, AppDbContext dbContext)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, AppDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _mapper = mapper;
             _dbContext = dbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<int> GetUserCount()
         {
@@ -45,14 +47,15 @@ namespace TequipWiseServer.Services
             {
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = "User with this email already exists!" });
             }
-          
             // Create a new ApplicationUser instance and set its properties
             ApplicationUser user = new ApplicationUser
             {
                 Email = registerUser.Email,
                 UserName = registerUser.Username,
                 TeNum = registerUser.TeNum,
-                DepartmentDeptId=registerUser.DepartmentDeptId,
+                locaId = registerUser.locationID,
+                DepartmentDeptId=registerUser.DeptId,
+                plantId=registerUser.plantId,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
@@ -130,11 +133,9 @@ namespace TequipWiseServer.Services
         public async Task<List<UserDetailsDTO>> GetUsers()
         {
             var users = await _userManager.Users
+                .Include(u => u.Location)
                 .Include(u => u.Department)
-                    .ThenInclude(d => d.LocationDepartments)
-                        .ThenInclude(ld => ld.Location)
-                            .ThenInclude(l => l.LocationPlants)
-                                .ThenInclude(lp => lp.Plant)
+                .Include(u => u.Plant)
                 .ToListAsync();
 
             var userDetailsList = new List<UserDetailsDTO>();
@@ -143,20 +144,6 @@ namespace TequipWiseServer.Services
                 var roles = await _userManager.GetRolesAsync(user);
                 var userDetails = _mapper.Map<UserDetailsDTO>(user);
                 userDetails.Roles = roles.ToList();
-
-                // Assuming Department has a navigation property to LocationDepartment
-                var locationDepartment = user.Department.LocationDepartments.FirstOrDefault();
-                if (locationDepartment != null)
-                {
-                    userDetails.Location = locationDepartment.Location.LocationName; // Assuming Location has a LocationName property
-
-                    // Assuming Location has a navigation property to LocationPlant
-                    var locationPlant = locationDepartment.Location.LocationPlants.FirstOrDefault();
-                    if (locationPlant != null)
-                    {
-                        userDetails.plant_name = locationPlant.Plant.plant_name; // Assuming Plant has a plant_name property
-                    }
-                }
 
                 userDetailsList.Add(userDetails);
             }
@@ -185,30 +172,19 @@ namespace TequipWiseServer.Services
 
         public async Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails)
         {
-
-           
             // Find the user by userId
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 return new NotFoundObjectResult(new Response { Status = "Error", Message = "User not found!" });
             }
-
             // Update user properties based on updatedUserDetails
             user.Email = updatedUserDetails.Email;
             user.TeNum = updatedUserDetails.TeNum;
             user.UserName = updatedUserDetails.UserName;
 
-            // Retrieve department based on provided department name
-            if (!string.IsNullOrEmpty(updatedUserDetails.DepartmentName))
-            {
-                var department = await _dbContext.Departments.FirstOrDefaultAsync(d => d.DepartmentName == updatedUserDetails.DepartmentName);
-                if (department != null)
-                {
-                    user.Department = department;
-                    user.DepartmentDeptId = department.DeptId;
-                }
-            }
+         
+
             // Find the backup approver by TeNum
             if (!string.IsNullOrEmpty(updatedUserDetails.Backupaprover_Name))
             {
@@ -219,6 +195,7 @@ namespace TequipWiseServer.Services
                     user.BackupaproverId = backupApprover.Id;
                 }
             }
+
             // Update the user in the database
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -228,6 +205,36 @@ namespace TequipWiseServer.Services
                 var rolesToAdd = updatedUserDetails.Roles.Except(existingRoles);
                 var rolesToRemove = existingRoles.Except(updatedUserDetails.Roles);
 
+                // Retrieve department based on provided department name
+                if (!string.IsNullOrEmpty(updatedUserDetails.DepartmentName))
+                {
+                    var department = await _dbContext.Departments.FirstOrDefaultAsync(d => d.DepartmentName == updatedUserDetails.DepartmentName);
+                    if (department != null)
+                    {
+                        user.Department = department;
+                        user.DepartmentDeptId = department.DeptId;
+                    }
+                }
+                // Retrieve department based on provided department name
+                if (!string.IsNullOrEmpty(updatedUserDetails.LocationName))
+                {
+                    var location = await _dbContext.Location.FirstOrDefaultAsync(l => l.LocationName == updatedUserDetails.LocationName);
+                    if (location != null)
+                    {
+                        user.Location = location;
+                        user.locaId = location.LocationId;
+                        _dbContext.Entry(location).State = EntityState.Modified; // Mark the entity as modified
+                    }
+                }
+                if (!string.IsNullOrEmpty(updatedUserDetails.plant_name))
+                {
+                    var plant = await _dbContext.Plants.FirstOrDefaultAsync(l => l.plant_name == updatedUserDetails.plant_name);
+                    if (plant != null)
+                    {
+                        user.Plant = plant;
+                        user.plantId = plant.PlantNumber;
+                    }
+                }
                 // Add new roles
                 foreach (var role in rolesToAdd)
                 {
@@ -239,11 +246,17 @@ namespace TequipWiseServer.Services
                 {
                     await _userManager.RemoveFromRoleAsync(user, role);
                 }
-
+                await _dbContext.SaveChangesAsync();
                 return new OkObjectResult(new Response { Status = "Success", Message = "User updated successfully!" });
             }
             else
             {
+                if (!result.Succeeded)
+                {
+                    var errors = result.Errors.Select(e => e.Description).ToList();
+                    // Log the errors or return them in the response
+                    return new BadRequestObjectResult(new Response { Status = "Error", Message = string.Join("; ", errors) });
+                }
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to update user!" });
             }
         }
@@ -257,7 +270,17 @@ namespace TequipWiseServer.Services
 
             return new OkObjectResult(roleDTOs);
         }
+        public async Task<ApplicationUser> GetAuthenticatedUserAsync()
+        {
+            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+            if (string.IsNullOrEmpty(userName))
+            {
+                return null; // No authenticated user
+            }
 
+            var user = await _userManager.FindByNameAsync(userName);
+            return user;
+        }
         public async Task<IActionResult> ChangeUserPassword(string userId, string newPassword)
         {
             // Find the user by userId
@@ -283,7 +306,24 @@ namespace TequipWiseServer.Services
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to change password." });
             }
         }
+        public async Task<ApplicationUser?> GetAuthenticatedUser()
+        {
+            // Retrieve the user's identity from the current HttpContext
+            var userClaims = _httpContextAccessor.HttpContext?.User;
 
+            if (userClaims != null && userClaims.Identity?.IsAuthenticated == true)
+            {
+                // Extract the username from the claims
+                var userName = userClaims.FindFirst(ClaimTypes.Name)?.Value;
+
+                // Retrieve the user details from the database
+                var user = await _userManager.FindByNameAsync(userName);
+                return user;
+            }
+
+            // Return null if no authenticated user is found
+            return null;
+        }
 
     }
 }

@@ -12,7 +12,7 @@ namespace TequipWiseServer.Models
         public string DepartmentName { get; set; }
         public bool Status {  get; set; }
 
-        // Foreign key to the Plant
+        public ICollection<ApplicationUser> Users { get; set; }
 
         public ICollection<LocationDepartment> LocationDepartments { get; set; }
 
@@ -22,7 +22,5 @@ namespace TequipWiseServer.Models
         // Navigation property to the manager
         public ApplicationUser? Manager { get; set; }
 
-        // Collection of users in this department
-        public ICollection<ApplicationUser>? Users { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace TequipWiseServer.Services
         .ThenInclude(ld => ld.Manager)
     .Include(l => l.LocationPlants)
         .ThenInclude(lp => lp.Plant)
-        .ThenInclude(p => p.Approver)// Include the Approver property
+        .ThenInclude(p => p.Approver).AsNoTracking()// Include the Approver property
     .ToListAsync();
 
             return _mapper.Map<IEnumerable<Location>, IEnumerable<LocationDTO>>(locations);

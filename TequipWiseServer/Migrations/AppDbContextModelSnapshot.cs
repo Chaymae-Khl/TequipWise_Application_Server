@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TequipWiseServer.Data;
 
 #nullable disable
 
-namespace TequipWiseServer.Data.Migrations
+namespace TequipWiseServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240510104642_newmigrationatoupdate")]
-    partial class newmigrationatoupdate
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,17 +51,45 @@ namespace TequipWiseServer.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "90bc3d23-43d5-42bc-bc53-e4937b3964ee",
+                            Id = "7e94e1b0-18ae-43ea-91bb-686e79ad7d91",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "5a47b55c-c91f-4dab-8f7e-bfd1002f8d72",
+                            Id = "0165b82a-5d62-411f-bdfb-8f2fce6fa066",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = "002b76aa-50ce-4378-9456-e586b83352d9",
+                            ConcurrencyStamp = "3",
+                            Name = "DeptManager",
+                            NormalizedName = "DeptManager"
+                        },
+                        new
+                        {
+                            Id = "8932e5e4-f614-4941-af3e-05aa83bd5269",
+                            ConcurrencyStamp = "4",
+                            Name = "HrManager",
+                            NormalizedName = "HrManager"
+                        },
+                        new
+                        {
+                            Id = "863b5e64-15ed-4f08-93e5-5aac04f78c06",
+                            ConcurrencyStamp = "5",
+                            Name = "FinanceManager",
+                            NormalizedName = "FinanceManager"
+                        },
+                        new
+                        {
+                            Id = "d7c72976-2829-436a-9d0a-b9487a58519f",
+                            ConcurrencyStamp = "5",
+                            Name = "FinanceManager",
+                            NormalizedName = "ItAnalyst"
                         });
                 });
 
@@ -345,6 +370,26 @@ namespace TequipWiseServer.Data.Migrations
                     b.ToTable("Plants");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.Supplier", b =>
+                {
+                    b.Property<string>("SuplierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("suuplier_name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SuplierId");
+
+                    b.ToTable("Suppliers");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -361,9 +406,19 @@ namespace TequipWiseServer.Data.Migrations
                     b.Property<string>("TeNum")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("locaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("plantId")
+                        .HasColumnType("int");
+
                     b.HasIndex("BackupaproverId");
 
                     b.HasIndex("DepartmentDeptId");
+
+                    b.HasIndex("locaId");
+
+                    b.HasIndex("plantId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -485,9 +540,21 @@ namespace TequipWiseServer.Data.Migrations
                         .WithMany("Users")
                         .HasForeignKey("DepartmentDeptId");
 
+                    b.HasOne("TequipWiseServer.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("locaId");
+
+                    b.HasOne("TequipWiseServer.Models.Plant", "Plant")
+                        .WithMany("Users")
+                        .HasForeignKey("plantId");
+
                     b.Navigation("Backupaprover");
 
                     b.Navigation("Department");
+
+                    b.Navigation("Location");
+
+                    b.Navigation("Plant");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.Department", b =>
@@ -507,6 +574,8 @@ namespace TequipWiseServer.Data.Migrations
             modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
                 {
                     b.Navigation("LocationPlants");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

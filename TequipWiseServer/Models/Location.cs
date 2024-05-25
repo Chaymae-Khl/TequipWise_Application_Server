@@ -11,6 +11,7 @@ namespace TequipWiseServer.Models
         public string LocationName { get; set; }
         public int BuildingNumber { get; set; }
 
+
         public ICollection<LocationPlant> LocationPlants { get; set; }
         public ICollection<LocationDepartment> LocationDepartments { get; set; }
     }

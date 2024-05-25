@@ -9,11 +9,11 @@ using TequipWiseServer.Data;
 
 #nullable disable
 
-namespace TequipWiseServer.Data.Migrations
+namespace TequipWiseServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240426111652_newmigration7")]
-    partial class newmigration7
+    [Migration("20240524163516_fixIssues2")]
+    partial class fixIssues2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,17 +54,45 @@ namespace TequipWiseServer.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7cfb7a96-3c16-4d3c-8f20-bceb1f4fd9e5",
+                            Id = "14680205-25b7-44fb-919c-c93e85d44156",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "5821ae5a-61f0-49ca-be5c-5bbfd2efe33e",
+                            Id = "10445a9b-3c33-4fa9-83a9-5d9b7e349b05",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = "933c1b02-fe51-4ce1-8004-157b969f2317",
+                            ConcurrencyStamp = "3",
+                            Name = "DeptManager",
+                            NormalizedName = "DeptManager"
+                        },
+                        new
+                        {
+                            Id = "6ed37d70-6435-4208-9e23-dea73473b198",
+                            ConcurrencyStamp = "4",
+                            Name = "HrManager",
+                            NormalizedName = "HrManager"
+                        },
+                        new
+                        {
+                            Id = "41606d96-4415-4a59-bf68-9f8695e035b8",
+                            ConcurrencyStamp = "5",
+                            Name = "FinanceManager",
+                            NormalizedName = "FinanceManager"
+                        },
+                        new
+                        {
+                            Id = "db25bb20-e3bc-4441-8769-9aa4edb4b878",
+                            ConcurrencyStamp = "5",
+                            Name = "FinanceManager",
+                            NormalizedName = "ItAnalyst"
                         });
                 });
 
@@ -263,9 +291,6 @@ namespace TequipWiseServer.Data.Migrations
                     b.Property<string>("ManagerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("PlantId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
@@ -273,9 +298,57 @@ namespace TequipWiseServer.Data.Migrations
 
                     b.HasIndex("ManagerId");
 
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Location", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
+
+                    b.Property<int>("BuildingNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LocationName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.LocationDepartment", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LocationId", "DepartmentId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("LocationDepartments");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.LocationPlant", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LocationId", "PlantId");
+
                     b.HasIndex("PlantId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("LocationPlants");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
@@ -286,36 +359,59 @@ namespace TequipWiseServer.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantNumber"));
 
-                    b.Property<int>("BuildingNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("ApproverId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Plant_Manager")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("location")
+                    b.Property<string>("plant_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PlantNumber");
 
+                    b.HasIndex("ApproverId");
+
                     b.ToTable("Plants");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Supplier", b =>
+                {
+                    b.Property<string>("SuplierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("suuplier_name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SuplierId");
+
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int?>("DepartmentDeptId")
+                    b.Property<string>("BackupaproverId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ManagerId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool?>("StatusBackupProvider")
+                        .HasColumnType("bit");
 
                     b.Property<string>("TeNum")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("DepartmentDeptId");
+                    b.HasIndex("BackupaproverId");
+
+                    b.HasIndex("LocationId");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
@@ -377,32 +473,86 @@ namespace TequipWiseServer.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ManagerId");
 
-                    b.HasOne("TequipWiseServer.Models.Plant", "Plant")
-                        .WithMany("Departments")
-                        .HasForeignKey("PlantId");
-
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.LocationDepartment", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.Department", "Department")
+                        .WithMany("LocationDepartments")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TequipWiseServer.Models.Location", "Location")
+                        .WithMany("LocationDepartments")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.LocationPlant", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.Location", "Location")
+                        .WithMany("LocationPlants")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TequipWiseServer.Models.Plant", "Plant")
+                        .WithMany("LocationPlants")
+                        .HasForeignKey("PlantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
 
                     b.Navigation("Plant");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "Approver")
+                        .WithMany()
+                        .HasForeignKey("ApproverId");
+
+                    b.Navigation("Approver");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("TequipWiseServer.Models.Department", "Department")
-                        .WithMany("Users")
-                        .HasForeignKey("DepartmentDeptId");
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "Backupaprover")
+                        .WithMany()
+                        .HasForeignKey("BackupaproverId");
 
-                    b.Navigation("Department");
+                    b.HasOne("TequipWiseServer.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
+                    b.Navigation("Backupaprover");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.Department", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("LocationDepartments");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Location", b =>
+                {
+                    b.Navigation("LocationDepartments");
+
+                    b.Navigation("LocationPlants");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
                 {
-                    b.Navigation("Departments");
+                    b.Navigation("LocationPlants");
                 });
 #pragma warning restore 612, 618
         }

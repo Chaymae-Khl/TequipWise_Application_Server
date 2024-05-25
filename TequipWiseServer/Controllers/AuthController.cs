@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using MyAvocatApi.Models;
 using MyAvocatApi.Models.Authentication.SignIn;
 using MyAvocatApi.Models.Authentication.SignUp;
+using System;
 using System.ComponentModel.DataAnnotations;
+using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using TequipWiseServer.Models.Authentication;
@@ -68,13 +70,26 @@ namespace TequipWiseServer.Controllers
                 new Response { Status = "Error", Message = "Could not send link to email. Please try again." });
         }
 
+        [HttpGet("GetAuthenticatedUser")]
+        public async Task<IActionResult> GetAuthenticatedUser()
+        {
+            var user = await _authService.GetAuthenticatedUserAsync();
 
+            if (user != null)
+            {
+                var userDto = new UserDetailsDTO
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    TeNum = user.TeNum,
+                };
+                // For simplicity, returning the user object directly
+                return Ok(userDto);
+            }
 
-
-
-
-
-
+            return NotFound(new { message = "Authenticated user not found." });
+        }
         [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPassword(string token, string email)
         {
@@ -107,7 +122,18 @@ namespace TequipWiseServer.Controllers
 
         }
 
+        //[HttpGet("user")]
+        //public IActionResult GetAuthenticatedUser()
+        //{
+        //    var authenticatedUser = _authService.GetAuthenticatedUserAsync();
+        //    if (authenticatedUser == null)
+        //    {
+        //        return NotFound(); // User not found or not authenticated
+        //    }
+        //    var userDTO = _mapper.Map<UserDTO>(authenticatedUser);
+        //    return Ok(userDTO);
 
+        //}
         //[HttpPost]
         //public async Task<IActionResult> Testemail()
         //{

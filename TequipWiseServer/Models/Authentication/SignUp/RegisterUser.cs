@@ -15,6 +15,9 @@ namespace MyAvocatApi.Models.Authentication.SignUp
         [Required(ErrorMessage ="password is required")]
         public string? Password { get; set; }
 
-        public int? DepartmentDeptId {  get; set; }
+        public int? locationID { get; set; }
+        public int? DeptId { get; set; }
+        public int? plantId { get; set; }
+
     }
 }

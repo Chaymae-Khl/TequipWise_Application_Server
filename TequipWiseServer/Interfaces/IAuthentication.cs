@@ -18,6 +18,6 @@ namespace TequipWiseServer.Interfaces
         Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails);
         Task<IActionResult> GetAllRoles();
         Task<IActionResult> ChangeUserPassword(string userId, string newPassword);
-
+        Task<ApplicationUser> GetAuthenticatedUserAsync();
     }
 }

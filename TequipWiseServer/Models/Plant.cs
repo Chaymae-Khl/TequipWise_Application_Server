@@ -11,6 +11,8 @@ namespace TequipWiseServer.Models
         public int PlantNumber { get; set; }
         public string plant_name { get; set; }
         public string? ApproverId { get; set; }
+        public ICollection<ApplicationUser> Users { get; set; }
+
         public ICollection<LocationPlant> LocationPlants { get; set; }
         public ApplicationUser? Approver { get; set; }
     }

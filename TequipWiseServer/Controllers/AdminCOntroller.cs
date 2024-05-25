@@ -16,10 +16,12 @@ namespace TequipWiseServer.Controllers
 
         private readonly IAuthentication _authService;
         private readonly Iplantsdept _plantdept;
-        public AdminCOntroller(IAuthentication authService, Iplantsdept plantdept)
+        private readonly Isupplier _supplierService;
+        public AdminCOntroller(IAuthentication authService, Iplantsdept plantdept, Isupplier supplierService)
         {
             _authService = authService;
             _plantdept = plantdept;
+            _supplierService = supplierService;
         }
 
 
@@ -76,5 +78,41 @@ namespace TequipWiseServer.Controllers
         }
 
 
+
+
+        //Supplier Managment
+        [HttpGet("Suppliers")]
+        public async Task<ActionResult<IEnumerable<Supplier>>> GetAllSuppliers()
+        {
+            var suppliers = await _supplierService.GetSuppliers();
+            return Ok(suppliers);
+        }
+
+        [HttpPost("AddSupplier")]
+        public async Task<IActionResult> CreateSupplier([FromBody] Supplier supplier)
+        {
+            var result = await _supplierService.AddSuplier(supplier);
+            return result;
+        }
+
+
+        [HttpPut("updateSupplier/{Id}")]
+        public async Task<IActionResult> UpdateSupplier(string Id, [FromBody] Supplier supplier)
+        {
+            var result = await _supplierService.UpdateUser(Id,supplier);
+            return result;
+        }
+        [HttpDelete("DeleteSupplier/{id}")]
+        public async Task<IActionResult> DeleteSupplier(string id)
+        {
+            return await _supplierService.DeleteSuplier(id);
+        }
+        //nuber of suppliers
+        [HttpGet("numberofsuppliers")]
+        public async Task<ActionResult<int>> GetNumberofSupplires()
+        {
+            var numsuppliers = await _supplierService.GetSuppliersCount();
+            return Ok(numsuppliers);
+        }
     }
 }
