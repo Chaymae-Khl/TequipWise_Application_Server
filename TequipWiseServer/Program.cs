@@ -19,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services.
 builder.Services.AddScoped<IAuthentication,AuthService>();
 builder.Services.AddScoped<IOpenData, OpdenDataService>();
-builder.Services.AddScoped<Iplantsdept, PlantsDeptService>();
+builder.Services.AddScoped<ILocation, LocationService>();   
 builder.Services.AddScoped<Isupplier, SupplierService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMappers));

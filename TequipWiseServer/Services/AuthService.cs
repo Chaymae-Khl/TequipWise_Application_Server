@@ -159,6 +159,28 @@ namespace TequipWiseServer.Services
                 return new NotFoundObjectResult(new Response { Status = "Error", Message = "User not found!" });
             }
 
+            // Check for users who reference this user as a backup approver
+            var dependentUsers = _userManager.Users.Where(u => u.BackupaproverId == userId).ToList();
+
+            // Option 1: Update dependent users to remove the reference
+            foreach (var dependentUser in dependentUsers)
+            {
+                dependentUser.BackupaproverId = null; // or assign a different valid BackupaproverId
+                _dbContext.Users.Update(dependentUser);
+            }
+            // Find all users managed by this user
+            var subordinates = _userManager.Users.Where(u => u.ManagerId == userId).ToList();
+
+            // Option 1: Update subordinates to remove the manager reference
+            foreach (var subordinate in subordinates)
+            {
+                subordinate.ManagerId = null; // or assign a different valid ManagerId
+                _dbContext.Users.Update(subordinate);
+            }
+            // Save changes to the dependent users
+            await _dbContext.SaveChangesAsync();
+
+            // Now delete the user
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
@@ -178,14 +200,24 @@ namespace TequipWiseServer.Services
             {
                 return new NotFoundObjectResult(new Response { Status = "Error", Message = "User not found!" });
             }
+
             // Update user properties based on updatedUserDetails
             user.Email = updatedUserDetails.Email;
             user.TeNum = updatedUserDetails.TeNum;
             user.UserName = updatedUserDetails.UserName;
 
-         
+            // Update the manager of the user if provided
+            if (!string.IsNullOrEmpty(updatedUserDetails.ManagerName))
+            {
+                var manager = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.ManagerName);
+                if (manager != null)
+                {
+                    user.Manager = manager;
+                    user.ManagerId = manager.Id;
+                }
+            }
 
-            // Find the backup approver by TeNum
+            // Update the backup approver by TeNum if provided
             if (!string.IsNullOrEmpty(updatedUserDetails.Backupaprover_Name))
             {
                 var backupApprover = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.Backupaprover_Name);
@@ -198,68 +230,71 @@ namespace TequipWiseServer.Services
 
             // Update the user in the database
             var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                // Update user roles
-                var existingRoles = await _userManager.GetRolesAsync(user);
-                var rolesToAdd = updatedUserDetails.Roles.Except(existingRoles);
-                var rolesToRemove = existingRoles.Except(updatedUserDetails.Roles);
-
-                // Retrieve department based on provided department name
-                if (!string.IsNullOrEmpty(updatedUserDetails.DepartmentName))
-                {
-                    var department = await _dbContext.Departments.FirstOrDefaultAsync(d => d.DepartmentName == updatedUserDetails.DepartmentName);
-                    if (department != null)
-                    {
-                        user.Department = department;
-                        user.DepartmentDeptId = department.DeptId;
-                    }
-                }
-                // Retrieve department based on provided department name
-                if (!string.IsNullOrEmpty(updatedUserDetails.LocationName))
-                {
-                    var location = await _dbContext.Location.FirstOrDefaultAsync(l => l.LocationName == updatedUserDetails.LocationName);
-                    if (location != null)
-                    {
-                        user.Location = location;
-                        user.locaId = location.LocationId;
-                        _dbContext.Entry(location).State = EntityState.Modified; // Mark the entity as modified
-                    }
-                }
-                if (!string.IsNullOrEmpty(updatedUserDetails.plant_name))
-                {
-                    var plant = await _dbContext.Plants.FirstOrDefaultAsync(l => l.plant_name == updatedUserDetails.plant_name);
-                    if (plant != null)
-                    {
-                        user.Plant = plant;
-                        user.plantId = plant.PlantNumber;
-                    }
-                }
-                // Add new roles
-                foreach (var role in rolesToAdd)
-                {
-                    await _userManager.AddToRoleAsync(user, role);
-                }
-
-                // Remove roles that are no longer assigned
-                foreach (var role in rolesToRemove)
-                {
-                    await _userManager.RemoveFromRoleAsync(user, role);
-                }
-                await _dbContext.SaveChangesAsync();
-                return new OkObjectResult(new Response { Status = "Success", Message = "User updated successfully!" });
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                return new BadRequestObjectResult(new Response { Status = "Error", Message = string.Join("; ", errors) });
             }
-            else
+
+            // Update user roles
+            var existingRoles = await _userManager.GetRolesAsync(user);
+            var rolesToAdd = updatedUserDetails.Roles.Except(existingRoles);
+            var rolesToRemove = existingRoles.Except(updatedUserDetails.Roles);
+
+            // Add new roles
+            foreach (var role in rolesToAdd)
             {
-                if (!result.Succeeded)
-                {
-                    var errors = result.Errors.Select(e => e.Description).ToList();
-                    // Log the errors or return them in the response
-                    return new BadRequestObjectResult(new Response { Status = "Error", Message = string.Join("; ", errors) });
-                }
-                return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to update user!" });
+                await _userManager.AddToRoleAsync(user, role);
             }
+
+            // Remove roles that are no longer assigned
+            foreach (var role in rolesToRemove)
+            {
+                await _userManager.RemoveFromRoleAsync(user, role);
+            }
+
+            // Retrieve and update department based on provided department name
+            if (!string.IsNullOrEmpty(updatedUserDetails.DepartmentName))
+            {
+                var department = await _dbContext.Departments.FirstOrDefaultAsync(d => d.DepartmentName == updatedUserDetails.DepartmentName);
+                if (department != null)
+                {
+                    user.Department = department;
+                    user.DepartmentDeptId = department.DeptId;
+                }
+            }
+
+            // Retrieve and update location based on provided location name
+            if (!string.IsNullOrEmpty(updatedUserDetails.LocationName))
+            {
+                var location = await _dbContext.Location.FirstOrDefaultAsync(l => l.LocationName == updatedUserDetails.LocationName);
+                if (location != null)
+                {
+                    user.Location = location;
+                    user.locaId = location.LocationId;
+                }
+            }
+
+            // Retrieve and update plant based on provided plant name
+            if (!string.IsNullOrEmpty(updatedUserDetails.plant_name))
+            {
+                var plant = await _dbContext.Plants.FirstOrDefaultAsync(p => p.plant_name == updatedUserDetails.plant_name);
+                if (plant != null)
+                {
+                    user.Plant = plant;
+                    user.plantId = plant.PlantNumber;
+                }
+            }
+
+            // Save changes to the context
+            await _dbContext.SaveChangesAsync();
+
+            return new OkObjectResult(new Response { Status = "Success", Message = "User updated successfully!" });
         }
+
+
+
+
         public async Task<IActionResult> GetAllRoles()
         {
             // Retrieve all roles from RoleManager

@@ -8,5 +8,6 @@
 
         public List<DepartmentDTO> Departments { get; set; }
         public List<PlantDto> Plants { get; set; }
+
     }
 }

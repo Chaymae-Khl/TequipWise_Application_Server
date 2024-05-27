@@ -47,6 +47,11 @@ namespace TequipWiseServer.Data
                 .WithMany(d => d.LocationDepartments)
                 .HasForeignKey(ld => ld.DepartmentId);
 
+            builder.Entity<LocationDepartment>()
+              .HasOne(u => u.Manager)
+              .WithMany()
+              .HasForeignKey(u => u.ManagerId);
+
             builder.Entity<Department>()
                 .HasOne(d => d.Manager)
                 .WithMany()
@@ -61,6 +66,12 @@ namespace TequipWiseServer.Data
                 .HasOne(u => u.Backupaprover)
                 .WithMany()
                 .HasForeignKey(u => u.BackupaproverId);
+
+
+            builder.Entity<ApplicationUser>()
+                .HasOne(u => u.Manager)
+                .WithMany(u => u.Subordinates)
+                .HasForeignKey(u => u.ManagerId);
 
             builder.Entity<ApplicationUser>()
                 .HasOne(u => u.Location)

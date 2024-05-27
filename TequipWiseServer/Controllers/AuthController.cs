@@ -122,28 +122,6 @@ namespace TequipWiseServer.Controllers
 
         }
 
-        //[HttpGet("user")]
-        //public IActionResult GetAuthenticatedUser()
-        //{
-        //    var authenticatedUser = _authService.GetAuthenticatedUserAsync();
-        //    if (authenticatedUser == null)
-        //    {
-        //        return NotFound(); // User not found or not authenticated
-        //    }
-        //    var userDTO = _mapper.Map<UserDTO>(authenticatedUser);
-        //    return Ok(userDTO);
-
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> Testemail()
-        //{
-        //    var message = new Message(new string[] { "khalil.ch19402@gmail.com" }, "test", "<h1>Hi????? chaymaeeeeee</h1>");
-
-        //    _emailService.SendEmail(message);
-
-        //    return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "email Sent successfully" });
-        //}
-
 
     }
 }

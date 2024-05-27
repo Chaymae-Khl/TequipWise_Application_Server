@@ -15,12 +15,13 @@ namespace TequipWiseServer.Controllers
     {
 
         private readonly IAuthentication _authService;
-        private readonly Iplantsdept _plantdept;
+        private readonly ILocation _locationService;
         private readonly Isupplier _supplierService;
-        public AdminCOntroller(IAuthentication authService, Iplantsdept plantdept, Isupplier supplierService)
+       
+        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService)
         {
             _authService = authService;
-            _plantdept = plantdept;
+            _locationService = locationService;
             _supplierService = supplierService;
         }
 
@@ -68,14 +69,19 @@ namespace TequipWiseServer.Controllers
             return result;
         }
 
-
-        //deptartement and plant management
-        [HttpPost("AddPlant")]
-        public async Task<IActionResult> AddPlant([FromBody] Plant newPlant)
+        
+        //Location Management
+        [HttpPost("AddLocation")]
+        public async Task<IActionResult> AddPlant([FromBody] LocationDTO newLOcation)
         {
-            var result = await _plantdept.AddPlant(newPlant);
+            var result = await _locationService.CreateLocation(newLOcation);
             return result;
         }
+
+
+
+
+
 
 
 

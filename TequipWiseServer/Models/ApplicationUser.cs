@@ -11,6 +11,8 @@ namespace TequipWiseServer.Models
 
         public string? BackupaproverId { get; set; }
         public ApplicationUser? Backupaprover { get; set; } //the person that will aprove the request when
+        public string? ManagerId { get; set; }
+        public ApplicationUser? Manager { get; set; }
         public int? locaId { get; set; }
         public Location? Location { get; set; }
 
@@ -18,9 +20,10 @@ namespace TequipWiseServer.Models
         public Department? Department { get; set; } // Assuming Department is your related entity
         public int? plantId { get; set; }
         public Plant? Plant { get; set; }
-       
 
-      
+
+        public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
+
 
 
     }

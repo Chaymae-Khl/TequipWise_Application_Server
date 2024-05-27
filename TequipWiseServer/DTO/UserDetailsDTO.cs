@@ -9,6 +9,7 @@
 
         public string? plant_name { get; set; }
         public string? Backupaprover_Name { get; set; }
+        public string? ManagerName { get; set; }
 
         public List<string> Roles { get; set; }
         public string DepartmentName { get; set; }
