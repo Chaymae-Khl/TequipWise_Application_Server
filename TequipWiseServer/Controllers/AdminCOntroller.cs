@@ -70,17 +70,54 @@ namespace TequipWiseServer.Controllers
         }
 
         
-        //Location Management
+        //Location (Plant-Depart) Management
+         //Add location with there department and plants
         [HttpPost("AddLocation")]
         public async Task<IActionResult> AddPlant([FromBody] LocationDTO newLOcation)
         {
             var result = await _locationService.CreateLocation(newLOcation);
             return result;
         }
+         //Delete location and the association between it and the plant and department 
+        [HttpDelete("DeleteLOcation/{id}")]
+        public async Task<IActionResult> DeleteLocation(int id)
+        {
+            return await _locationService.DeleteLocation(id);
+        }
 
+        [HttpPost("add-plant-to-location/{locationId}")]
+        public async Task<IActionResult> AddPlantToLocation(int locationId, [FromBody] PlantDto plantDto)
+        {
+            return await _locationService.AddPlantToLocation(locationId, plantDto);
+        }
 
+        [HttpPut("updatePlantLocation/{locationId}/plants/{plantId}")]
+        public async Task<IActionResult> UpdatePlantLocation(int locationId, int plantId, [FromBody] PlantDto plantDto)
+        {
+            var result = await _locationService.UpdatePlantOfLocation(locationId, plantId, plantDto);
+            return result;
+        }
+        [HttpDelete("DeletePlantofLocation/{locationId}/plants/{plantId}")]
+        public async Task<IActionResult> DeletePlantofLocation(int locationId, int plantId)
+        {
+            return await _locationService.DeletePlantofLocation(locationId, locationId);
+        }
 
+        // get the name of plants
 
+        [HttpGet("Plants")]
+        public async Task<ActionResult<IEnumerable<PlantDto>>> GetAllPlants()
+        {
+            var plants = await _locationService.GetPlants();
+            return Ok(plants);
+        }
+
+        [HttpGet("Departments")]
+        public async Task<ActionResult<IEnumerable<DepartmentDTO>>> GetAllDepartments()
+        {
+            var depts = await _locationService.GetDepartments();
+            return Ok(depts);
+        }
 
 
 

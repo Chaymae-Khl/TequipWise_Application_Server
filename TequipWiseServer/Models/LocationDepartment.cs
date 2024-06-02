@@ -9,6 +9,5 @@
         public string? ManagerId { get; set; }
         public ApplicationUser? Manager { get; set; }
 
-
     }
 }

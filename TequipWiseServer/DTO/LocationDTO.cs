@@ -6,8 +6,9 @@
         public string LocationName { get; set; }
         public int BuildingNumber { get; set; }
 
-        public List<DepartmentDTO> Departments { get; set; }
-        public List<PlantDto> Plants { get; set; }
+        public List<DepartmentDTO>? Departments { get; set; }
+        public List<PlantDto>? Plants { get; set; }
+
 
     }
 }
