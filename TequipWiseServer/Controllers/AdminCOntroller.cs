@@ -69,9 +69,10 @@ namespace TequipWiseServer.Controllers
             return result;
         }
 
-        
+
         //Location (Plant-Depart) Management
-         //Add location with there department and plants
+         //Location plant traitement
+        //Add location with there department and plants
         [HttpPost("AddLocation")]
         public async Task<IActionResult> AddPlant([FromBody] LocationDTO newLOcation)
         {
@@ -97,11 +98,31 @@ namespace TequipWiseServer.Controllers
             var result = await _locationService.UpdatePlantOfLocation(locationId, plantId, plantDto);
             return result;
         }
+
         [HttpDelete("DeletePlantofLocation/{locationId}/plants/{plantId}")]
         public async Task<IActionResult> DeletePlantofLocation(int locationId, int plantId)
         {
-            return await _locationService.DeletePlantofLocation(locationId, locationId);
+            return await _locationService.DeletePlantofLocation(locationId, plantId);
         }
+
+        //Location departement traitement
+        //add departement to the location
+
+        [HttpPost("add-departement-to-location/{locationId}")]
+        public async Task<IActionResult> AdddepartementToLocation(int locationId, [FromBody] DepartmentDTO deptDto)
+        {
+            return await _locationService.AddDepartementToLocation(locationId, deptDto);
+        }
+        //update teh departement of teh location
+        [HttpPut("updateDepartmentLocation/{locationId}/Department/{deptId}")]
+        public async Task<IActionResult> UpdateDepartementLocation(int locationId, int deptId, [FromBody] DepartmentDTO deptDto)
+        {
+            var result = await _locationService.UpdateDepartementOfLocation(locationId, deptId, deptDto);
+            return result;
+        }
+
+
+
 
         // get the name of plants
 

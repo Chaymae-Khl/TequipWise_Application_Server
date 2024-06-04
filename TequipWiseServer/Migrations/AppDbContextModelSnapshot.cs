@@ -51,49 +51,49 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a80e61cb-a815-417e-bfc8-ebd4e2ef5466",
+                            Id = "aa8fa98b-f3e3-453e-88cc-98d74f367948",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "bf8b9616-6b31-4404-bd37-983387da0d01",
+                            Id = "dfc55ae9-02be-4c46-a3e3-a00155645b56",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "0f44201e-eeab-4923-bbdd-e893eaafba55",
+                            Id = "24874f6d-5668-466c-9685-9ce1f2be1661",
                             ConcurrencyStamp = "3",
                             Name = "DeptManager",
                             NormalizedName = "DeptManager"
                         },
                         new
                         {
-                            Id = "0ab4a7ed-da8d-463a-9065-56a38645187c",
+                            Id = "4eb6938c-81bb-4b87-967e-58d8ccf4cb27",
                             ConcurrencyStamp = "4",
                             Name = "HrManager",
                             NormalizedName = "HrManager"
                         },
                         new
                         {
-                            Id = "2387aeb7-eb3e-49fe-932c-bc5676ab5184",
+                            Id = "b603a1bf-6892-494e-a7fa-bdc0b368ef87",
                             ConcurrencyStamp = "5",
                             Name = "FinanceManager",
                             NormalizedName = "FinanceManager"
                         },
                         new
                         {
-                            Id = "ffcc4a52-ef46-42b6-a1a8-0a8989c85b16",
+                            Id = "079fab96-630a-43dd-82e5-7fb391359ad8",
                             ConcurrencyStamp = "6",
                             Name = "ItAnalyst",
                             NormalizedName = "ItAnalyst"
                         },
                         new
                         {
-                            Id = "12bde992-8663-4714-91c1-c5fdff77658e",
+                            Id = "f5b69d67-98bf-4ec2-829d-e9e35af882e5",
                             ConcurrencyStamp = "7",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -312,9 +312,6 @@ namespace TequipWiseServer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
-
-                    b.Property<int>("BuildingNumber")
-                        .HasColumnType("int");
 
                     b.Property<string>("LocationName")
                         .IsRequired()

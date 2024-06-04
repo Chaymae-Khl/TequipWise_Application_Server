@@ -9,7 +9,6 @@ namespace TequipWiseServer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LocationId { get; set; }
         public string LocationName { get; set; }
-        public int BuildingNumber { get; set; }
 
 
         public ICollection<LocationPlant> LocationPlants { get; set; }

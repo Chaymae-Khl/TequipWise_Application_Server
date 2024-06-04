@@ -21,6 +21,14 @@ namespace TequipWiseServer.Services
             _mapper = mapper;
         }
 
+        public async Task<IActionResult> AddPlant(Plant newPlant)
+        {
+            _dbContext.Plants.Add(newPlant);
+            await _dbContext.SaveChangesAsync();
+            return new OkObjectResult(new Response { Status = "Success", Message = "Plant Added successfully!" });
+
+        }
+
         public async Task<IActionResult> CreateLocation(LocationDTO locationDto)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -30,7 +38,6 @@ namespace TequipWiseServer.Services
                 var newLocation = new Location
                 {
                     LocationName = locationDto.LocationName,
-                    BuildingNumber = locationDto.BuildingNumber
                 };
 
                 _dbContext.Location.Add(newLocation);
@@ -156,6 +163,8 @@ namespace TequipWiseServer.Services
             return deptlist;
         }
 
+
+        //Location with palnt and department
         public async Task<IActionResult> AddPlantToLocation(int locationId, PlantDto plantDto)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -287,21 +296,96 @@ namespace TequipWiseServer.Services
             }
     }
 
-
-
-        public async Task<IEnumerable<Supplier>> GetSuppliers()
+        public async Task<IActionResult> AddDepartementToLocation(int locationId, DepartmentDTO departmentDto)
         {
-            return await _dbContext.Suppliers.ToListAsync();
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                // Find the existing location
+                var location = await _dbContext.Location.FindAsync(locationId);
+                if (location == null)
+                {
+                    return new BadRequestObjectResult(new Response { Status = "Error", Message = "Location not found" });
+                }
+
+                // Create the new plant entity
+                var newDepartement = new Department
+                {
+                    DepartmentName = departmentDto.DepartmentName,
+                    Status = departmentDto.Status,
+                    ManagerId = departmentDto.ManagerId
+                };
+
+                _dbContext.Departments.Add(newDepartement);
+                await _dbContext.SaveChangesAsync();
+
+                // Create the LocationPlant relationship
+                var locationDepartement = new LocationDepartment
+                {
+                    LocationId = location.LocationId,
+                    DepartmentId = newDepartement.DeptId
+                };
+
+                _dbContext.LocationDepartments.Add(locationDepartement);
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return new OkObjectResult(new Response { Status = "Success", Message = "Departement  added to location successfully!" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return new BadRequestObjectResult(new Response { Status = "Error", Message = $"An error occurred: {ex.Message}" });
+            }
         }
 
-
-        public async Task<IActionResult> AddPlant(Plant newPlant)
+        public async Task<IActionResult> UpdateDepartementOfLocation(int locationId, int deptId, DepartmentDTO departmentDto)
         {
-            _dbContext.Plants.Add(newPlant);
-            await _dbContext.SaveChangesAsync();
-            return new OkObjectResult(new Response { Status = "Success", Message = "Plant Added successfully!" });
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
+            try
+            {
+                // Find the existing location
+                var location = await _dbContext.Location.FindAsync(locationId);
+                if (location == null)
+                {
+                    return new BadRequestObjectResult(new Response { Status = "Error", Message = "Location not found" });
+                }
+
+                // Find the existing plant
+                var department = await _dbContext.Departments.FindAsync(deptId);
+                if (department == null)
+                {
+                    return new BadRequestObjectResult(new Response { Status = "Error", Message = "Departement not found" });
+                }
+
+                // Check if the plant is associated with the given location
+                var locationDept = await _dbContext.LocationDepartments
+                    .FirstOrDefaultAsync(ld => ld.LocationId == locationId && ld.DepartmentId == deptId);
+                if (locationDept == null)
+                {
+                    return new BadRequestObjectResult(new Response { Status = "Error", Message = "The Departement is not associated with the given location" });
+                }
+
+                // Update the plant entity
+                department.DepartmentName = departmentDto.DepartmentName;
+                department.Status = departmentDto.Status;
+                department.ManagerId = departmentDto.ManagerId;
+
+                _dbContext.Departments.Update(department);
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return new OkObjectResult(new Response { Status = "Success", Message = "Departemnt updated successfully!" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return new BadRequestObjectResult(new Response { Status = "Error", Message = $"An error occurred: {ex.Message}" });
+            }
         }
-
     }
 }

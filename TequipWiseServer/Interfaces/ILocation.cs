@@ -14,5 +14,10 @@ namespace TequipWiseServer.Interfaces
         Task<IActionResult> AddPlantToLocation(int locationId, PlantDto plantDto);
         Task<IActionResult> UpdatePlantOfLocation(int locationId, int plantId, PlantDto plantDto);
         Task<IActionResult> DeletePlantofLocation(int locationId, int plantId);
+
+        Task<IActionResult> AddDepartementToLocation(int locationId, DepartmentDTO departmentDto);
+        Task<IActionResult> UpdateDepartementOfLocation(int locationId, int deptId, DepartmentDTO departmentDto);
+
+
     }
 }
