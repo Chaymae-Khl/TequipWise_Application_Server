@@ -21,10 +21,13 @@ builder.Services.AddScoped<IAuthentication,AuthService>();
 builder.Services.AddScoped<IOpenData, OpdenDataService>();
 builder.Services.AddScoped<ILocation, LocationService>();   
 builder.Services.AddScoped<Isupplier, SupplierService>();
-
+builder.Services.AddScoped<IEquipment,EquipementService>();
 builder.Services.AddAutoMapper(typeof(AutoMappers));
 builder.Services.AddScoped<IEMailService, EmailService>();
 builder.Services.AddHttpContextAccessor();
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
+                  .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
 
 //For EF 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -40,9 +43,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 //    options.JsonSerializerOptions.WriteIndented = true; // If you want the JSON to be nicely formatted
 //});
 //add email configuration
-var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
-                  .Get<EmailConfiguration>();
-builder.Services.AddSingleton(emailConfig);
+
 
 
 //email send

@@ -17,6 +17,8 @@ namespace MyApp.Tests
         private readonly Mock<IAuthentication> _mockAuthService;
         private readonly Mock<ILocation> _mockPlantDeptService;
         private readonly Mock<Isupplier> _mockSupplierService;
+        private readonly Mock<IEquipment> _mockEquipmentService;
+
         private readonly AdminCOntroller _controller;
 
         public SupplierTest()
@@ -25,9 +27,10 @@ namespace MyApp.Tests
             _mockAuthService = new Mock<IAuthentication>();
             _mockPlantDeptService = new Mock<ILocation>();
             _mockSupplierService = new Mock<Isupplier>();
+            _mockEquipmentService = new Mock<IEquipment>();
 
             // Inject mocks into the controller
-            _controller = new AdminCOntroller(_mockAuthService.Object, _mockPlantDeptService.Object, _mockSupplierService.Object);
+            _controller = new AdminCOntroller(_mockAuthService.Object, _mockPlantDeptService.Object, _mockSupplierService.Object, _mockEquipmentService.Object);
         }
 
 

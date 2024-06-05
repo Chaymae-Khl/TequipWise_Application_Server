@@ -16,5 +16,7 @@ namespace TequipWiseServer.Interfaces
         Task<IActionResult> UpdateUser(string suplierId, Supplier supplier);
 
         Task<int> GetSuppliersCount();
+
+        Task<List<dynamic>> GetSupplierInfoAsync();
     }
 }

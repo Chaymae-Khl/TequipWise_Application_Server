@@ -14,6 +14,7 @@ namespace TequipWiseServer.Data
         public DbSet<Location> Location { get; set; }
         public DbSet<LocationPlant> LocationPlants { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Equipment> Equipments { get; set; }
         public DbSet<LocationDepartment> LocationDepartments { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -78,7 +79,10 @@ namespace TequipWiseServer.Data
                 .WithMany()
                 .HasForeignKey(u => u.locaId);
 
-
+            builder.Entity<Supplier>()
+             .HasMany(s => s.Equipements)
+             .WithOne(e => e.supplier)
+             .HasForeignKey(e => e.supplierrid);
         }
        
         private void SeedRoles(ModelBuilder builder)

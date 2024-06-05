@@ -42,7 +42,7 @@ namespace TequipWiseServer.Services
 
         public async Task<IEnumerable<Supplier>> GetSuppliers()
         {
-            return await _dbContext.Suppliers.ToListAsync();
+            return await _dbContext.Suppliers.Include(s => s.Equipements).ToListAsync();
         }
 
 
@@ -61,6 +61,19 @@ namespace TequipWiseServer.Services
             _dbContext.Suppliers.Update(existingSupplier);
             await _dbContext.SaveChangesAsync();
             return new OkObjectResult(existingSupplier);
+        }
+        //is a best practice if you want to get just a small informations using Dynamic
+        public async Task<List<dynamic>> GetSupplierInfoAsync()
+        {
+            return await _dbContext.Suppliers
+                .AsNoTracking()
+                .Select(s => new
+                {
+                    SupplierId = s.SuplierId,
+                    SupplierName = s.suuplier_name
+                })
+                .Cast<dynamic>()
+                .ToListAsync();
         }
     }
 }

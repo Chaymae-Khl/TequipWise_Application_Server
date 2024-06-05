@@ -17,12 +17,14 @@ namespace TequipWiseServer.Controllers
         private readonly IAuthentication _authService;
         private readonly ILocation _locationService;
         private readonly Isupplier _supplierService;
-       
-        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService)
+        private readonly IEquipment _equipmentService;
+
+        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService)
         {
             _authService = authService;
             _locationService = locationService;
             _supplierService = supplierService;
+            _equipmentService = equipmentService;
         }
 
 
@@ -171,12 +173,60 @@ namespace TequipWiseServer.Controllers
         {
             return await _supplierService.DeleteSuplier(id);
         }
-        //nuber of suppliers
+          //number of suppliers
         [HttpGet("numberofsuppliers")]
         public async Task<ActionResult<int>> GetNumberofSupplires()
         {
             var numsuppliers = await _supplierService.GetSuppliersCount();
             return Ok(numsuppliers);
         }
+        //get Id and name of supplier
+        [HttpGet("SuppliersName")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetAllSuppliersName()
+        {
+            var suppliersname = await _supplierService.GetSupplierInfoAsync();
+            return Ok(suppliersname);
+        }
+
+
+
+
+        //Equipment Mangement
+
+        [HttpGet("AllEquipements")]
+        public async Task<IActionResult> GetAllEquipemnts()
+        {
+            var equipements = await _equipmentService.GetEquipments();
+            return Ok(equipements);
+        } 
+
+        [HttpPost("AddEquipment")]
+        public async Task<IActionResult> AddNewEquipment([FromBody] Equipment equipment)
+        {
+            return await _equipmentService.AddEquipment(equipment);
+
+        }
+
+        [HttpPut("updateEquipment/{Id}")]
+        public async Task<IActionResult> UpdateEquipement(int Id, [FromBody] Equipment equipment)
+        {
+            var result = await _equipmentService.UpdateEquipemnt(Id, equipment);
+            return result;
+        }
+
+        [HttpDelete("DeleteEquipment/{id}")]
+        public async Task<IActionResult> DeleteEquipment(int id)
+        {
+            return await _equipmentService.RemoveEquipment(id);
+        }
+
+        [HttpGet("NumberOfEquipment")]
+        public async Task<ActionResult<int>> GetNumberofEquipements()
+        {
+            var numberOfEquipements= await _equipmentService.GetEquipmentCount();
+            return Ok(numberOfEquipements);
+        }
+
+
     }
 }

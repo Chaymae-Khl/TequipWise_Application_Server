@@ -29,6 +29,9 @@ namespace TequipWiseServer.Helpers
                 .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department != null ? src.Department.DepartmentName : null))
                 .ForMember(dest => dest.plant_name, opt => opt.MapFrom(src => src.Plant != null ? src.Plant.plant_name : null))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+
+            CreateMap<Equipment, EquipmentDTO>()
+      .ForMember(dest => dest.supplierName, opt => opt.MapFrom(src => src.supplier != null ? src.supplier.suuplier_name : null));
         }
     }
 }

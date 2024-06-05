@@ -51,49 +51,49 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aa8fa98b-f3e3-453e-88cc-98d74f367948",
+                            Id = "5ec91ab8-a9c8-4a90-bb8c-687680144178",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "dfc55ae9-02be-4c46-a3e3-a00155645b56",
+                            Id = "515a150b-e964-4794-b82e-3bf6a5898c65",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "24874f6d-5668-466c-9685-9ce1f2be1661",
+                            Id = "a46c358a-77d9-49b7-b71a-9c8df6dfe122",
                             ConcurrencyStamp = "3",
                             Name = "DeptManager",
                             NormalizedName = "DeptManager"
                         },
                         new
                         {
-                            Id = "4eb6938c-81bb-4b87-967e-58d8ccf4cb27",
+                            Id = "9e5a72fe-3489-4991-abc8-6d0b7f0369fe",
                             ConcurrencyStamp = "4",
                             Name = "HrManager",
                             NormalizedName = "HrManager"
                         },
                         new
                         {
-                            Id = "b603a1bf-6892-494e-a7fa-bdc0b368ef87",
+                            Id = "ed5f0593-8c66-4b6c-83b6-6f907f32d1c0",
                             ConcurrencyStamp = "5",
                             Name = "FinanceManager",
                             NormalizedName = "FinanceManager"
                         },
                         new
                         {
-                            Id = "079fab96-630a-43dd-82e5-7fb391359ad8",
+                            Id = "c5fca5e0-1dbf-4cc6-8f23-1b81a1720f26",
                             ConcurrencyStamp = "6",
                             Name = "ItAnalyst",
                             NormalizedName = "ItAnalyst"
                         },
                         new
                         {
-                            Id = "f5b69d67-98bf-4ec2-829d-e9e35af882e5",
+                            Id = "32a7c8ff-748c-41db-905d-2e75e94c46f5",
                             ConcurrencyStamp = "7",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -305,6 +305,28 @@ namespace TequipWiseServer.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.Equipment", b =>
+                {
+                    b.Property<int>("EquipementSN")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EquipementSN"));
+
+                    b.Property<string>("EquipName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("supplierrid")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("EquipementSN");
+
+                    b.HasIndex("supplierrid");
+
+                    b.ToTable("Equipments");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.Location", b =>
                 {
                     b.Property<int>("LocationId")
@@ -501,6 +523,15 @@ namespace TequipWiseServer.Migrations
                     b.Navigation("Manager");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.Equipment", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.Supplier", "supplier")
+                        .WithMany("Equipements")
+                        .HasForeignKey("supplierrid");
+
+                    b.Navigation("supplier");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.LocationDepartment", b =>
                 {
                     b.HasOne("TequipWiseServer.Models.Department", "Department")
@@ -606,6 +637,11 @@ namespace TequipWiseServer.Migrations
                     b.Navigation("LocationPlants");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.Supplier", b =>
+                {
+                    b.Navigation("Equipements");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
