@@ -16,6 +16,8 @@ namespace TequipWiseServer.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
         public DbSet<LocationDepartment> LocationDepartments { get; set; }
+        public DbSet<UserEquipmentRequest> UserEquipmentRequests { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -25,7 +27,7 @@ namespace TequipWiseServer.Data
             base.OnModelCreating(builder);
             SeedRoles(builder);
             // Define the relationships
-
+            //Location/Plant/Departemnt Relations
             builder.Entity<LocationPlant>()
                 .HasKey(lp => new { lp.LocationId, lp.PlantId });
             builder.Entity<LocationPlant>()
@@ -57,12 +59,13 @@ namespace TequipWiseServer.Data
                 .HasOne(d => d.Manager)
                 .WithMany()
                 .HasForeignKey(d => d.ManagerId);
-
+            
             builder.Entity<Plant>()
                 .HasOne(p => p.Approver)
                 .WithMany()
                 .HasForeignKey(p => p.ApproverId);
 
+            //user relations
             builder.Entity<ApplicationUser>()
                 .HasOne(u => u.Backupaprover)
                 .WithMany()
@@ -78,11 +81,25 @@ namespace TequipWiseServer.Data
                 .HasOne(u => u.Location)
                 .WithMany()
                 .HasForeignKey(u => u.locaId);
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.UserEquipmentRequests)
+                .WithOne(uer => uer.User)
+                .HasForeignKey(uer => uer.UserId);
 
+            builder.Entity<Equipment>()
+                .HasMany(e => e.UserEquipmentRequests)
+                .WithOne(uer => uer.Equipment)
+                .HasForeignKey(uer => uer.EquipmentId);
+
+
+
+            //Supplier Relation
             builder.Entity<Supplier>()
              .HasMany(s => s.Equipements)
              .WithOne(e => e.supplier)
              .HasForeignKey(e => e.supplierrid);
+
+
         }
        
         private void SeedRoles(ModelBuilder builder)

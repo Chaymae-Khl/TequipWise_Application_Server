@@ -12,5 +12,6 @@ namespace TequipWiseServer.Interfaces
 
         Task<IActionResult> RemoveEquipment(int id);
         Task<IActionResult> UpdateEquipemnt(int equipId, Equipment equipment);
+        Task<List<dynamic>> GetEquipemntInfoAsync();
     }
 }

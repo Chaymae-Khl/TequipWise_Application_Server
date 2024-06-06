@@ -226,7 +226,12 @@ namespace TequipWiseServer.Controllers
             var numberOfEquipements= await _equipmentService.GetEquipmentCount();
             return Ok(numberOfEquipements);
         }
-
+        [HttpGet("EquipemntName")]
+        public async Task<ActionResult<IEnumerable<dynamic>>> GetAllEquipemntName()
+        {
+            var Equipmentname = await _equipmentService.GetEquipemntInfoAsync();
+            return Ok(Equipmentname);
+        }
 
     }
 }

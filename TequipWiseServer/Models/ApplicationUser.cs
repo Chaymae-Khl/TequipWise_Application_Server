@@ -24,7 +24,8 @@ namespace TequipWiseServer.Models
 
         public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
 
+        public virtual ICollection<UserEquipmentRequest> UserEquipmentRequests { get; set; }
 
-
+      
     }
 }

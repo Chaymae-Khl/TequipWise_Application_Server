@@ -73,5 +73,18 @@ namespace TequipWiseServer.Services
             await _dbContext.SaveChangesAsync();
             return new OkObjectResult(existingEquipment);
         }
+
+        public async Task<List<dynamic>> GetEquipemntInfoAsync()
+        {
+            return await _dbContext.Equipments
+                .AsNoTracking()
+                .Select(e => new
+                {
+                    EquipementSN = e.EquipementSN,
+                    EquipName = e.EquipName
+                })
+                .Cast<dynamic>()
+                .ToListAsync();
+        }
     }
 }

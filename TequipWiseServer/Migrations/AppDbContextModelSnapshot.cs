@@ -51,49 +51,49 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5ec91ab8-a9c8-4a90-bb8c-687680144178",
+                            Id = "73013f03-d19b-40d3-a2cf-f1e2d42fc73d",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "515a150b-e964-4794-b82e-3bf6a5898c65",
+                            Id = "7d90897d-fddc-4db5-aa52-e81c5b699f11",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "a46c358a-77d9-49b7-b71a-9c8df6dfe122",
+                            Id = "8d6f7e0b-f2b1-4e4d-9c50-3ab441c2af59",
                             ConcurrencyStamp = "3",
                             Name = "DeptManager",
                             NormalizedName = "DeptManager"
                         },
                         new
                         {
-                            Id = "9e5a72fe-3489-4991-abc8-6d0b7f0369fe",
+                            Id = "51a45d16-76b7-4627-9fb3-6a5b2a31cccf",
                             ConcurrencyStamp = "4",
                             Name = "HrManager",
                             NormalizedName = "HrManager"
                         },
                         new
                         {
-                            Id = "ed5f0593-8c66-4b6c-83b6-6f907f32d1c0",
+                            Id = "ebbef6a5-45f6-432f-9538-27a732a5e0a0",
                             ConcurrencyStamp = "5",
                             Name = "FinanceManager",
                             NormalizedName = "FinanceManager"
                         },
                         new
                         {
-                            Id = "c5fca5e0-1dbf-4cc6-8f23-1b81a1720f26",
+                            Id = "247cddb8-f622-4eed-afcb-30c723a04ce9",
                             ConcurrencyStamp = "6",
                             Name = "ItAnalyst",
                             NormalizedName = "ItAnalyst"
                         },
                         new
                         {
-                            Id = "32a7c8ff-748c-41db-905d-2e75e94c46f5",
+                            Id = "7593f447-cd0e-4b5a-bbd9-50901dcf27b1",
                             ConcurrencyStamp = "7",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -425,6 +425,88 @@ namespace TequipWiseServer.Migrations
                     b.ToTable("Suppliers");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.UserEquipmentRequest", b =>
+                {
+                    b.Property<int>("UserEquipmentRequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserEquipmentRequestId"));
+
+                    b.Property<string>("CC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Departmang_Not_confirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("DepartmangconfirmStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("DepartmangconfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Finance_Not_confirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("FinanceconfirmSatuts")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("FinanceconfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IT_Not_confirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ITconfirmSatuts")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ITconfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NewhireName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("NumberEquipment")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PONum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PRNum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("RequestStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SupplierOffer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserEquipmentRequestId");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserEquipmentRequests");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -585,6 +667,25 @@ namespace TequipWiseServer.Migrations
                     b.Navigation("Approver");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.UserEquipmentRequest", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.Equipment", "Equipment")
+                        .WithMany("UserEquipmentRequests")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "User")
+                        .WithMany("UserEquipmentRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
                     b.HasOne("TequipWiseServer.Models.ApplicationUser", "Backupaprover")
@@ -625,6 +726,11 @@ namespace TequipWiseServer.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.Equipment", b =>
+                {
+                    b.Navigation("UserEquipmentRequests");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.Location", b =>
                 {
                     b.Navigation("LocationDepartments");
@@ -647,6 +753,8 @@ namespace TequipWiseServer.Migrations
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Subordinates");
+
+                    b.Navigation("UserEquipmentRequests");
                 });
 #pragma warning restore 612, 618
         }
