@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyAvocatApi.Models.Authentication.SignUp
+namespace TequipWiseServer.Models.Authentication.SignUp
 {
     public class RegisterUser
 

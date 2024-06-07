@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyAvocatApi.Models.Authentication.SignIn;
-using MyAvocatApi.Models.Authentication.SignUp;
+using TequipWiseServer.Models.Authentication.SignIn;
+using TequipWiseServer.Models.Authentication.SignUp;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Models;
 

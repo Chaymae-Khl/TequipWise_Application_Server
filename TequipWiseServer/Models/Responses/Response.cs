@@ -1,4 +1,4 @@
-﻿namespace MyAvocatApi.Models
+﻿namespace TequipWiseServer.Models
 {
     public class Response
     {

@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MyAvocatApi.Models;
-using MyAvocatApi.Models.Authentication.SignIn;
-using MyAvocatApi.Models.Authentication.SignUp;
+using TequipWiseServer.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,7 +11,10 @@ using System.Text;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
-using TequipWiseServer.Models;
+using TequipWiseServer.Models.Authentication.SignIn;
+using TequipWiseServer.Models.Authentication.SignUp;
+using Newtonsoft.Json;
+using System.Diagnostics;
 namespace TequipWiseServer.Services
 {
     public class AuthService : IAuthentication

@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyAvocatApi.Models;
+using TequipWiseServer.Models;
 using System.Numerics;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
-using TequipWiseServer.Models;
 
 namespace TequipWiseServer.Services
 {

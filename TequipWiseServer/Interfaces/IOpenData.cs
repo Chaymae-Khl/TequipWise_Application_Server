@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyAvocatApi.Models.Authentication.SignUp;
+using TequipWiseServer.Models.Authentication.SignUp;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Models;
 

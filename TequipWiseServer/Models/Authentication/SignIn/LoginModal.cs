@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyAvocatApi.Models.Authentication.SignIn
+namespace TequipWiseServer.Models.Authentication.SignIn
 {
     public class LoginModal
     {

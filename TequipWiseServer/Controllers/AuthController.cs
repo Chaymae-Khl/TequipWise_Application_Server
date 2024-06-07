@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyAvocatApi.Models;
-using MyAvocatApi.Models.Authentication.SignIn;
-using MyAvocatApi.Models.Authentication.SignUp;
+using TequipWiseServer.Models;
+using TequipWiseServer.Models.Authentication.SignIn;
+using TequipWiseServer.Models.Authentication.SignUp;
 using System;
 using System.ComponentModel.DataAnnotations;
 using TequipWiseServer.DTO;
@@ -14,6 +14,8 @@ using TequipWiseServer.Models.Authentication;
 using TequipWiseServer.Services;
 using User.Managmenet.Service.Models;
 using User.Managmenet.Service.Services;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace TequipWiseServer.Controllers
 {
@@ -83,6 +85,7 @@ namespace TequipWiseServer.Controllers
                     UserName = user.UserName,
                     Email = user.Email,
                     TeNum = user.TeNum,
+                   
                 };
                 // For simplicity, returning the user object directly
                 return Ok(userDto);

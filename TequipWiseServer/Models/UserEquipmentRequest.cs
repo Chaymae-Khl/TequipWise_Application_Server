@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TequipWiseServer.Models
 {
@@ -21,7 +22,7 @@ namespace TequipWiseServer.Models
         //if is confirmed by all the actor the requestStatus is confirmed
         public bool? RequestStatus { get; set; }
 
-        public string? NewhireName { get; set; }
+        public bool? isNewhire { get; set; }
 
         public int? NumberEquipment { get; set; }
 
@@ -44,6 +45,7 @@ namespace TequipWiseServer.Models
 
         public string? IT_Not_confirmCause { get; set; }
 
+        //is a pdf file
         public string? SupplierOffer {  get; set; }
 
         public string? PONum {  get; set; }
@@ -55,7 +57,11 @@ namespace TequipWiseServer.Models
         public string? CC { get; set; }
 
         // Navigation properties
-        public virtual ApplicationUser User { get; set; }
-        public virtual Equipment Equipment { get; set; }
+
+        [JsonIgnore]
+        public virtual ApplicationUser? User { get; set; }
+
+        [JsonIgnore]
+        public virtual Equipment? Equipment { get; set; }
     }
 }

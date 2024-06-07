@@ -1,4 +1,6 @@
-﻿namespace TequipWiseServer.DTO
+﻿using TequipWiseServer.Models;
+
+namespace TequipWiseServer.DTO
 {
     public class UserDetailsDTO
     {
@@ -15,6 +17,5 @@
         public string DepartmentName { get; set; }
 
         public string? LocationName { get; set; }
-        
     }
 }
