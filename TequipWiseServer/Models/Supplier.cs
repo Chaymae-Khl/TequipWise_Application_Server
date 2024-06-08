@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TequipWiseServer.Models
 {
@@ -13,7 +14,7 @@ namespace TequipWiseServer.Models
         public string? address { get; set; }
         public string? email { get; set; }
 
-        public ICollection<Equipment> Equipements { get; set; }
+        public ICollection<Equipment>? Equipements { get; set; }
 
     }
 }

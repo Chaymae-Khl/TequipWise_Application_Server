@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Text.Json.Serialization;
 
 namespace TequipWiseServer.Models
 {
@@ -7,8 +9,11 @@ namespace TequipWiseServer.Models
         public string? TeNum { get; set; }
         public bool? StatusBackupProvider { get; set; }
         public string? BackupaproverId { get; set; }
+
+
         public ApplicationUser? Backupaprover { get; set; } //the person that will aprove the request when
         public string? ManagerId { get; set; }
+
         public ApplicationUser? Manager { get; set; }
         public int? locaId { get; set; }
         public Location? Location { get; set; }
@@ -21,7 +26,7 @@ namespace TequipWiseServer.Models
 
         public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
 
-        public virtual ICollection<UserEquipmentRequest> UserEquipmentRequests { get; set; }
+        public virtual ICollection<UserEquipmentRequest>? UserEquipmentRequests { get; set; }
 
 
     }

@@ -7,8 +7,8 @@ namespace TequipWiseServer.Models
     {
        
         public int LocationId { get; set; }
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
         public int PlantId { get; set; }
-        public Plant Plant { get; set; }
+        public Plant? Plant { get; set; }
     }
 }

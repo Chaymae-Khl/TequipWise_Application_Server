@@ -82,7 +82,6 @@ namespace TequipWiseServer.Data
                 .WithMany()
                 .HasForeignKey(u => u.locaId);
 
-       
 
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.UserEquipmentRequests)

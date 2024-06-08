@@ -13,9 +13,9 @@ namespace TequipWiseServer.Models
         public string SapNumber { get; set; }
 
         public string? ApproverId { get; set; }
-        public ICollection<ApplicationUser> Users { get; set; }
+        public ICollection<ApplicationUser>? Users { get; set; }
 
-        public ICollection<LocationPlant> LocationPlants { get; set; }
+        public ICollection<LocationPlant>? LocationPlants { get; set; }
         public ApplicationUser? Approver { get; set; }
     }
 }

@@ -17,8 +17,8 @@ namespace TequipWiseServer.Models
         [JsonIgnore]
         public Supplier? supplier { get; set; }
 
-
-        public virtual ICollection<UserEquipmentRequest> UserEquipmentRequests { get; set; }
+        
+        public virtual ICollection<UserEquipmentRequest>? UserEquipmentRequests { get; set; }
 
         
     }

@@ -23,16 +23,16 @@ namespace TequipWiseServer.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-      private readonly IAuthentication _authService;
-      private readonly UserManager<ApplicationUser> _userManager;
-      private readonly IEMailService _emailService;
+        private readonly IAuthentication _authService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEMailService _emailService;
 
 
         public AuthController(IAuthentication authService, UserManager<ApplicationUser> userManager, IEMailService emailService)
         {
             _authService = authService;
             _userManager = userManager;
-            _emailService= emailService;
+            _emailService = emailService;
         }
 
         [HttpPost("Register")]
@@ -53,7 +53,7 @@ namespace TequipWiseServer.Controllers
         {
             if (string.IsNullOrEmpty(Email))
             {
-                return StatusCode(StatusCodes.Status400BadRequest, new { errors = new {Email = new[] { "The email field is required." } } });
+                return StatusCode(StatusCodes.Status400BadRequest, new { errors = new { Email = new[] { "The email field is required." } } });
             }
 
             var user = await _userManager.FindByEmailAsync(Email);
@@ -73,25 +73,9 @@ namespace TequipWiseServer.Controllers
         }
 
         [HttpGet("GetAuthenticatedUser")]
-        public async Task<IActionResult> GetAuthenticatedUser()
+        public async Task<IActionResult> GetAuthenticatedUserDetails()
         {
-            var user = await _authService.GetAuthenticatedUserAsync();
-
-            if (user != null)
-            {
-                var userDto = new UserDetailsDTO
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    TeNum = user.TeNum,
-                   
-                };
-                // For simplicity, returning the user object directly
-                return Ok(userDto);
-            }
-
-            return NotFound(new { message = "Authenticated user not found." });
+            return await _authService.GetAuthenticatedUserAsync();
         }
         [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPassword(string token, string email)
@@ -106,16 +90,17 @@ namespace TequipWiseServer.Controllers
         public async Task<IActionResult> ResetPassword(ForgotPasswordModel forgotPasswordModel)
         {
             var user = await _userManager.FindByEmailAsync(forgotPasswordModel.Email);
-            if(user != null)
+            if (user != null)
             {
                 var resetPassResult = await _userManager.ResetPasswordAsync(user, forgotPasswordModel.Token, forgotPasswordModel.Password);
-                if(!resetPassResult.Succeeded) { 
-                foreach(var error in resetPassResult.Errors)
+                if (!resetPassResult.Succeeded)
+                {
+                    foreach (var error in resetPassResult.Errors)
                     {
                         ModelState.AddModelError(error.Code, error.Description);
                     }
                     return Ok(ModelState);
-                
+
                 }
                 return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = $"Password Has been changed" });
             }

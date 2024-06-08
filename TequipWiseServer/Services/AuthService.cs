@@ -41,7 +41,7 @@ namespace TequipWiseServer.Services
         }
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
-            
+
             // Check if the user already exists by email
             var userExistByEmail = await _userManager.FindByEmailAsync(registerUser.Email);
             if (userExistByEmail != null)
@@ -55,8 +55,8 @@ namespace TequipWiseServer.Services
                 UserName = registerUser.Username,
                 TeNum = registerUser.TeNum,
                 locaId = registerUser.locationID,
-                DepartmentDeptId=registerUser.DeptId,
-                plantId=registerUser.plantId,
+                DepartmentDeptId = registerUser.DeptId,
+                plantId = registerUser.plantId,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
@@ -160,36 +160,61 @@ namespace TequipWiseServer.Services
                 return new NotFoundObjectResult(new Response { Status = "Error", Message = "User not found!" });
             }
 
-            // Check for users who reference this user as a backup approver
-            var dependentUsers = _userManager.Users.Where(u => u.BackupaproverId == userId).ToList();
+            using (var transaction = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Check for users who reference this user as a backup approver
+                    var dependentUsers = await _userManager.Users.Where(u => u.BackupaproverId == userId).ToListAsync();
 
-            // Option 1: Update dependent users to remove the reference
-            foreach (var dependentUser in dependentUsers)
-            {
-                dependentUser.BackupaproverId = null; // or assign a different valid BackupaproverId
-                _dbContext.Users.Update(dependentUser);
-            }
-            // Find all users managed by this user
-            var subordinates = _userManager.Users.Where(u => u.ManagerId == userId).ToList();
+                    // Update dependent users to remove the reference
+                    foreach (var dependentUser in dependentUsers)
+                    {
+                        dependentUser.BackupaproverId = null; // or assign a different valid BackupaproverId
+                        _dbContext.Users.Update(dependentUser);
+                    }
 
-            // Option 1: Update subordinates to remove the manager reference
-            foreach (var subordinate in subordinates)
-            {
-                subordinate.ManagerId = null; // or assign a different valid ManagerId
-                _dbContext.Users.Update(subordinate);
-            }
-            // Save changes to the dependent users
-            await _dbContext.SaveChangesAsync();
+                    // Find all users managed by this user
+                    var subordinates = await _userManager.Users.Where(u => u.ManagerId == userId).ToListAsync();
 
-            // Now delete the user
-            var result = await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
-            {
-                return new OkObjectResult(new Response { Status = "Success", Message = "User deleted successfully!" });
-            }
-            else
-            {
-                return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to delete user!" });
+                    // Update subordinates to remove the manager reference
+                    foreach (var subordinate in subordinates)
+                    {
+                        subordinate.ManagerId = null; // or assign a different valid ManagerId
+                        _dbContext.Users.Update(subordinate);
+                    }
+
+                    // Check for departments managed by this user
+                    var departments = await _dbContext.Departments.Where(d => d.ManagerId == userId).ToListAsync();
+
+                    // Update departments to remove the manager reference
+                    foreach (var department in departments)
+                    {
+                        department.ManagerId = null; // or assign a different valid ManagerId
+                        _dbContext.Departments.Update(department);
+                    }
+
+                    // Save all changes
+                    await _dbContext.SaveChangesAsync();
+
+                    // Now delete the user
+                    var result = await _userManager.DeleteAsync(user);
+                    if (result.Succeeded)
+                    {
+                        await transaction.CommitAsync();
+                        return new OkObjectResult(new Response { Status = "Success", Message = "User deleted successfully!" });
+                    }
+                    else
+                    {
+                        await transaction.RollbackAsync();
+                        return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to delete user!" });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new BadRequestObjectResult(new Response { Status = "Error", Message = $"An error occurred while deleting the user: {ex.Message}" });
+                }
             }
         }
 
@@ -306,16 +331,40 @@ namespace TequipWiseServer.Services
 
             return new OkObjectResult(roleDTOs);
         }
-        public async Task<ApplicationUser> GetAuthenticatedUserAsync()
+        public async Task<IActionResult> GetAuthenticatedUserAsync()
         {
-            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-            if (string.IsNullOrEmpty(userName))
+            // Retrieve the user's identity from the current HttpContext
+            var userClaims = _httpContextAccessor.HttpContext?.User;
+
+            if (userClaims != null && userClaims.Identity?.IsAuthenticated == true)
             {
-                return null; // No authenticated user
+                // Extract the username from the claims
+                var userName = userClaims.FindFirst(ClaimTypes.Name)?.Value;
+
+                // Retrieve the user details from the database including related entities
+                var user = await _userManager.Users
+                    .Include(u => u.Location)
+                    .Include(u => u.Department)
+                    .Include(u => u.Plant)
+                    .Include(u => u.Backupaprover)
+                    .Include(u => u.Manager)
+                    .FirstOrDefaultAsync(u => u.UserName == userName);
+
+                if (user != null)
+                {
+                    // Map to UserDetailsDTO
+                    var userDetails = _mapper.Map<UserDetailsDTO>(user);
+
+                    // Get roles for the user
+                    var roles = await _userManager.GetRolesAsync(user);
+                    userDetails.Roles = roles.ToList();
+
+                    return new OkObjectResult(userDetails);
+                }
             }
 
-            var user = await _userManager.FindByNameAsync(userName);
-            return user;
+            // Return unauthorized if no authenticated user is found
+            return new UnauthorizedResult();
         }
         public async Task<IActionResult> ChangeUserPassword(string userId, string newPassword)
         {

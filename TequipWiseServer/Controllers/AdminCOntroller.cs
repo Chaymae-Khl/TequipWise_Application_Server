@@ -53,7 +53,7 @@ namespace TequipWiseServer.Controllers
         [HttpPut("update/{userId}")]
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserDetailsDTO updatedUserDetails)
         {
-          
+
             var result = await _authService.UpdateUser(userId, updatedUserDetails);
             return result;
         }
@@ -73,7 +73,7 @@ namespace TequipWiseServer.Controllers
 
 
         //Location (Plant-Depart) Management
-         //Location plant traitement
+        //Location plant traitement
         //Add location with there department and plants
         [HttpPost("AddLocation")]
         public async Task<IActionResult> AddPlant([FromBody] LocationDTO newLOcation)
@@ -81,7 +81,7 @@ namespace TequipWiseServer.Controllers
             var result = await _locationService.CreateLocation(newLOcation);
             return result;
         }
-         //Delete location and the association between it and the plant and department 
+        //Delete location and the association between it and the plant and department 
         [HttpDelete("DeleteLOcation/{id}")]
         public async Task<IActionResult> DeleteLocation(int id)
         {
@@ -165,7 +165,7 @@ namespace TequipWiseServer.Controllers
         [HttpPut("updateSupplier/{Id}")]
         public async Task<IActionResult> UpdateSupplier(string Id, [FromBody] Supplier supplier)
         {
-            var result = await _supplierService.UpdateUser(Id,supplier);
+            var result = await _supplierService.UpdateUser(Id, supplier);
             return result;
         }
         [HttpDelete("DeleteSupplier/{id}")]
@@ -173,7 +173,7 @@ namespace TequipWiseServer.Controllers
         {
             return await _supplierService.DeleteSuplier(id);
         }
-          //number of suppliers
+        //number of suppliers
         [HttpGet("numberofsuppliers")]
         public async Task<ActionResult<int>> GetNumberofSupplires()
         {
@@ -198,7 +198,7 @@ namespace TequipWiseServer.Controllers
         {
             var equipements = await _equipmentService.GetEquipments();
             return Ok(equipements);
-        } 
+        }
 
         [HttpPost("AddEquipment")]
         public async Task<IActionResult> AddNewEquipment([FromBody] Equipment equipment)
@@ -223,7 +223,7 @@ namespace TequipWiseServer.Controllers
         [HttpGet("NumberOfEquipment")]
         public async Task<ActionResult<int>> GetNumberofEquipements()
         {
-            var numberOfEquipements= await _equipmentService.GetEquipmentCount();
+            var numberOfEquipements = await _equipmentService.GetEquipmentCount();
             return Ok(numberOfEquipements);
         }
         [HttpGet("EquipemntName")]

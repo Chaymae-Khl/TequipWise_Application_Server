@@ -38,6 +38,11 @@ namespace TequipWiseServer.Models
         public bool? FinanceconfirmSatuts { get; set; }
 
         public string? Finance_Not_confirmCause { get; set; }
+        public string? GL { get; set; }
+
+        public string? CC { get; set; }
+        public string? order { get; set; }
+
 
         //IT request part
         public DateTime? ITconfirmedAt { get; set; }
@@ -52,9 +57,7 @@ namespace TequipWiseServer.Models
 
         public string? PRNum { get; set; }
 
-        public string? GL { get; set; }
-
-        public string? CC { get; set; }
+     
 
         // Navigation properties
 
