@@ -10,8 +10,7 @@ namespace TequipWiseServer.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserEquipmentRequestId { get; set; }
-        [Required]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [Required]
         public int EquipmentId { get; set; }
         [Required]
@@ -57,7 +56,8 @@ namespace TequipWiseServer.Models
 
         public string? PRNum { get; set; }
 
-     
+        public bool? PR_Status { get; set; }
+        public string? PR_Not_ConfirmCause { get; set; }
 
         // Navigation properties
 

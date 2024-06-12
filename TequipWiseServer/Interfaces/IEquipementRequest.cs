@@ -8,8 +8,9 @@ namespace TequipWiseServer.Interfaces
     {
 
         Task<IActionResult> PassRequest(UserEquipmentRequest request);
+        Task<IEnumerable<EquipementRequestDTO>> GetRequestsByUserIdAsync(string userId);
+        Task<int> GetRequestCountByUserIdAsync(string userId);
 
-
-
+        Task<IEnumerable<EquipementRequestDTO>> GetRequestsForDepartmentManagerAsync(string managerId);
     }
 }

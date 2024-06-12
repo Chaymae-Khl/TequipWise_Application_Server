@@ -51,52 +51,59 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "db86c9d9-955e-40c6-b7ca-b0567e7bdecc",
+                            Id = "05b6f7b1-0a80-4f81-92fe-4c479c8db698",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "d4b6a298-c475-4299-ae24-d52df1fac9dd",
+                            Id = "ee5fcb3a-4513-40a7-85fd-92ae2bc36ad9",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "4f9c8b57-24cd-439d-be3f-f66488a6a891",
+                            Id = "f42a12ba-dc78-4547-8a3b-c1b3b13fe910",
                             ConcurrencyStamp = "3",
                             Name = "DeptManager",
                             NormalizedName = "DeptManager"
                         },
                         new
                         {
-                            Id = "5b4a5b1d-181b-4cce-99c0-80c2693ff224",
+                            Id = "1703c713-0943-45db-8078-2a371c17a0f7",
                             ConcurrencyStamp = "4",
                             Name = "HrManager",
                             NormalizedName = "HrManager"
                         },
                         new
                         {
-                            Id = "188629e8-f40a-4091-b915-505265908003",
+                            Id = "569166de-c1e6-4f33-a968-257dfdbf9236",
                             ConcurrencyStamp = "5",
                             Name = "FinanceManager",
                             NormalizedName = "FinanceManager"
                         },
                         new
                         {
-                            Id = "3395db37-3ecd-42dc-b4c9-b1a481e555ea",
+                            Id = "4e5d24a1-353b-44b4-a742-6edb25a51cf4",
                             ConcurrencyStamp = "6",
                             Name = "ItAnalyst",
                             NormalizedName = "ItAnalyst"
                         },
                         new
                         {
-                            Id = "40e8a622-4949-4b87-b69c-e85fdc0dbc0b",
+                            Id = "66fd005c-a99e-4ac8-963b-6e6fad44b1fc",
                             ConcurrencyStamp = "7",
                             Name = "Controller",
                             NormalizedName = "Controller"
+                        },
+                        new
+                        {
+                            Id = "1302322e-bb1c-4498-a286-a62c8ba5d690",
+                            ConcurrencyStamp = "8",
+                            Name = "Manager",
+                            NormalizedName = "Manager"
                         });
                 });
 
@@ -482,6 +489,12 @@ namespace TequipWiseServer.Migrations
                     b.Property<string>("PRNum")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PR_Not_ConfirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PR_Status")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 
@@ -492,7 +505,6 @@ namespace TequipWiseServer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool?>("isNewhire")
@@ -514,6 +526,9 @@ namespace TequipWiseServer.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<bool?>("ApproverActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("BackupaproverId")
                         .HasColumnType("nvarchar(450)");
 
@@ -528,6 +543,9 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<string>("TeNum")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("backupActive")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("locaId")
                         .HasColumnType("int");
@@ -680,9 +698,7 @@ namespace TequipWiseServer.Migrations
 
                     b.HasOne("TequipWiseServer.Models.ApplicationUser", "User")
                         .WithMany("UserEquipmentRequests")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Equipment");
 

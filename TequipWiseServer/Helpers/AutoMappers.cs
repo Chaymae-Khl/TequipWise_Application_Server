@@ -23,20 +23,24 @@ namespace TequipWiseServer.Helpers
 
             CreateMap<UserEquipmentRequest, EquipementRequestDTO>();
 
+            CreateMap<Equipment, EquipmentDTO>()
+                .ForMember(dest => dest.supplierName, opt => opt.MapFrom(src => src.supplier.suuplier_name));
             CreateMap<ApplicationUser, UserDetailsDTO>()
                 .ForMember(dest => dest.Roles, opt => opt.Ignore())
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department))
+                .ForMember(dest => dest.Subordinates, opt => opt.MapFrom(src => src.Subordinates))
                 .ForMember(dest => dest.Backupaprover_Name, opt => opt.MapFrom(src => src.Backupaprover != null ? src.Backupaprover.TeNum : null))
                 .ForMember(dest => dest.ManagerName, opt => opt.MapFrom(src => src.Manager != null ? src.Manager.TeNum : null))
-                .ForMember(dest => dest.ManagerEmail, opt => opt.MapFrom(src => src.Manager != null ? src.Manager.Email : null)) // Map manager's email
+                .ForMember(dest => dest.ManagerEmail, opt => opt.MapFrom(src => src.Department != null ? src.Department.Manager.Email : null))
+                .ForMember(dest => dest.ApproverEmail, opt => opt.MapFrom(src => src.Manager != null ? src.Manager.Email : null))
                 .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location != null ? src.Location.LocationName : null))
                 .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department != null ? src.Department.DepartmentName : null))
                 .ForMember(dest => dest.plant_name, opt => opt.MapFrom(src => src.Plant != null ? src.Plant.plant_name : null))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
-
-            CreateMap<Equipment, EquipmentDTO>()
-                .ForMember(dest => dest.supplierName, opt => opt.MapFrom(src => src.supplier != null ? src.supplier.suuplier_name : null));
+            CreateMap<ApplicationUser, SubordinateDTO>();
+            CreateMap<UserEquipmentRequest, EquipementRequestDTO>()
+                  .ForMember(dest => dest.EquipmentName, opt => opt.MapFrom(src => src.Equipment.EquipName));
         }
     }
 }

@@ -137,6 +137,7 @@ namespace TequipWiseServer.Services
                 .Include(u => u.Location)
                 .Include(u => u.Department)
                 .Include(u => u.Plant)
+                .Include(u=>u.Subordinates)
                 .ToListAsync();
 
             var userDetailsList = new List<UserDetailsDTO>();
@@ -231,7 +232,8 @@ namespace TequipWiseServer.Services
             user.Email = updatedUserDetails.Email;
             user.TeNum = updatedUserDetails.TeNum;
             user.UserName = updatedUserDetails.UserName;
-
+            user.ApproverActive=updatedUserDetails.ApproverActive;
+            user.backupActive = updatedUserDetails.backupActive;
             // Update the manager of the user if provided
             if (!string.IsNullOrEmpty(updatedUserDetails.ManagerName))
             {
@@ -320,7 +322,6 @@ namespace TequipWiseServer.Services
 
 
 
-
         public async Task<IActionResult> GetAllRoles()
         {
             // Retrieve all roles from RoleManager
@@ -345,6 +346,7 @@ namespace TequipWiseServer.Services
                 var user = await _userManager.Users
                     .Include(u => u.Location)
                     .Include(u => u.Department)
+                        .ThenInclude(d => d.Manager) // Include Manager for the Department
                     .Include(u => u.Plant)
                     .Include(u => u.Backupaprover)
                     .Include(u => u.Manager)
@@ -363,9 +365,9 @@ namespace TequipWiseServer.Services
                 }
             }
 
-            // Return unauthorized if no authenticated user is found
             return new UnauthorizedResult();
-        }
+        } 
+
         public async Task<IActionResult> ChangeUserPassword(string userId, string newPassword)
         {
             // Find the user by userId
@@ -391,19 +393,29 @@ namespace TequipWiseServer.Services
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to change password." });
             }
         }
-        public async Task<ApplicationUser?> GetAuthenticatedUser()
+        public async Task<List<UserDetailsDTO?>> GetAuthenticatedUser()
         {
             // Retrieve the user's identity from the current HttpContext
             var userClaims = _httpContextAccessor.HttpContext?.User;
 
             if (userClaims != null && userClaims.Identity?.IsAuthenticated == true)
             {
-                // Extract the username from the claims
-                var userName = userClaims.FindFirst(ClaimTypes.Name)?.Value;
+                var users = await _userManager.Users
+        .Include(u => u.Location)
+        .Include(u => u.Department)
+        .Include(u => u.Plant)
+        .Include(u => u.Subordinates)
+        .ToListAsync();
 
-                // Retrieve the user details from the database
-                var user = await _userManager.FindByNameAsync(userName);
-                return user;
+                var userDetailsList = new List<UserDetailsDTO>();
+                foreach (var user in users)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var userDetails = _mapper.Map<UserDetailsDTO>(user);
+                    userDetails.Roles = roles.ToList();
+                    userDetailsList.Add(userDetails);
+                }
+                return userDetailsList;
             }
 
             // Return null if no authenticated user is found
