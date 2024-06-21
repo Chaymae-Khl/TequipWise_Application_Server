@@ -87,14 +87,26 @@ namespace TequipWiseServer.Data
                 .HasMany(u => u.UserEquipmentRequests)
                 .WithOne(uer => uer.User)
                 .HasForeignKey(uer => uer.UserId);
+            builder.Entity<ApplicationUser>()
+                .HasMany(u => u.ItRequestToApprove)
+                .WithOne(uer => uer.IT)
+                .HasForeignKey(uer => uer.itId);
+            builder.Entity<ApplicationUser>()
+              .HasMany(u => u.DeptMangRequestToApprove)
+              .WithOne(uer => uer.DeparManag)
+              .HasForeignKey(uer => uer.deptManagId);
+            builder.Entity<ApplicationUser>()
+              .HasMany(u => u.ControllerRequestToApprove)
+              .WithOne(uer => uer.Controller)
+              .HasForeignKey(uer => uer.controllerid);
 
+            //Equipemnt relations
             builder.Entity<Equipment>()
                 .HasMany(e => e.UserEquipmentRequests)
                 .WithOne(uer => uer.Equipment)
                 .HasForeignKey(uer => uer.EquipmentId);
 
-
-
+           
             //Supplier Relation
             builder.Entity<Supplier>()
              .HasMany(s => s.Equipements)
@@ -110,13 +122,8 @@ namespace TequipWiseServer.Data
                new IdentityRole() { Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin" },
                new IdentityRole() { Name = "User", ConcurrencyStamp = "2", NormalizedName = "User" },
                new IdentityRole() { Name = "DeptManager", ConcurrencyStamp = "3", NormalizedName = "DeptManager" },
-               new IdentityRole() { Name = "HrManager", ConcurrencyStamp = "4", NormalizedName = "HrManager" },
-               new IdentityRole() { Name = "FinanceManager", ConcurrencyStamp = "5", NormalizedName = "FinanceManager" },
-               new IdentityRole() { Name = "ItAnalyst", ConcurrencyStamp = "6", NormalizedName = "ItAnalyst" },
-               new IdentityRole() { Name = "Controller", ConcurrencyStamp = "7", NormalizedName = "Controller" },
-               new IdentityRole() { Name = "Manager", ConcurrencyStamp = "8", NormalizedName = "Manager" }
-
-
+               new IdentityRole() { Name = "ItAnalyst", ConcurrencyStamp = "4", NormalizedName = "ItAnalyst" },
+               new IdentityRole() { Name = "Controller", ConcurrencyStamp = "5", NormalizedName = "Controller" }
                 );
         }
     }

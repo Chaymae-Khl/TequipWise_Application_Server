@@ -16,6 +16,10 @@ namespace TequipWiseServer.DTO
         public DateTime RequestDate { get; set; }
         [Required]
         public string Comment { get; set; }
+
+        public string? NameOfUser { get; set; }
+        public string? TeIdentifier {  get; set; }
+
         //if is confirmed by all the actor the requestStatus is confirmed
         public bool? RequestStatus { get; set; }
 
@@ -23,7 +27,13 @@ namespace TequipWiseServer.DTO
 
         public int? NumberEquipment { get; set; }
 
+
+
+
         //departmenent manager request part
+
+        public string? DeptMangApproverName { get; set; }
+       
 
         public DateTime? DepartmangconfirmedAt { get; set; }
         public bool? DepartmangconfirmStatus { get; set; }
@@ -31,6 +41,7 @@ namespace TequipWiseServer.DTO
         public string? Departmang_Not_confirmCause { get; set; }
 
         //Finance request part (Controller)
+        public string? ControllerApproverName { get; set; }
         public DateTime? FinanceconfirmedAt { get; set; }
         public bool? FinanceconfirmSatuts { get; set; }
 
@@ -42,6 +53,8 @@ namespace TequipWiseServer.DTO
 
 
         //IT request part
+        public string? ITApproverName { get; set; }
+
         public DateTime? ITconfirmedAt { get; set; }
         public bool? ITconfirmSatuts { get; set; }
 
@@ -59,9 +72,7 @@ namespace TequipWiseServer.DTO
 
         public string EquipmentName { get; set; }
 
-        [JsonIgnore]
-        public Equipment Equipment { get; set; }
-        [JsonIgnore]
-        public virtual ApplicationUser? User { get; set; }
+       
+
     }
 }

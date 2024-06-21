@@ -218,7 +218,17 @@ namespace TequipWiseServer.Services
                 }
             }
         }
+        public async Task<UserDetailsDTO> GetUserByIdAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
 
+            var userDetails = _mapper.Map<UserDetailsDTO>(user);
+            return userDetails;
+        }
         public async Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails)
         {
             // Find the user by userId
@@ -243,6 +253,7 @@ namespace TequipWiseServer.Services
                     user.Manager = manager;
                     user.ManagerId = manager.Id;
                 }
+
             }
 
             // Update the backup approver by TeNum if provided
@@ -403,9 +414,14 @@ namespace TequipWiseServer.Services
                 var users = await _userManager.Users
         .Include(u => u.Location)
         .Include(u => u.Department)
+         .ThenInclude(d => d.Manager)
+                    .ThenInclude(m => m.Backupaprover)
         .Include(u => u.Plant)
         .Include(u => u.Subordinates)
+        .Include(u => u.Manager) // Include Manager
+          .ThenInclude(m => m.Backupaprover) // Then include Backupaprover
         .ToListAsync();
+
 
                 var userDetailsList = new List<UserDetailsDTO>();
                 foreach (var user in users)

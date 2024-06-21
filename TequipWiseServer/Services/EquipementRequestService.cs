@@ -27,6 +27,10 @@ namespace TequipWiseServer.Services
                 .Where(r => r.UserId == userId)
                 //.OrderByDescending(r => r.RequestDate)
                 .Include(r => r.Equipment)
+                .Include(r => r.User)
+                .Include(r => r.IT)
+                .Include(r => r.Controller)
+                .Include(r => r.DeparManag)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);

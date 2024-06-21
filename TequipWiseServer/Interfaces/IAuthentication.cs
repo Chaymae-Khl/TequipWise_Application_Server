@@ -15,6 +15,7 @@ namespace TequipWiseServer.Interfaces
         Task<IActionResult> Login([FromBody] LoginModal loginmodal);
         Task<List<UserDetailsDTO>> GetUsers();
         Task<IActionResult> DeleteUser(string userId);
+        Task<UserDetailsDTO> GetUserByIdAsync(string userId);
         Task<IActionResult> UpdateUser(string userId, UserDetailsDTO updatedUserDetails);
         Task<IActionResult> GetAllRoles();
         Task<IActionResult> ChangeUserPassword(string userId, string newPassword);

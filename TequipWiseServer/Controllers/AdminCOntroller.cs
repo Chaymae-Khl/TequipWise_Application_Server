@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using TequipWiseServer.Services;
+using User.Managmenet.Service.Models;
+using User.Managmenet.Service.Services;
 
 namespace TequipWiseServer.Controllers
 {
@@ -18,14 +21,18 @@ namespace TequipWiseServer.Controllers
         private readonly ILocation _locationService;
         private readonly Isupplier _supplierService;
         private readonly IEquipment _equipmentService;
-
-        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService)
+        private readonly IEMailService _emailService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService, IEMailService emailService, UserManager<ApplicationUser> userManager)
         {
             _authService = authService;
             _locationService = locationService;
             _supplierService = supplierService;
             _equipmentService = equipmentService;
+            _emailService = emailService;
+            _userManager = userManager;
         }
+        public string FixedemailLink = "http://localhost:4200/";
 
 
         //Users management
@@ -53,7 +60,41 @@ namespace TequipWiseServer.Controllers
         [HttpPut("update/{userId}")]
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserDetailsDTO updatedUserDetails)
         {
+            // Retrieve the current user details from the database
+            var currentUserDetails = await _authService.GetUserByIdAsync(userId);
+            if (currentUserDetails == null)
+            {
+                return NotFound(new Response { Status = "Error", Message = "User not found." });
+            }
 
+            // Check if a specific field has been modified
+            if (updatedUserDetails.ManagerName !=currentUserDetails.ManagerName )
+            {
+                var ApproverEmail = updatedUserDetails.ApproverEmail;
+                if (string.IsNullOrEmpty(ApproverEmail))
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        new Response { Status = "Error", Message = "Approver email is missing." });
+                }
+
+                var approver = await _userManager.FindByEmailAsync(ApproverEmail);
+                if (approver != null)
+                {
+                    // Generate a token for confirming the request (not for password reset)
+                    var token = await _userManager.GenerateUserTokenAsync(approver, TokenOptions.DefaultProvider, "EquipmentRequest");
+                    var deptmangLink = FixedemailLink + "RequestConfirmation";
+
+                    var message = new Message(new string[] { approver.Email }, "Equipment Request Confirmation Link", $"Hi, you are the approver of {currentUserDetails.TeNum}. You have a new request. Follow this link =>> " + deptmangLink);
+                    _emailService.SendEmail(message);
+
+                    // Continue to update the user details even if the email is sent
+                }
+            }
+            else
+            {
+                Console.WriteLine("===================the approver is not updated");
+            }
+            // Update the user details
             var result = await _authService.UpdateUser(userId, updatedUserDetails);
             return result;
         }
