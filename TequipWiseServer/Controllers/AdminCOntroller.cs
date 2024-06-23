@@ -61,11 +61,14 @@ namespace TequipWiseServer.Controllers
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserDetailsDTO updatedUserDetails)
         {
             // Retrieve the current user details from the database
-            var currentUserDetails = await _authService.GetUserByIdAsync(userId);
+            var currentUserDetails = await _authService.GetUserByIdAsync(userId)
+                ;
             if (currentUserDetails == null)
             {
                 return NotFound(new Response { Status = "Error", Message = "User not found." });
             }
+            Console.WriteLine( "==================="+updatedUserDetails.ManagerName);
+            Console.WriteLine("==================="+currentUserDetails.ManagerName);
 
             // Check if a specific field has been modified
             if (updatedUserDetails.ManagerName !=currentUserDetails.ManagerName )
@@ -77,14 +80,14 @@ namespace TequipWiseServer.Controllers
                         new Response { Status = "Error", Message = "Approver email is missing." });
                 }
 
-                var approver = await _userManager.FindByEmailAsync(ApproverEmail);
+                var approver = updatedUserDetails.ManagerEmail;
                 if (approver != null)
                 {
                     // Generate a token for confirming the request (not for password reset)
-                    var token = await _userManager.GenerateUserTokenAsync(approver, TokenOptions.DefaultProvider, "EquipmentRequest");
+                    //var token = await _userManager.GenerateUserTokenAsync(approver, TokenOptions.DefaultProvider, "EquipmentRequest");
                     var deptmangLink = FixedemailLink + "RequestConfirmation";
 
-                    var message = new Message(new string[] { approver.Email }, "Equipment Request Confirmation Link", $"Hi, you are the approver of {currentUserDetails.TeNum}. You have a new request. Follow this link =>> " + deptmangLink);
+                    var message = new Message(new string[] { approver }, "Equipment Request Confirmation Link", $"Hi, you are the approver of {currentUserDetails.TeNum}. You have a new request. Follow this link =>> " + deptmangLink);
                     _emailService.SendEmail(message);
 
                     // Continue to update the user details even if the email is sent

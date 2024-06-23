@@ -220,11 +220,14 @@ namespace TequipWiseServer.Services
         }
         public async Task<UserDetailsDTO> GetUserByIdAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users
+       .Include(u => u.Manager) 
+       .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 return null;
             }
+            Console.WriteLine($"================User: {user}, ManagerName: {user.Manager?.TeNum}");
 
             var userDetails = _mapper.Map<UserDetailsDTO>(user);
             return userDetails;

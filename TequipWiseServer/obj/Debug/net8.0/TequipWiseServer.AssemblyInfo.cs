@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TequipWiseServer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9c010123c6c21deb79022b584e4b7cef667f29e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a0af00672c3a5add7c7d4e693fbcf4d2fb4cbcd1")]
 [assembly: System.Reflection.AssemblyProductAttribute("TequipWiseServer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TequipWiseServer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
