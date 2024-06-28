@@ -78,7 +78,8 @@ namespace TequipWiseServer.Services
                         {
                             plant_name = plantDto.plant_name,
                             SapNumber=plantDto.SapNumber,
-                            ApproverId = plantDto.ApproverId
+                            ApproverId = plantDto.ApproverId,
+                            ITApproverId=plantDto.ITApproverId
                         };
                         plants.Add(plant);
                     }
@@ -182,7 +183,9 @@ namespace TequipWiseServer.Services
                 {
                     plant_name = plantDto.plant_name,
                     SapNumber=plantDto.SapNumber,
-                    ApproverId = plantDto.ApproverId
+                    ApproverId = plantDto.ApproverId,
+                    ITApproverId = plantDto.ITApproverId
+
                 };
 
                 _dbContext.Plants.Add(newPlant);
@@ -241,7 +244,8 @@ namespace TequipWiseServer.Services
                 plant.plant_name = plantDto.plant_name;
                 plant.SapNumber = plantDto.SapNumber;
                 plant.ApproverId = plantDto.ApproverId;
-                
+                plant.ITApproverId = plantDto.ITApproverId;
+
                 _dbContext.Plants.Update(plant);
                 await _dbContext.SaveChangesAsync();
 

@@ -72,11 +72,6 @@ namespace TequipWiseServer.Controllers
                 new Response { Status = "Error", Message = "Could not send link to email. Please try again." });
         }
 
-        [HttpGet("GetAuthenticatedUser")]
-        public async Task<IActionResult> GetAuthenticatedUserDetails()
-        {
-            return await _authService.GetAuthenticatedUserAsync();
-        }
         [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPassword(string token, string email)
         {

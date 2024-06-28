@@ -17,7 +17,8 @@ namespace TequipWiseServer.Helpers
                 .ForMember(dest => dest.ManagerName, opt => opt.MapFrom(src => src.Manager != null ? src.Manager.TeNum : null));
 
             CreateMap<Plant, PlantDto>()
-                .ForMember(dest => dest.Approver_name, opt => opt.MapFrom(src => src.Approver != null ? src.Approver.TeNum : null));
+                .ForMember(dest => dest.Approver_name, opt => opt.MapFrom(src => src.Approver != null ? src.Approver.TeNum : null))
+                .ForMember(dest => dest.ITApprover_name, opt => opt.MapFrom(src => src.ItApprover != null ? src.ItApprover.TeNum : null));
 
             CreateMap<IdentityRole, RoleDTO>();
 

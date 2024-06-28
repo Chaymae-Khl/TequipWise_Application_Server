@@ -22,15 +22,13 @@ namespace TequipWiseServer.Controllers
         private readonly Isupplier _supplierService;
         private readonly IEquipment _equipmentService;
         private readonly IEMailService _emailService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService, IEMailService emailService, UserManager<ApplicationUser> userManager)
+        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService, IEMailService emailService)
         {
             _authService = authService;
             _locationService = locationService;
             _supplierService = supplierService;
             _equipmentService = equipmentService;
             _emailService = emailService;
-            _userManager = userManager;
         }
         public string FixedemailLink = "http://localhost:4200/";
 
@@ -83,8 +81,7 @@ namespace TequipWiseServer.Controllers
                 var approver = updatedUserDetails.ManagerEmail;
                 if (approver != null)
                 {
-                    // Generate a token for confirming the request (not for password reset)
-                    //var token = await _userManager.GenerateUserTokenAsync(approver, TokenOptions.DefaultProvider, "EquipmentRequest");
+                    
                     var deptmangLink = FixedemailLink + "RequestConfirmation";
 
                     var message = new Message(new string[] { approver }, "Equipment Request Confirmation Link", $"Hi, you are the approver of {currentUserDetails.TeNum}. You have a new request. Follow this link =>> " + deptmangLink);

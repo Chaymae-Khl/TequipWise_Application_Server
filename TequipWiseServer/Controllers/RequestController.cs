@@ -227,19 +227,56 @@ namespace TequipWiseServer.Controllers
             }
 
             var roles = await _userManager.GetRolesAsync(new ApplicationUser { Id = userDetails.Id });
-            if (!roles.Contains("DeptManager"))
+
+            IEnumerable<EquipementRequestDTO> requests;
+
+            if (roles.Contains("Manager"))
+            {
+                requests = await _requestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
+            }
+            else if (roles.Contains("It Approver"))
+            {
+                requests = await _requestService.GetRequestsForLocationITApproverAsync(userDetails.Id);
+            }
+            else
             {
                 return Forbid();
             }
 
-            var requests = await _requestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
-
             return Ok(requests);
         }
 
+        [HttpPut("UpdateEquipemntRequest")]
+        public async Task<IActionResult> UpdateRequest([FromBody] UserEquipmentRequest updatedRequest)
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
 
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
 
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
 
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
+            }
+
+            if (updatedRequest.UserId != userDetails.Id)
+            {
+                return Forbid();
+            }
+
+            var result = await _requestService.UpdateRequest(updatedRequest);
+
+            return result;
+        }
 
 
         [HttpGet("EquipemntName")]

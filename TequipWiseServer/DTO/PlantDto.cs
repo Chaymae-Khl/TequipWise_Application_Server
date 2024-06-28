@@ -9,6 +9,7 @@
         public string? Location { get; set; }
         public string? ApproverId { get; set; }
         public string? Approver_name { get; set; }
-
+        public string? ITApproverId { get; set; }
+        public string? ITApprover_name { get; set; }
     }
 }

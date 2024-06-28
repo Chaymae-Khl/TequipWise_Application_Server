@@ -12,10 +12,18 @@ namespace TequipWiseServer.Models
         public string plant_name { get; set; }
         public string SapNumber { get; set; }
 
+        //controller (Approver)
         public string? ApproverId { get; set; }
+
+        //It Approver
+        public string? ITApproverId { get; set; }
+
+
         public ICollection<ApplicationUser>? Users { get; set; }
 
         public ICollection<LocationPlant>? LocationPlants { get; set; }
         public ApplicationUser? Approver { get; set; }
+        public ApplicationUser? ItApprover { get; set; }
+
     }
 }
