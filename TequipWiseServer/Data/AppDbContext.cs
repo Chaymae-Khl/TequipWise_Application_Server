@@ -104,6 +104,14 @@ namespace TequipWiseServer.Data
               .WithOne(uer => uer.Controller)
               .HasForeignKey(uer => uer.controllerid);
 
+            builder.Entity<ApplicationUser>()
+                .HasOne(u => u.Plant)
+                .WithMany(p => p.Users)
+                .HasForeignKey(u => u.plantId);
+
+
+
+
             //Equipemnt relations
             builder.Entity<Equipment>()
                 .HasMany(e => e.UserEquipmentRequests)

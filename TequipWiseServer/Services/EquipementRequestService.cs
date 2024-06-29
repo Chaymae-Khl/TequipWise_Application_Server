@@ -71,25 +71,42 @@ namespace TequipWiseServer.Services
         }
         public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForLocationITApproverAsync(string Itapproverid)
         {
-            // Find the user and their associated plant
-            var user = await _userManager.FindByIdAsync(Itapproverid);
+            // Step 1: Find the plant IDs where the user is the IT approver
+            var plantIds = await _dbContext.Plants
+                                           .Where(p => p.ITApproverId == Itapproverid)
+                                           .Select(p => p.PlantNumber)
+                                           .ToListAsync();
 
-            if (user == null || user.plantId == null)
+            // Debug: Log or inspect plant IDs
+            Console.WriteLine("Plant IDs where the user is IT approver:");
+            foreach (var id in plantIds)
             {
+                Console.WriteLine($"Plant ID: {id}");
+            }
+
+            // Check if plantIds is empty
+            if (!plantIds.Any())
+            {
+                Console.WriteLine("No plant IDs found for the given IT approver.");
                 return Enumerable.Empty<EquipementRequestDTO>();
             }
 
-            var plantId = user.plantId.Value;
-
-            // Retrieve the requests associated with the plant where the user is the IT approver
+            // Step 2: Get the requests for those plants
             var requests = await _dbContext.UserEquipmentRequests
-                                           .Where(r => r.User.plantId == plantId)
+                                           .Where(r => r.User.plantId.HasValue && plantIds.Contains(r.User.plantId.Value))
                                            .OrderByDescending(r => r.RequestDate)
                                            .Include(r => r.Equipment)
                                            .Include(r => r.User)
                                            .Include(r => r.Controller)
                                            .Include(r => r.DeparManag)
                                            .ToListAsync();
+
+            // Debug: Log or inspect requests count
+            Console.WriteLine($"Total requests found: {requests.Count}");
+            foreach (var request in requests)
+            {
+                Console.WriteLine($"Request ID: {request.UserEquipmentRequestId}, Plant ID: {request.User.plantId}");
+            }
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }

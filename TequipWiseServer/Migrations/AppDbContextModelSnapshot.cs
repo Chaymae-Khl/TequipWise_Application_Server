@@ -51,35 +51,35 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b247fc4f-68e0-4967-9160-3c06cc703c05",
+                            Id = "01073f74-f057-4184-919b-bfd84c020d96",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "c5a41980-2c7a-43ab-a260-fa45004f8df1",
+                            Id = "6b04e077-1ebd-40be-9ef5-669219d8f235",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "a375319d-e0b6-4f54-810d-f6c6182eb2ff",
+                            Id = "5d40aa2b-6355-479c-92f2-585b60552d94",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "e7456689-2b34-4f99-a76d-8fa9040d553d",
+                            Id = "973734c1-05e8-4a23-bb75-fe02f572cc1e",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "ff7fea80-ca99-4615-a3d1-5d50cf5fad80",
+                            Id = "13898a98-0adc-413e-a59c-2833537d658c",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
