@@ -51,6 +51,9 @@ namespace TequipWiseServer.DTO
         public string? CC { get; set; }
         public string? order { get; set; }
 
+        [JsonIgnore]
+        public virtual ApplicationUser? User { get; set; }
+
 
         //IT request part
         public string? ITApproverName { get; set; }

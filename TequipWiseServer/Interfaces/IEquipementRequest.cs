@@ -12,7 +12,7 @@ namespace TequipWiseServer.Interfaces
         Task<int> GetRequestCountByUserIdAsync(string userId);
         Task<IEnumerable<EquipementRequestDTO>> GetRequestsForLocationITApproverAsync(string Itapproverid);
         Task<IEnumerable<EquipementRequestDTO>> GetRequestsForDepartmentManagerAsync(string managerId);
-
+        Task<EquipementRequestDTO> GetRequestByIdAsync(int requestId);
         Task<IActionResult> UpdateRequest(UserEquipmentRequest updatedRequest);
     }
 }

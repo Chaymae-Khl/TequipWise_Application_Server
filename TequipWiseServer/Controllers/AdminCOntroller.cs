@@ -59,8 +59,8 @@ namespace TequipWiseServer.Controllers
         public async Task<IActionResult> UpdateUser(string userId, [FromBody] UserDetailsDTO updatedUserDetails)
         {
             // Retrieve the current user details from the database
-            var currentUserDetails = await _authService.GetUserByIdAsync(userId)
-                ;
+            var currentUserDetails = await _authService.GetUserByIdAsync(userId);
+                
             if (currentUserDetails == null)
             {
                 return NotFound(new Response { Status = "Error", Message = "User not found." });

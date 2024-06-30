@@ -16,6 +16,8 @@ namespace TequipWiseServer.DTO
         public string? Backupaprover_Name { get; set; }
         public string? ManagerName { get; set; }
         public string? ManagerEmail { get; set; }
+        public string? ItApproverEmail { get; set; }
+
         public string? ApproverEmail { get; set; }
         public string? ManagerBackupApproverEmail { get; set; }
         public bool? ManagerBackupApproverActive { get; set; }

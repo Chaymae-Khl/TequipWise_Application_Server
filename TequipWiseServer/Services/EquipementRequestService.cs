@@ -65,6 +65,7 @@ namespace TequipWiseServer.Services
                                            .Include(r => r.IT)
                                            .Include(r => r.Controller)
                                            .Include(r => r.DeparManag)
+                                           .AsNoTracking()
                                            .ToListAsync();
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
@@ -97,8 +98,10 @@ namespace TequipWiseServer.Services
                                            .OrderByDescending(r => r.RequestDate)
                                            .Include(r => r.Equipment)
                                            .Include(r => r.User)
+                                           .Include(r => r.IT)
                                            .Include(r => r.Controller)
                                            .Include(r => r.DeparManag)
+                                           .AsNoTracking()
                                            .ToListAsync();
 
             // Debug: Log or inspect requests count
@@ -110,8 +113,40 @@ namespace TequipWiseServer.Services
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }
+
+        public async Task<EquipementRequestDTO> GetRequestByIdAsync(int requestId)
+        {
+            var request = await _dbContext.UserEquipmentRequests
+                .Include(r => r.Equipment)
+                .Include(r => r.User)
+                  .ThenInclude(rp=>rp.Plant)
+                  .ThenInclude(pi=>pi.ItApprover)
+                .Include(r => r.IT)
+                .Include(r => r.Controller)
+                .Include(r => r.DeparManag)
+                 .AsNoTracking()
+           .FirstOrDefaultAsync(r => r.UserEquipmentRequestId == requestId);
+            if (request == null)
+            {
+                return null;
+            }
+            Console.WriteLine($"================User: {request}");
+
+            var requestsDetails = _mapper.Map<EquipementRequestDTO>(request);
+            return requestsDetails;
+        }
         public async Task<IActionResult> UpdateRequest(UserEquipmentRequest updatedRequest)
         {
+            // Detach the existing tracked entity, if any
+            var trackedEntity = _dbContext.UserEquipmentRequests
+                                           .Local
+                                           .FirstOrDefault(e => e.UserEquipmentRequestId == updatedRequest.UserEquipmentRequestId);
+
+            if (trackedEntity != null)
+            {
+                _dbContext.Entry(trackedEntity).State = EntityState.Detached;
+            }
+
             _dbContext.Entry(updatedRequest).State = EntityState.Modified;
 
             try

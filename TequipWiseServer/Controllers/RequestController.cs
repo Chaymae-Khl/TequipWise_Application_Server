@@ -249,13 +249,11 @@ namespace TequipWiseServer.Controllers
         [HttpPut("UpdateEquipemntRequest")]
         public async Task<IActionResult> UpdateRequest([FromBody] UserEquipmentRequest updatedRequest)
         {
+            // Retrieve the authenticationuser info
+
             var userResult = await _authService.GetAuthenticatedUserAsync();
 
-            if (userResult is UnauthorizedResult)
-            {
-                return Unauthorized();
-            }
-
+       
             var okResult = userResult as OkObjectResult;
             if (okResult == null || okResult.Value == null)
             {
@@ -268,10 +266,32 @@ namespace TequipWiseServer.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
             }
 
-            if (updatedRequest.UserId != userDetails.Id)
+        
+
+            // Retrieve the current request details from the database
+            var currentrequestDetails = await _requestService.GetRequestByIdAsync(updatedRequest.UserEquipmentRequestId);
+
+            if (currentrequestDetails == null)
             {
-                return Forbid();
+                return NotFound(new Response { Status = "Error", Message = "Equipement not found." });
             }
+
+            // Check if a specific field has been modified
+            if (updatedRequest.DepartmangconfirmStatus != currentrequestDetails.DepartmangconfirmStatus)
+            {
+                var ItApproverLink = FixedemailLink + "RequestConfirmation";
+                updatedRequest.deptManagId = userDetails.Id;
+                updatedRequest.DepartmangconfirmedAt= DateTime.Now;
+                var ItApproverEmail = currentrequestDetails.User.Plant.ItApprover.Email;
+                if (ItApproverEmail != null)
+                {
+                    var message = new Message(new string[] { ItApproverEmail }, "Equipment Request Confirmation Link", $"Hi, You have new request to approve Employee: {currentrequestDetails.NameOfUser}. You have a new request. Follow this link =>> " + ItApproverLink);
+                    _emailService.SendEmail(message);
+                }
+
+            }
+
+             
 
             var result = await _requestService.UpdateRequest(updatedRequest);
 

@@ -418,8 +418,9 @@ namespace TequipWiseServer.Services
         .Include(u => u.Location)
         .Include(u => u.Department)
          .ThenInclude(d => d.Manager)
-                    .ThenInclude(m => m.Backupaprover)
+         .ThenInclude(m => m.Backupaprover)
         .Include(u => u.Plant)
+          .ThenInclude(d => d.ItApprover)
         .Include(u => u.Subordinates)
         .Include(u => u.Manager) // Include Manager
           .ThenInclude(m => m.Backupaprover) // Then include Backupaprover
