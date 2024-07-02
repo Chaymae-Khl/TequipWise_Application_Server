@@ -59,7 +59,7 @@ namespace TequipWiseServer.Services
         {
             var requests = await _dbContext.UserEquipmentRequests
                                            .Where(r => r.User.Department.ManagerId == managerId)
-                                           .OrderByDescending(r => r.RequestDate)
+                                           //.OrderByDescending(r => r.RequestDate)
                                            .Include(r => r.Equipment)
                                            .Include(r => r.User)
                                            .Include(r => r.IT)

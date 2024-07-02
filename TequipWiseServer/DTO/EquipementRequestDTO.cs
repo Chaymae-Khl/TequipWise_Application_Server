@@ -33,7 +33,8 @@ namespace TequipWiseServer.DTO
         //departmenent manager request part
 
         public string? DeptMangApproverName { get; set; }
-       
+        public string? deptManagId { get; set; }
+
 
         public DateTime? DepartmangconfirmedAt { get; set; }
         public bool? DepartmangconfirmStatus { get; set; }

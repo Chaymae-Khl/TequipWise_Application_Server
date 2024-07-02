@@ -59,7 +59,7 @@ namespace TequipWiseServer.Services
                 plantId = registerUser.plantId,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-
+          
             // Check if the specified role exists
             if (await _roleManager.RoleExistsAsync(role))
             {

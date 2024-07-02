@@ -4,6 +4,7 @@ using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 namespace TequipWiseServer.Services
 {
     public class OpdenDataService : IOpenData
@@ -17,8 +18,15 @@ namespace TequipWiseServer.Services
         }
 
 
+
+
+
+
+
         public async Task<IEnumerable<LocationDTO>> GetPlants()
         {
+            //to give the request the time to be executed
+            _dbContext.Database.SetCommandTimeout(60);
             var locations = await _dbContext.Location
         .Include(l => l.LocationDepartments)
             .ThenInclude(ld => ld.Department)
@@ -33,6 +41,7 @@ namespace TequipWiseServer.Services
         .ToListAsync();
 
             return _mapper.Map<IEnumerable<Location>, IEnumerable<LocationDTO>>(locations);
+
         }
     }
 }
