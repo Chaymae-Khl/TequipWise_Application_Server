@@ -83,8 +83,13 @@ namespace TequipWiseServer.Controllers
                 {
                     
                     var deptmangLink = FixedemailLink + "RequestConfirmation";
+                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ApproverTemplate.html");
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                    var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink)
+                             .Replace("{{TeNum}}", currentUserDetails.TeNum);
+      
 
-                    var message = new Message(new string[] { approver }, "Equipment Request Confirmation Link", $"Hi, you are the approver of {currentUserDetails.TeNum}. You have a new request. Follow this link =>> " + deptmangLink);
+                    var message = new Message(new string[] { approver }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
 
                     // Continue to update the user details even if the email is sent

@@ -61,8 +61,12 @@ namespace TequipWiseServer.Controllers
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user!);
                 var forgotPasswordLink = $"http://localhost:4200/forgetPassword?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
-                //var ForgotPasswordLink = Url.Action(nameof(ResetPassword), "Auth", new { token, Email = user.Email }, Request.Scheme);
-                var message = new Message(new string[] { user.Email! }, "Forgot Password link", forgotPasswordLink!);
+
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate.Replace("{{resetLink}}", forgotPasswordLink);
+
+                var message = new Message(new string[] { user.Email! }, "Forgot Password link", emailContent, isHtml: true);
                 _emailService.SendEmail(message);
                 return StatusCode(StatusCodes.Status200OK,
                     new Response { Status = "Success", Message = $"Password change request is sent to email {user.Email} successfully." });

@@ -84,12 +84,14 @@ namespace TequipWiseServer.Controllers
                 if (approver != null)
                 {
                     // Generate a token for confirming the request (not for password reset)
-                    var token = await _userManager.GenerateUserTokenAsync(approver, TokenOptions.DefaultProvider, "EquipmentRequest");
+
+                    //var token = await _userManager.GenerateUserTokenAsync(approver, TokenOptions.DefaultProvider, "EquipmentRequest");
                     var deptmangLink = FixedemailLink + "RequestConfirmation";
-
-                    var message = new Message(new string[] { approver.Email }, "Equipment Request Confirmation Link", "Hi, you have new request follow this link =>>" + deptmangLink);
+                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                    var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink);
+                    var message = new Message(new string[] { approver.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
-
                     return StatusCode(StatusCodes.Status200OK,
                         new Response { Status = "Success", Message = $"Equipment request confirmation link sent to your approver by email." });
                 }
@@ -110,10 +112,13 @@ namespace TequipWiseServer.Controllers
                     if (manager != null)
                     {
                         // Generate a token for confirming the request (not for password reset)
-                        var token = await _userManager.GenerateUserTokenAsync(manager, TokenOptions.DefaultProvider, "EquipmentRequest");
+                        //var token = await _userManager.GenerateUserTokenAsync(manager, TokenOptions.DefaultProvider, "EquipmentRequest");
                         var deptmangLink = FixedemailLink + "RequestConfirmation";
+                        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
+                        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                        var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink);
 
-                        var message = new Message(new string[] { manager.Email }, "Equipment Request Confirmation Link", "Hi, you have new request follow this link =>>" + deptmangLink);
+                        var message = new Message(new string[] { manager.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
                         _emailService.SendEmail(message);
 
                         return StatusCode(StatusCodes.Status200OK,
@@ -132,13 +137,17 @@ namespace TequipWiseServer.Controllers
                      if (manager != null)
                         {
                 // Generate a token for confirming the request (not for password reset)
-                     var token = await _userManager.GenerateUserTokenAsync(manager, TokenOptions.DefaultProvider, "EquipmentRequest");
+                     //var token = await _userManager.GenerateUserTokenAsync(manager, TokenOptions.DefaultProvider, "EquipmentRequest");
                      var deptmangLink = FixedemailLink+ "RequestConfirmation";
+                        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
+                        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                        var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink);
+                            
 
-                     var message = new Message(new string[] { manager.Email }, "Equipment Request Confirmation Link","Hi, you have new request follow this link =>>"+ deptmangLink);
-                     _emailService.SendEmail(message);
+                        var message = new Message(new string[] { manager.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
+                        _emailService.SendEmail(message);
 
-                      return StatusCode(StatusCodes.Status200OK,
+                        return StatusCode(StatusCodes.Status200OK,
                     new Response { Status = "Success", Message = $"Equipment request confirmation link sent to the manager of you department by email." });
                      }
                      }
@@ -252,8 +261,8 @@ namespace TequipWiseServer.Controllers
             // Retrieve the authenticationuser info
 
             var userResult = await _authService.GetAuthenticatedUserAsync();
+           
 
-       
             var okResult = userResult as OkObjectResult;
             if (okResult == null || okResult.Value == null)
             {
@@ -270,28 +279,56 @@ namespace TequipWiseServer.Controllers
 
             // Retrieve the current request details from the database
             var currentrequestDetails = await _requestService.GetRequestByIdAsync(updatedRequest.UserEquipmentRequestId);
+            //get the user Email
+            var userEmail = currentrequestDetails.User.Email;
+            //get the itAPprover Email
+            var ItApproverEmail = currentrequestDetails.User.Plant.ItApprover.Email;
 
             if (currentrequestDetails == null)
             {
                 return NotFound(new Response { Status = "Error", Message = "Equipement not found." });
             }
 
-            // Check if a specific field has been modified
+            // Check if a specific field 'DepartmangconfirmStatus' has been modified
             if (updatedRequest.DepartmangconfirmStatus != currentrequestDetails.DepartmangconfirmStatus)
             {
-                var ItApproverLink = FixedemailLink + "RequestConfirmation";
+                
                 updatedRequest.deptManagId = userDetails.Id;
                 updatedRequest.DepartmangconfirmedAt= DateTime.Now;
-                var ItApproverEmail = currentrequestDetails.User.Plant.ItApprover.Email;
+                var ItApproverLink = FixedemailLink + "RequestConfirmation";
+
+                //when the manager approver an emai should be sent to the it approver
                 if (ItApproverEmail != null)
                 {
-                    var message = new Message(new string[] { ItApproverEmail }, "Equipment Request Confirmation Link", $"Hi, You have new request to approve Employee: {currentrequestDetails.NameOfUser}. You have a new request. Follow this link =>> " + ItApproverLink);
+
+                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                    var emailContent = emailTemplate.Replace("{{resetLink}}", ItApproverLink)
+                             .Replace("{{TeNum}}", currentrequestDetails.NameOfUser);
+
+                    var message = new Message(new string[] { ItApproverEmail }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
                 }
 
             }
 
-             
+            //change the global status of the request to false if the manager or the itapprover or the financeappror reject
+            if (updatedRequest.DepartmangconfirmStatus ==false || updatedRequest.ITconfirmSatuts == false || updatedRequest.FinanceconfirmSatuts == false)
+            {
+                var rejectionlink = FixedemailLink + "EquipmentList";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate.Replace("{{resetLink}}", rejectionlink)
+                    .Replace("{{equipment}}", currentrequestDetails.EquipmentName)
+                    .Replace("{{UserName}}", currentrequestDetails.NameOfUser);
+                updatedRequest.RequestStatus = false;
+                //send the rejection email to the user
+
+                var message = new Message(new string[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
+                _emailService.SendEmail(message);
+                Console.WriteLine("=================== the request is rejcted ");
+            }
+
 
             var result = await _requestService.UpdateRequest(updatedRequest);
 
