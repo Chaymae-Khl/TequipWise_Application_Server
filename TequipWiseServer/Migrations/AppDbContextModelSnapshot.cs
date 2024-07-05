@@ -51,35 +51,35 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e15ed7a9-1683-42ae-9c0d-038f22677060",
+                            Id = "23201a6a-a047-40ed-9b32-4788c684e564",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "12187402-719b-4b9c-b7ae-1fa42dfdff73",
+                            Id = "9a5e0f8a-0776-407a-baf5-6c710c623a40",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "27d29d75-a99d-4557-8918-e2c1fa8e53d4",
+                            Id = "bcc7a254-59b4-4db1-8e63-39e95ecd1355",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "0a8a28f1-21b6-431b-aef8-2f6fb4e1638f",
+                            Id = "d1707d9f-75fb-40e9-bebb-84b208e9f72f",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "fd88971f-a8ce-4e7d-b8fc-f452bce0b942",
+                            Id = "866407e9-e332-4b1f-9ec9-104596596897",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -276,6 +276,9 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailManger")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ManagerId")

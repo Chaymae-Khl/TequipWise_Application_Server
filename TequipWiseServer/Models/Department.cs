@@ -10,6 +10,7 @@ namespace TequipWiseServer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DeptId {  get; set; }
         public string DepartmentName { get; set; }
+        public string? EmailManger { get; set; }
         public bool Status {  get; set; }
 
         [JsonIgnore]

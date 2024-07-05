@@ -51,6 +51,7 @@ namespace TequipWiseServer.Services
                         {
                             DepartmentName = deptDto.DepartmentName,
                             Status = deptDto.Status,
+                            EmailManger = deptDto.EmailManger,
                             ManagerId = deptDto.ManagerId
                         };
                         departments.Add(department);
@@ -376,7 +377,7 @@ namespace TequipWiseServer.Services
                 department.DepartmentName = departmentDto.DepartmentName;
                 department.Status = departmentDto.Status;
                 department.ManagerId = departmentDto.ManagerId;
-
+                department.EmailManger= departmentDto.EmailManger;
                 _dbContext.Departments.Update(department);
                 await _dbContext.SaveChangesAsync();
 

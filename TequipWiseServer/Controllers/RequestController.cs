@@ -322,6 +322,7 @@ namespace TequipWiseServer.Controllers
                     .Replace("{{equipment}}", currentrequestDetails.EquipmentName)
                     .Replace("{{UserName}}", currentrequestDetails.NameOfUser);
                 updatedRequest.RequestStatus = false;
+             
                 //send the rejection email to the user
 
                 var message = new Message(new string[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
