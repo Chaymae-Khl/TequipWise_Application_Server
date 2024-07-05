@@ -6,6 +6,8 @@ using System.Numerics;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
+using User.Managmenet.Service.Services;
+using User.Managmenet.Service.Models;
 
 namespace TequipWiseServer.Services
 {
@@ -13,11 +15,14 @@ namespace TequipWiseServer.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper; // Inject IMapper
+        private readonly IEMailService _emailService;
+        public string FixedemailLink = "http://localhost:4200/";
 
-        public LocationService(AppDbContext dbContext, IMapper mapper)
+        public LocationService(AppDbContext dbContext, IMapper mapper,IEMailService eMailService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _emailService = eMailService;
         }
 
         public async Task<IActionResult> AddPlant(Plant newPlant)
@@ -32,8 +37,27 @@ namespace TequipWiseServer.Services
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            try
-            {
+                // Check if any department's ManagerEmail is empty
+                if (locationDto.Departments != null && locationDto.Departments.Any())
+                {
+                    foreach (var deptDto in locationDto.Departments)
+                    {
+                        if (deptDto.EmailManger!=null)
+                        {
+                            var deptmangLink = FixedemailLink + "register";
+                            var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RegisterTemplate.html");
+                            var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                            var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink)
+                                                            .Replace("{{email}}", deptDto.EmailManger)
+                                                            .Replace("{{lacation}}", locationDto.LocationName)
+                                                            .Replace("{{departement}}", deptDto.DepartmentName);
+                            var message = new Message(new string[] { deptDto.EmailManger }, "Create You Account in TequipWise", emailContent, isHtml: true);
+                            _emailService.SendEmail(message);
+                        }
+                    }
+                }
+
+                // Continue with the creation of the location
                 var newLocation = new Location
                 {
                     LocationName = locationDto.LocationName,
@@ -78,9 +102,9 @@ namespace TequipWiseServer.Services
                         var plant = new Plant
                         {
                             plant_name = plantDto.plant_name,
-                            SapNumber=plantDto.SapNumber,
+                            SapNumber = plantDto.SapNumber,
                             ApproverId = plantDto.ApproverId,
-                            ITApproverId=plantDto.ITApproverId
+                            ITApproverId = plantDto.ITApproverId
                         };
                         plants.Add(plant);
                     }
@@ -101,12 +125,7 @@ namespace TequipWiseServer.Services
                 await transaction.CommitAsync();
 
                 return new OkObjectResult(new Response { Status = "Success", Message = "Location and associated entities added successfully!" });
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                return new BadRequestObjectResult(new Response { Status = "Error", Message = $"An error occurred: {ex.Message}" });
-            }
+            
         }
 
         public async Task<IActionResult> DeleteLocation(int locationId)
@@ -303,11 +322,25 @@ namespace TequipWiseServer.Services
         public async Task<IActionResult> AddDepartementToLocation(int locationId, DepartmentDTO departmentDto)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
+           
             try
             {
+                // Check if any department's ManagerEmail is empty
                 // Find the existing location
                 var location = await _dbContext.Location.FindAsync(locationId);
+                if (departmentDto.EmailManger != null)
+                {
+                    var deptmangLink = FixedemailLink + "register";
+                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RegisterTemplate.html");
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                    var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink)
+                                                    .Replace("{{email}}", departmentDto.EmailManger)
+                                                    .Replace("{{lacation}}", location.LocationName)
+                                                    .Replace("{{departement}}", departmentDto.DepartmentName);
+                    var message = new Message(new string[] { departmentDto.EmailManger }, "Create You Account in TequipWise", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                }
+
                 if (location == null)
                 {
                     return new BadRequestObjectResult(new Response { Status = "Error", Message = "Location not found" });
@@ -318,6 +351,7 @@ namespace TequipWiseServer.Services
                 {
                     DepartmentName = departmentDto.DepartmentName,
                     Status = departmentDto.Status,
+                    EmailManger= departmentDto.EmailManger,
                     ManagerId = departmentDto.ManagerId
                 };
 

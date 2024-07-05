@@ -15,6 +15,7 @@ using TequipWiseServer.Models.Authentication.SignIn;
 using TequipWiseServer.Models.Authentication.SignUp;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Microsoft.VisualBasic;
 namespace TequipWiseServer.Services
 {
     public class AuthService : IAuthentication
@@ -39,16 +40,13 @@ namespace TequipWiseServer.Services
         {
             return await _userManager.Users.CountAsync();
         }
+
+
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
+            // Check if the email entered exists in the department as ManagerEmail
+            var emailExistAsManager = await _dbContext.Departments.AnyAsync(d => d.EmailManger == registerUser.Email);
 
-            // Check if the user already exists by email
-            var userExistByEmail = await _userManager.FindByEmailAsync(registerUser.Email);
-            if (userExistByEmail != null)
-            {
-                return new BadRequestObjectResult(new Response { Status = "Error", Message = "User with this email already exists!" });
-            }
-            // Create a new ApplicationUser instance and set its properties
             ApplicationUser user = new ApplicationUser
             {
                 Email = registerUser.Email,
@@ -59,7 +57,14 @@ namespace TequipWiseServer.Services
                 plantId = registerUser.plantId,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
-          
+
+            // Check if the user already exists by email
+            var userExistByEmail = await _userManager.FindByEmailAsync(registerUser.Email);
+            if (userExistByEmail != null)
+            {
+                return new BadRequestObjectResult(new Response { Status = "Error", Message = "User with this email already exists!" });
+            }
+
             // Check if the specified role exists
             if (await _roleManager.RoleExistsAsync(role))
             {
@@ -67,8 +72,26 @@ namespace TequipWiseServer.Services
                 var result = await _userManager.CreateAsync(user, registerUser.Password);
                 if (result.Succeeded)
                 {
-                    // If user creation succeeds, assign the specified role to the user
-                    await _userManager.AddToRoleAsync(user, role);
+                    // If email exists as ManagerEmail, set ManagerId and assign Manager role
+                    if (emailExistAsManager)
+                    {
+                        var managerRole = "Manager";
+                        if (await _roleManager.RoleExistsAsync(managerRole))
+                        {
+                            var department = await _dbContext.Departments.FirstOrDefaultAsync(d => d.EmailManger == registerUser.Email);
+                            if (department != null)
+                            {
+                                department.ManagerId = user.Id;
+                                await _dbContext.SaveChangesAsync();
+                            }
+                            await _userManager.AddToRoleAsync(user, managerRole);
+                        }
+                    }
+                    else
+                    {
+                        // Assign the specified role to the user
+                        await _userManager.AddToRoleAsync(user, role);
+                    }
                     return new OkObjectResult(new Response { Status = "Success", Message = "User created successfully!" });
                 }
                 else
