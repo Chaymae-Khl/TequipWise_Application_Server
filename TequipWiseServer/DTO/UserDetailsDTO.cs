@@ -23,6 +23,7 @@ namespace TequipWiseServer.DTO
         public bool? ManagerBackupApproverActive { get; set; }
         public int locaId { get; set; }
 
+    
         public Location? Location { get; set; }
         public Department? Department { get; set; }
         public List<string> Roles { get; set; }

@@ -52,6 +52,7 @@ namespace TequipWiseServer.Services
                 Email = registerUser.Email,
                 UserName = registerUser.Username,
                 TeNum = registerUser.TeNum,
+                SapNumberId=registerUser.SapNumberId,
                 locaId = registerUser.locationID,
                 DepartmentDeptId = registerUser.DeptId,
                 plantId = registerUser.plantId,

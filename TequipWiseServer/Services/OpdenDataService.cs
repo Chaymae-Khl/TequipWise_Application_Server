@@ -33,7 +33,6 @@ namespace TequipWiseServer.Services
             .ThenInclude(d => d.Manager)
         .Include(l => l.LocationPlants)
             .ThenInclude(lp => lp.Plant)
-            .ThenInclude(p => p.Approver)
         .Include(l => l.LocationPlants)
             .ThenInclude(lp => lp.Plant)
             .ThenInclude(p => p.ItApprover) // Include the ITApprover property

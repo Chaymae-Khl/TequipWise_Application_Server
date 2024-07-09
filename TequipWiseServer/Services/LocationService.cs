@@ -18,7 +18,7 @@ namespace TequipWiseServer.Services
         private readonly IEMailService _emailService;
         public string FixedemailLink = "http://localhost:4200/";
 
-        public LocationService(AppDbContext dbContext, IMapper mapper,IEMailService eMailService)
+        public LocationService(AppDbContext dbContext, IMapper mapper, IEMailService eMailService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -37,95 +37,93 @@ namespace TequipWiseServer.Services
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-                // Check if any department's ManagerEmail is empty
-                if (locationDto.Departments != null && locationDto.Departments.Any())
+            // Check if any department's ManagerEmail is empty
+            if (locationDto.Departments != null && locationDto.Departments.Any())
+            {
+                foreach (var deptDto in locationDto.Departments)
                 {
-                    foreach (var deptDto in locationDto.Departments)
+                    if (deptDto.EmailManger != null)
                     {
-                        if (deptDto.EmailManger!=null)
-                        {
-                            var deptmangLink = FixedemailLink + "register";
-                            var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RegisterTemplate.html");
-                            var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-                            var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink)
-                                                            .Replace("{{email}}", deptDto.EmailManger)
-                                                            .Replace("{{lacation}}", locationDto.LocationName)
-                                                            .Replace("{{departement}}", deptDto.DepartmentName);
-                            var message = new Message(new string[] { deptDto.EmailManger }, "Create You Account in TequipWise", emailContent, isHtml: true);
-                            _emailService.SendEmail(message);
-                        }
+                        var deptmangLink = FixedemailLink + "register";
+                        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RegisterTemplate.html");
+                        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                        var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink)
+                                                        .Replace("{{email}}", deptDto.EmailManger)
+                                                        .Replace("{{lacation}}", locationDto.LocationName)
+                                                        .Replace("{{departement}}", deptDto.DepartmentName);
+                        var message = new Message(new string[] { deptDto.EmailManger }, "Create You Account in TequipWise", emailContent, isHtml: true);
+                        _emailService.SendEmail(message);
                     }
                 }
+            }
 
-                // Continue with the creation of the location
-                var newLocation = new Location
+            // Continue with the creation of the location
+            var newLocation = new Location
+            {
+                LocationName = locationDto.LocationName,
+            };
+
+            _dbContext.Location.Add(newLocation);
+            await _dbContext.SaveChangesAsync();
+
+            if (locationDto.Departments != null && locationDto.Departments.Any())
+            {
+                var departments = new List<Department>();
+                foreach (var deptDto in locationDto.Departments)
                 {
-                    LocationName = locationDto.LocationName,
-                };
+                    var department = new Department
+                    {
+                        DepartmentName = deptDto.DepartmentName,
+                        Status = deptDto.Status,
+                        EmailManger = deptDto.EmailManger,
+                        ManagerId = deptDto.ManagerId
+                    };
+                    departments.Add(department);
+                }
 
-                _dbContext.Location.Add(newLocation);
+                _dbContext.Departments.AddRange(departments);
                 await _dbContext.SaveChangesAsync();
 
-                if (locationDto.Departments != null && locationDto.Departments.Any())
+                var locationDepartments = departments.Select(dept => new LocationDepartment
                 {
-                    var departments = new List<Department>();
-                    foreach (var deptDto in locationDto.Departments)
+                    LocationId = newLocation.LocationId,
+                    DepartmentId = dept.DeptId,
+                    ManagerId = dept.ManagerId
+                }).ToList();
+
+                _dbContext.LocationDepartments.AddRange(locationDepartments);
+            }
+
+            if (locationDto.Plants != null && locationDto.Plants.Any())
+            {
+                var plants = new List<Plant>();
+                foreach (var plantDto in locationDto.Plants)
+                {
+                    var plant = new Plant
                     {
-                        var department = new Department
-                        {
-                            DepartmentName = deptDto.DepartmentName,
-                            Status = deptDto.Status,
-                            EmailManger = deptDto.EmailManger,
-                            ManagerId = deptDto.ManagerId
-                        };
-                        departments.Add(department);
-                    }
-
-                    _dbContext.Departments.AddRange(departments);
-                    await _dbContext.SaveChangesAsync();
-
-                    var locationDepartments = departments.Select(dept => new LocationDepartment
-                    {
-                        LocationId = newLocation.LocationId,
-                        DepartmentId = dept.DeptId,
-                        ManagerId = dept.ManagerId
-                    }).ToList();
-
-                    _dbContext.LocationDepartments.AddRange(locationDepartments);
+                        plant_name = plantDto.plant_name,
+                        ITApproverId = plantDto.ITApproverId
+                    };
+                    plants.Add(plant);
                 }
 
-                if (locationDto.Plants != null && locationDto.Plants.Any())
-                {
-                    var plants = new List<Plant>();
-                    foreach (var plantDto in locationDto.Plants)
-                    {
-                        var plant = new Plant
-                        {
-                            plant_name = plantDto.plant_name,
-                            SapNumber = plantDto.SapNumber,
-                            ApproverId = plantDto.ApproverId,
-                            ITApproverId = plantDto.ITApproverId
-                        };
-                        plants.Add(plant);
-                    }
-
-                    _dbContext.Plants.AddRange(plants);
-                    await _dbContext.SaveChangesAsync();
-
-                    var locationPlants = plants.Select(plant => new LocationPlant
-                    {
-                        LocationId = newLocation.LocationId,
-                        PlantId = plant.PlantNumber
-                    }).ToList();
-
-                    _dbContext.LocationPlants.AddRange(locationPlants);
-                }
-
+                _dbContext.Plants.AddRange(plants);
                 await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();
 
-                return new OkObjectResult(new Response { Status = "Success", Message = "Location and associated entities added successfully!" });
-            
+                var locationPlants = plants.Select(plant => new LocationPlant
+                {
+                    LocationId = newLocation.LocationId,
+                    PlantId = plant.PlantNumber
+                }).ToList();
+
+                _dbContext.LocationPlants.AddRange(locationPlants);
+            }
+
+            await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return new OkObjectResult(new Response { Status = "Success", Message = "Location and associated entities added successfully!" });
+
         }
 
         public async Task<IActionResult> DeleteLocation(int locationId)
@@ -202,8 +200,7 @@ namespace TequipWiseServer.Services
                 var newPlant = new Plant
                 {
                     plant_name = plantDto.plant_name,
-                    SapNumber=plantDto.SapNumber,
-                    ApproverId = plantDto.ApproverId,
+                   
                     ITApproverId = plantDto.ITApproverId
 
                 };
@@ -262,8 +259,7 @@ namespace TequipWiseServer.Services
 
                 // Update the plant entity
                 plant.plant_name = plantDto.plant_name;
-                plant.SapNumber = plantDto.SapNumber;
-                plant.ApproverId = plantDto.ApproverId;
+               
                 plant.ITApproverId = plantDto.ITApproverId;
 
                 _dbContext.Plants.Update(plant);
@@ -317,12 +313,12 @@ namespace TequipWiseServer.Services
                 await transaction.RollbackAsync();
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = $"An error occurred: {ex.Message}" });
             }
-    }
+        }
 
         public async Task<IActionResult> AddDepartementToLocation(int locationId, DepartmentDTO departmentDto)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
-           
+
             try
             {
                 // Check if any department's ManagerEmail is empty
@@ -351,7 +347,7 @@ namespace TequipWiseServer.Services
                 {
                     DepartmentName = departmentDto.DepartmentName,
                     Status = departmentDto.Status,
-                    EmailManger= departmentDto.EmailManger,
+                    EmailManger = departmentDto.EmailManger,
                     ManagerId = departmentDto.ManagerId
                 };
 
@@ -411,7 +407,7 @@ namespace TequipWiseServer.Services
                 department.DepartmentName = departmentDto.DepartmentName;
                 department.Status = departmentDto.Status;
                 department.ManagerId = departmentDto.ManagerId;
-                department.EmailManger= departmentDto.EmailManger;
+                department.EmailManger = departmentDto.EmailManger;
                 _dbContext.Departments.Update(department);
                 await _dbContext.SaveChangesAsync();
 

@@ -51,35 +51,35 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "23201a6a-a047-40ed-9b32-4788c684e564",
+                            Id = "2169f318-baca-4cc3-bf19-3facc2181229",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "9a5e0f8a-0776-407a-baf5-6c710c623a40",
+                            Id = "8a520efa-3f0a-46ac-81d9-232e830b6d8f",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "bcc7a254-59b4-4db1-8e63-39e95ecd1355",
+                            Id = "db816a9c-5a5a-45a9-b187-29522d244503",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "d1707d9f-75fb-40e9-bebb-84b208e9f72f",
+                            Id = "65a7cc43-7fd3-4fb9-8334-c486c79b6ff6",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "866407e9-e332-4b1f-9ec9-104596596897",
+                            Id = "d4329b69-a807-4351-a710-ef61c7716864",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -376,15 +376,8 @@ namespace TequipWiseServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PlantNumber"));
 
-                    b.Property<string>("ApproverId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ITApproverId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SapNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("plant_name")
                         .IsRequired()
@@ -392,11 +385,30 @@ namespace TequipWiseServer.Migrations
 
                     b.HasKey("PlantNumber");
 
-                    b.HasIndex("ApproverId");
-
                     b.HasIndex("ITApproverId");
 
                     b.ToTable("Plants");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.SapNumber", b =>
+                {
+                    b.Property<int?>("SApID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SApID"));
+
+                    b.Property<string>("Idcontroller")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SapNum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SApID");
+
+                    b.HasIndex("Idcontroller");
+
+                    b.ToTable("SapNumbers");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.Supplier", b =>
@@ -540,6 +552,9 @@ namespace TequipWiseServer.Migrations
                     b.Property<string>("ManagerId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("SapNumberId")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("StatusBackupProvider")
                         .HasColumnType("bit");
 
@@ -560,6 +575,8 @@ namespace TequipWiseServer.Migrations
                     b.HasIndex("DepartmentDeptId");
 
                     b.HasIndex("ManagerId");
+
+                    b.HasIndex("SapNumberId");
 
                     b.HasIndex("locaId");
 
@@ -683,17 +700,20 @@ namespace TequipWiseServer.Migrations
 
             modelBuilder.Entity("TequipWiseServer.Models.Plant", b =>
                 {
-                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "Approver")
-                        .WithMany()
-                        .HasForeignKey("ApproverId");
-
                     b.HasOne("TequipWiseServer.Models.ApplicationUser", "ItApprover")
                         .WithMany()
                         .HasForeignKey("ITApproverId");
 
-                    b.Navigation("Approver");
-
                     b.Navigation("ItApprover");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.SapNumber", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "Controller")
+                        .WithMany()
+                        .HasForeignKey("Idcontroller");
+
+                    b.Navigation("Controller");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.UserEquipmentRequest", b =>
@@ -745,6 +765,10 @@ namespace TequipWiseServer.Migrations
                         .WithMany("Subordinates")
                         .HasForeignKey("ManagerId");
 
+                    b.HasOne("TequipWiseServer.Models.SapNumber", "SapNumber")
+                        .WithMany("Users")
+                        .HasForeignKey("SapNumberId");
+
                     b.HasOne("TequipWiseServer.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("locaId");
@@ -762,6 +786,8 @@ namespace TequipWiseServer.Migrations
                     b.Navigation("Manager");
 
                     b.Navigation("Plant");
+
+                    b.Navigation("SapNumber");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.Department", b =>
@@ -787,6 +813,11 @@ namespace TequipWiseServer.Migrations
                 {
                     b.Navigation("LocationPlants");
 
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.SapNumber", b =>
+                {
                     b.Navigation("Users");
                 });
 

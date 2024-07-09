@@ -15,6 +15,7 @@ namespace TequipWiseServer.Models.Authentication.SignUp
         [Required(ErrorMessage ="password is required")]
         public string? Password { get; set; }
 
+        public int? SapNumberId { get; set; }
         public int? locationID { get; set; }
         public int? DeptId { get; set; }
         public int? plantId { get; set; }

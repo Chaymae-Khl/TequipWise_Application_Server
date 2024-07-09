@@ -8,7 +8,6 @@ namespace TequipWiseServer.Data
 {
     public class AppDbContext :IdentityDbContext<IdentityUser>
     {
-        
         public DbSet<Department> Departments { get; set; }
         public DbSet<Plant> Plants { get; set; }
         public DbSet<Location> Location { get; set; }
@@ -17,7 +16,7 @@ namespace TequipWiseServer.Data
         public DbSet<Equipment> Equipments { get; set; }
         public DbSet<LocationDepartment> LocationDepartments { get; set; }
         public DbSet<UserEquipmentRequest> UserEquipmentRequests { get; set; }
-
+        public DbSet<SapNumber> SapNumbers { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -59,11 +58,8 @@ namespace TequipWiseServer.Data
                 .HasOne(d => d.Manager)
                 .WithMany()
                 .HasForeignKey(d => d.ManagerId);
-            
-            builder.Entity<Plant>()
-                .HasOne(p => p.Approver)
-                .WithMany()
-                .HasForeignKey(p => p.ApproverId);
+
+           
             builder.Entity<Plant>()
               .HasOne(p => p.ItApprover)
               .WithMany()
@@ -109,8 +105,10 @@ namespace TequipWiseServer.Data
                 .WithMany(p => p.Users)
                 .HasForeignKey(u => u.plantId);
 
-
-
+            builder.Entity<ApplicationUser>()
+              .HasOne(u => u.SapNumber)
+              .WithMany(s => s.Users)
+              .HasForeignKey(u => u.SapNumberId);
 
             //Equipemnt relations
             builder.Entity<Equipment>()
@@ -118,16 +116,21 @@ namespace TequipWiseServer.Data
                 .WithOne(uer => uer.Equipment)
                 .HasForeignKey(uer => uer.EquipmentId);
 
-           
+
             //Supplier Relation
             builder.Entity<Supplier>()
              .HasMany(s => s.Equipements)
              .WithOne(e => e.supplier)
              .HasForeignKey(e => e.supplierrid);
+            //Sapnum relatuions
+            builder.Entity<SapNumber>()
+      .HasOne(p => p.Controller)
+      .WithMany()
+      .HasForeignKey(p => p.Idcontroller);
 
 
         }
-       
+
         private void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(

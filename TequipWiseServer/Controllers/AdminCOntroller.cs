@@ -22,13 +22,16 @@ namespace TequipWiseServer.Controllers
         private readonly Isupplier _supplierService;
         private readonly IEquipment _equipmentService;
         private readonly IEMailService _emailService;
-        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService, IEMailService emailService)
+        private readonly ISapNum _sapNumService;
+
+        public AdminCOntroller(IAuthentication authService, ILocation locationService, Isupplier supplierService, IEquipment equipmentService, IEMailService emailService, ISapNum sapNumService)
         {
             _authService = authService;
             _locationService = locationService;
             _supplierService = supplierService;
             _equipmentService = equipmentService;
             _emailService = emailService;
+            _sapNumService = sapNumService;
         }
         public string FixedemailLink = "http://localhost:4200/";
 
@@ -277,6 +280,27 @@ namespace TequipWiseServer.Controllers
         {
             var Equipmentname = await _equipmentService.GetEquipemntInfoAsync();
             return Ok(Equipmentname);
+        }
+
+        //SapNums management
+     
+
+        [HttpPost("AddSapNum")]
+        public async Task<IActionResult> AddSuplier([FromBody] SapNumber sapNumber)
+        {
+            return await _sapNumService.AddSuplier(sapNumber);
+        }
+
+        [HttpDelete("DeleteSapNum/{id}")]
+        public async Task<IActionResult> DeleteSapNumber(string id)
+        {
+            return await _sapNumService.DeleteSapNum(id);
+        }
+
+        [HttpPut("updateSapNum/{id}")]
+        public async Task<IActionResult> UpdateSapNumber(string id, [FromBody] SapNumber sapNumber)
+        {
+            return await _sapNumService.UpdateSapNum(id, sapNumber);
         }
 
     }

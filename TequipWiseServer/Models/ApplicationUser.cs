@@ -29,12 +29,16 @@ namespace TequipWiseServer.Models
         public int? plantId { get; set; }
         public Plant? Plant { get; set; }
 
+        public int? SapNumberId { get; set; } // Foreign key to SapNumber
+        public SapNumber? SapNumber { get; set; } // Navigation property
+
 
         public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
 
         public virtual ICollection<UserEquipmentRequest>? UserEquipmentRequests { get; set; }
         public virtual ICollection<UserEquipmentRequest>? ItRequestToApprove { get; set; }
-        public virtual ICollection<UserEquipmentRequest>? ControllerRequestToApprove{ get; set; }
+        public virtual ICollection<UserEquipmentRequest>? ControllerRequestToApprove { get; set; }
         public virtual ICollection<UserEquipmentRequest>? DeptMangRequestToApprove { get; set; }
+
     }
 }

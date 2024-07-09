@@ -34,7 +34,7 @@ namespace MyApp.Tests
             _mockEmailService = new Mock<IEMailService>();
 
             // Inject mocks into the controller
-            _controller = new AdminCOntroller(_mockAuthService.Object, _mockPlantDeptService.Object, _mockSupplierService.Object, _mockEquipmentService.Object, _mockEmailService.Object);
+            //_controller = new AdminCOntroller(_mockAuthService.Object, _mockPlantDeptService.Object, _mockSupplierService.Object, _mockEquipmentService.Object, _mockEmailService.Object);
         }
 
 
@@ -176,8 +176,8 @@ namespace MyApp.Tests
                 LocationName = "New Location",
                 Plants = new List<PlantDto>
                 {
-                    new PlantDto { PlantNumber = 1, plant_name = "ICT", SapNumber = "12345" },
-                    new PlantDto { PlantNumber = 2, plant_name = "Auto", SapNumber = "67890" }
+                    new PlantDto { PlantNumber = 1, plant_name = "ICT" },
+                    new PlantDto { PlantNumber = 2, plant_name = "Auto" }
                 },
                 Departments = new List<DepartmentDTO>
                 {
@@ -202,7 +202,6 @@ namespace MyApp.Tests
             {
                 Assert.Equal(newLocation.Plants[i].PlantNumber, returnValue.Plants[i].PlantNumber);
                 Assert.Equal(newLocation.Plants[i].plant_name, returnValue.Plants[i].plant_name);
-                Assert.Equal(newLocation.Plants[i].SapNumber, returnValue.Plants[i].SapNumber);
             }
 
             Assert.Equal(newLocation.Departments.Count, returnValue.Departments.Count);
@@ -233,7 +232,7 @@ namespace MyApp.Tests
         {
             // Arrange
             var locationId = 1;
-            var plantDto = new PlantDto { PlantNumber = 1, plant_name = "New Plant", SapNumber = "12345" };
+            var plantDto = new PlantDto { PlantNumber = 1, plant_name = "New Plant" };
             _mockPlantDeptService.Setup(service => service.AddPlantToLocation(locationId, plantDto)).ReturnsAsync(new OkObjectResult(plantDto));
 
             // Act
@@ -245,7 +244,6 @@ namespace MyApp.Tests
             var returnValue = Assert.IsType<PlantDto>(okResult.Value);
             Assert.Equal(plantDto.PlantNumber, returnValue.PlantNumber);
             Assert.Equal(plantDto.plant_name, returnValue.plant_name);
-            Assert.Equal(plantDto.SapNumber, returnValue.SapNumber);
         }
 
         //update plant of exixting location
@@ -255,7 +253,7 @@ namespace MyApp.Tests
             // Arrange
             var locationId = 1;
             var plantId = 1;
-            var plantDto = new PlantDto { PlantNumber = plantId, plant_name = "Updated Plant", SapNumber = "67890" };
+            var plantDto = new PlantDto { PlantNumber = plantId, plant_name = "Updated Plant" };
             _mockPlantDeptService.Setup(service => service.UpdatePlantOfLocation(locationId, plantId, plantDto)).ReturnsAsync(new OkObjectResult(plantDto));
 
             // Act
@@ -267,7 +265,7 @@ namespace MyApp.Tests
             var returnValue = Assert.IsType<PlantDto>(okResult.Value);
             Assert.Equal(plantDto.PlantNumber, returnValue.PlantNumber);
             Assert.Equal(plantDto.plant_name, returnValue.plant_name);
-            Assert.Equal(plantDto.SapNumber, returnValue.SapNumber);
+            
         }
         //delete plant of exicting location
         [Fact]
@@ -334,8 +332,8 @@ namespace MyApp.Tests
             // Arrange
             var plants = new List<PlantDto>
             {
-                new PlantDto { PlantNumber = 1, plant_name = "Plant 1", SapNumber = "12345" },
-                new PlantDto { PlantNumber = 2, plant_name = "Plant 2", SapNumber = "67890" }
+                new PlantDto { PlantNumber = 1, plant_name = "Plant 1" },
+                new PlantDto { PlantNumber = 2, plant_name = "Plant 2" }
             };
             _mockPlantDeptService.Setup(service => service.GetPlants()).ReturnsAsync(plants);
 
@@ -349,7 +347,6 @@ namespace MyApp.Tests
             Assert.Equal(plants.Count, returnValue.Count);
             Assert.Equal(plants[0].PlantNumber, returnValue[0].PlantNumber);
             Assert.Equal(plants[0].plant_name, returnValue[0].plant_name);
-            Assert.Equal(plants[0].SapNumber, returnValue[0].SapNumber);
         }
 
         //Get all deopartements

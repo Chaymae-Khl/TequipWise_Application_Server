@@ -23,6 +23,7 @@ builder.Services.AddScoped<ILocation, LocationService>();
 builder.Services.AddScoped<Isupplier, SupplierService>();
 builder.Services.AddScoped<IEquipment,EquipementService>();
 builder.Services.AddScoped<IEquipementRequest, EquipementRequestService>();
+builder.Services.AddScoped<ISapNum, SapService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMappers));
 builder.Services.AddScoped<IEMailService, EmailService>();
