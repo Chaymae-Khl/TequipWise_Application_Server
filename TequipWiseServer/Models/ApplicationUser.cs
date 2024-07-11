@@ -35,10 +35,10 @@ namespace TequipWiseServer.Models
 
         public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
 
-        public virtual ICollection<UserEquipmentRequest>? UserEquipmentRequests { get; set; }
-        public virtual ICollection<UserEquipmentRequest>? ItRequestToApprove { get; set; }
-        public virtual ICollection<UserEquipmentRequest>? ControllerRequestToApprove { get; set; }
-        public virtual ICollection<UserEquipmentRequest>? DeptMangRequestToApprove { get; set; }
+        public virtual ICollection<EquipmentRequest>? UserEquipmentRequests { get; set; }
+        public virtual ICollection<SubEquipmentRequest>? ItRequestToApprove { get; set; }
+        public virtual ICollection<SubEquipmentRequest>? ControllerRequestToApprove { get; set; }
+        public virtual ICollection<SubEquipmentRequest>? DeptMangRequestToApprove { get; set; }
 
     }
 }

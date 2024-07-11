@@ -21,7 +21,17 @@ namespace TequipWiseServer.Helpers
 
             CreateMap<IdentityRole, RoleDTO>();
 
-            CreateMap<UserEquipmentRequest, EquipementRequestDTO>();
+            CreateMap<EquipmentRequest, EquipementRequestDTO>()
+            .ForMember(dest => dest.NmaeOfUser, opt => opt.MapFrom(src => src.User != null ? src.User.TeNum : null));
+          
+            CreateMap<SubEquipmentRequest, EquipementSUBrequestDTO>()
+            .ForMember(dest => dest.ItApproverName, opt => opt.MapFrom(src => src.IT != null ? src.IT.TeNum : null))
+            .ForMember(dest => dest.ControllerName, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null))
+            .ForMember(dest => dest.departementManagerName, opt => opt.MapFrom(src => src.DeparManag != null ? src.DeparManag.TeNum : null))
+            .ForMember(dest => dest.EquipementName, opt => opt.MapFrom(src => src.Equipment != null ? src.Equipment.EquipName : null));
+
+                
+
             CreateMap<SapNumber, SapNumberDto>()
                 .ForMember(dest => dest.Controller_name, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null)).ReverseMap();
 
@@ -40,18 +50,13 @@ namespace TequipWiseServer.Helpers
                 .ForMember(dest => dest.ManagerBackupApproverEmail, opt => opt.MapFrom(src => src.Department != null && src.Department.Manager.Backupaprover != null ? src.Department.Manager.Backupaprover.Email : null))
                 .ForMember(dest => dest.ManagerBackupApproverActive, opt => opt.MapFrom(src => src.Department != null && src.Department.Manager != null ? src.Department.Manager.backupActive : null))
                 .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location != null ? src.Location.LocationName : null))
+                .ForMember(dest => dest.SapNumb, opt => opt.MapFrom(src => src.SapNumber != null ? src.SapNumber.SapNum : null))
                 .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department != null ? src.Department.DepartmentName : null))
                 .ForMember(dest => dest.plant_name, opt => opt.MapFrom(src => src.Plant != null ? src.Plant.plant_name : null))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<ApplicationUser, SubordinateDTO>();
-            CreateMap<UserEquipmentRequest, EquipementRequestDTO>()
-                .ForMember(dest => dest.EquipmentName, opt => opt.MapFrom(src => src.Equipment.EquipName))
-                .ForMember(dest => dest.NameOfUser, opt => opt.MapFrom(src => src.User.TeNum))
-                .ForMember(dest => dest.TeIdentifier, opt => opt.MapFrom(src => src.User.UserName))
-                .ForMember(dest => dest.ITApproverName, opt => opt.MapFrom(src => src.IT.TeNum))
-                .ForMember(dest => dest.DeptMangApproverName, opt => opt.MapFrom(src => src.DeparManag.TeNum))
-                .ForMember(dest => dest.ControllerApproverName, opt => opt.MapFrom(src => src.Controller.TeNum));
+           
 
         }
     }

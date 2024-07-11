@@ -15,7 +15,9 @@ namespace TequipWiseServer.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
         public DbSet<LocationDepartment> LocationDepartments { get; set; }
-        public DbSet<UserEquipmentRequest> UserEquipmentRequests { get; set; }
+        public DbSet<SubEquipmentRequest> subEquipmentRequests { get; set; }
+        public DbSet<EquipmentRequest> EquipmentRequests { get; set; }
+
         public DbSet<SapNumber> SapNumbers { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -83,10 +85,7 @@ namespace TequipWiseServer.Data
                 .HasForeignKey(u => u.locaId);
 
 
-            builder.Entity<ApplicationUser>()
-                .HasMany(u => u.UserEquipmentRequests)
-                .WithOne(uer => uer.User)
-                .HasForeignKey(uer => uer.UserId);
+         
             builder.Entity<ApplicationUser>()
                 .HasMany(u => u.ItRequestToApprove)
                 .WithOne(uer => uer.IT)
@@ -109,12 +108,59 @@ namespace TequipWiseServer.Data
               .HasOne(u => u.SapNumber)
               .WithMany(s => s.Users)
               .HasForeignKey(u => u.SapNumberId);
+            builder.Entity<ApplicationUser>()
+               .HasMany(user => user.UserEquipmentRequests)
+               .WithOne(er => er.User)
+               .HasForeignKey(er => er.UserId);
 
             //Equipemnt relations
+            // EquipmentRequest relationships
+            builder.Entity<EquipmentRequest>()
+                .HasMany(er => er.EquipmentSubRequests)
+                .WithOne(sub => sub.EquipRequest)
+                .HasForeignKey(sub => sub.RequestId);
+
+            builder.Entity<EquipmentRequest>()
+                .HasOne(er => er.User)
+                .WithMany(user => user.UserEquipmentRequests)
+                .HasForeignKey(er => er.UserId);
+
+            // Equipment relationships
             builder.Entity<Equipment>()
-                .HasMany(e => e.UserEquipmentRequests)
-                .WithOne(uer => uer.Equipment)
-                .HasForeignKey(uer => uer.EquipmentId);
+                .HasMany(eq => eq.UserEquipmentRequests)
+                .WithOne(sub => sub.Equipment)
+                .HasForeignKey(sub => sub.EquipmentId);
+
+            builder.Entity<Equipment>()
+                .HasOne(eq => eq.supplier)
+                .WithMany() // Assuming Supplier is another entity you have
+                .HasForeignKey(eq => eq.supplierrid);
+
+            // SubEquipmentRequest relationships
+            builder.Entity<SubEquipmentRequest>()
+                .HasOne(sub => sub.EquipRequest)
+                .WithMany(er => er.EquipmentSubRequests)
+                .HasForeignKey(sub => sub.RequestId);
+
+            builder.Entity<SubEquipmentRequest>()
+                .HasOne(sub => sub.Equipment)
+                .WithMany(eq => eq.UserEquipmentRequests)
+                .HasForeignKey(sub => sub.EquipmentId);
+
+            builder.Entity<SubEquipmentRequest>()
+                .HasOne(sub => sub.DeparManag)
+                .WithMany()
+                .HasForeignKey(sub => sub.deptManagId);
+
+            builder.Entity<SubEquipmentRequest>()
+                .HasOne(sub => sub.IT)
+                .WithMany()
+                .HasForeignKey(sub => sub.itId);
+
+            builder.Entity<SubEquipmentRequest>()
+                .HasOne(sub => sub.Controller)
+                .WithMany()
+                .HasForeignKey(sub => sub.controllerid);
 
 
             //Supplier Relation
@@ -124,9 +170,9 @@ namespace TequipWiseServer.Data
              .HasForeignKey(e => e.supplierrid);
             //Sapnum relatuions
             builder.Entity<SapNumber>()
-      .HasOne(p => p.Controller)
-      .WithMany()
-      .HasForeignKey(p => p.Idcontroller);
+           .HasOne(p => p.Controller)
+            .WithMany()
+            .HasForeignKey(p => p.Idcontroller);
 
 
         }

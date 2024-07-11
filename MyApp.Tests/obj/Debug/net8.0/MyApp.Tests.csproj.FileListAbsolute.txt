@@ -164,3 +164,4 @@ C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.pdb
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.genruntimeconfig.cache
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\ref\MyApp.Tests.dll
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\TequipWiseServer.staticwebassets.runtime.json

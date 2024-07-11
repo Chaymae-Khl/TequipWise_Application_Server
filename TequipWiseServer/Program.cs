@@ -130,6 +130,8 @@ app.UseCors(x => x
             .AllowAnyMethod()
             .AllowAnyHeader());
 
+// This should be in place to serve static files (to get the files from the back-end)
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

@@ -1,82 +1,39 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using TequipWiseServer.Models;
 
 namespace TequipWiseServer.DTO
 {
     public class EquipementRequestDTO
     {
-        [Required]
-        public int UserEquipmentRequestId { get; set; }
-        [Required]
-        public string UserId { get; set; }
-        [Required]
-        public int EquipmentId { get; set; }
-        [Required]
+        public int EquipmentRequestId { get; set; }
         public DateTime RequestDate { get; set; }
-        [Required]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
+        public float? TotalPrice { get; set; }
 
-        public string? NameOfUser { get; set; }
-        public string? TeIdentifier {  get; set; }
+        public bool? RequestStatus { get; set; } = null;
 
-        //if is confirmed by all the actor the requestStatus is confirmed
-        public bool? RequestStatus { get; set; }
+        public bool? isNewhire { get; set; } = false;
 
-        public bool? isNewhire { get; set; }
+        public string? NewHireName { get; set; }
 
-        public int? NumberEquipment { get; set; }
-
-
-
-
-        //departmenent manager request part
-
-        public string? DeptMangApproverName { get; set; }
-        public string? deptManagId { get; set; }
-
-
-        public DateTime? DepartmangconfirmedAt { get; set; }
-        public bool? DepartmangconfirmStatus { get; set; }
-
-        public string? Departmang_Not_confirmCause { get; set; }
-
-        //Finance request part (Controller)
-        public string? ControllerApproverName { get; set; }
-        public DateTime? FinanceconfirmedAt { get; set; }
-        public bool? FinanceconfirmSatuts { get; set; }
-
-        public string? Finance_Not_confirmCause { get; set; }
         public string? GL { get; set; }
 
         public string? CC { get; set; }
         public string? order { get; set; }
 
-        [JsonIgnore]
-        public virtual ApplicationUser? User { get; set; }
-
-
-        //IT request part
-        public string? ITApproverName { get; set; }
-
-        public DateTime? ITconfirmedAt { get; set; }
-        public bool? ITconfirmSatuts { get; set; }
-
-        public string? IT_Not_confirmCause { get; set; }
-
-        //is a pdf file
         public string? SupplierOffer { get; set; }
 
         public string? PONum { get; set; }
 
         public string? PRNum { get; set; }
 
-        public bool? PR_Status { get; set; }
+        public bool? PR_Status { get; set; } = null;
         public string? PR_Not_ConfirmCause { get; set; }
 
-        public string EquipmentName { get; set; }
+        public string? NmaeOfUser { get; set; }
 
-       
+        public virtual ICollection<EquipementSUBrequestDTO>? EquipmentSubRequests { get; set; }
+
 
     }
 }

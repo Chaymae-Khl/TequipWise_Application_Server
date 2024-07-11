@@ -22,8 +22,10 @@ namespace TequipWiseServer.DTO
         public string? ManagerBackupApproverEmail { get; set; }
         public bool? ManagerBackupApproverActive { get; set; }
         public int locaId { get; set; }
+        public int? SapNumberId { get; set; }
+        public string? SapNumb { get; set; }
 
-    
+
         public Location? Location { get; set; }
         public Department? Department { get; set; }
         public List<string> Roles { get; set; }

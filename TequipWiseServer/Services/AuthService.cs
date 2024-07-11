@@ -161,6 +161,7 @@ namespace TequipWiseServer.Services
                 .Include(u => u.Location)
                 .Include(u => u.Department)
                 .Include(u => u.Plant)
+                .Include(u=>u.SapNumber)
                 .Include(u=>u.Subordinates)
                 .ToListAsync();
 
@@ -351,7 +352,16 @@ namespace TequipWiseServer.Services
                     user.plantId = plant.PlantNumber;
                 }
             }
-
+            // Retrieve and update department based on provided department name
+            if (!string.IsNullOrEmpty(updatedUserDetails.SapNumb))
+            {
+                var sap = await _dbContext.SapNumbers.FirstOrDefaultAsync(d => d.SapNum == updatedUserDetails.SapNumb);
+                if (sap != null)
+                {
+                    user.SapNumber = sap;
+                    user.SapNumberId = sap.SApID;
+                }
+            }
             // Save changes to the context
             await _dbContext.SaveChangesAsync();
 
@@ -439,16 +449,17 @@ namespace TequipWiseServer.Services
             if (userClaims != null && userClaims.Identity?.IsAuthenticated == true)
             {
                 var users = await _userManager.Users
-        .Include(u => u.Location)
-        .Include(u => u.Department)
-         .ThenInclude(d => d.Manager)
-         .ThenInclude(m => m.Backupaprover)
-        .Include(u => u.Plant)
-          .ThenInclude(d => d.ItApprover)
-        .Include(u => u.Subordinates)
-        .Include(u => u.Manager) // Include Manager
-          .ThenInclude(m => m.Backupaprover) // Then include Backupaprover
-        .ToListAsync();
+         .Include(u => u.Location)
+    .Include(u => u.Department)
+        .ThenInclude(d => d.Manager)
+        .ThenInclude(m => m.Backupaprover)
+    .Include(u => u.Plant)
+        .ThenInclude(p => p.ItApprover)
+    .Include(u => u.SapNumber) // Ensure SapNumber is included
+    .Include(u => u.Subordinates)
+    .Include(u => u.Manager)
+        .ThenInclude(m => m.Backupaprover)
+    .ToListAsync();
 
 
                 var userDetailsList = new List<UserDetailsDTO>();
