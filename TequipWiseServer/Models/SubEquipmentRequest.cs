@@ -16,9 +16,9 @@ namespace TequipWiseServer.Models
         public string Comment { get; set; }
 
         //prix unitaire
-        public float? PU { get; set; }
+        public float? PU { get; set; } = 0;
 
-        public float Totale { get; set; }
+        public float Totale { get; set; }= 0;
         //the approver iDS
         public string? deptManagId { get; set; }
         public string? itId { get; set; }

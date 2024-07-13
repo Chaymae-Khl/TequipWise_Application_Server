@@ -68,7 +68,8 @@ namespace TequipWiseServer.Controllers
 
             //assight the request to the autheticated user
             newrequest.UserId = userDetails.Id;
-
+            //set the acual date
+            newrequest.RequestDate=DateTime.Now;
             // Save the request in the database
             var result = await _requestService.PassRequest(newrequest);
             if (result is OkObjectResult == false)
@@ -164,33 +165,33 @@ namespace TequipWiseServer.Controllers
 
         ////get the requests of the authenticated user
 
-        //[HttpGet("GetUserRequests")]
-        //public async Task<IActionResult> GetUserRequests()
-        //{
-        //      var userResult = await _authService.GetAuthenticatedUserAsync();
+        [HttpGet("GetUserRequests")]
+        public async Task<IActionResult> GetUserRequests()
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
 
-        //    if (userResult is UnauthorizedResult)
-        //    {
-        //        return Unauthorized();
-        //    }
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
 
-        //    var okResult = userResult as OkObjectResult;
-        //    if (okResult == null || okResult.Value == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
-        //    }
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
 
-        //    var userDetails = okResult.Value as UserDetailsDTO;
-        //    if (userDetails == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status400BadRequest,
-        //            new Response { Status = "Error", Message = "User details are missing." });
-        //    }
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Response { Status = "Error", Message = "User details are missing." });
+            }
 
-        //    var userRequests = await _requestService.GetRequestsByUserIdAsync(userDetails.Id);
+            var userRequests = await _requestService.GetRequestsByUserIdAsync(userDetails.Id);
 
-        //    return Ok(userRequests);
-        //}
+            return Ok(userRequests);
+        }
 
         //[HttpGet("GetUserRequestCount")]
         //public async Task<IActionResult> GetUserRequestCount()

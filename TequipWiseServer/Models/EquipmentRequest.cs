@@ -15,7 +15,7 @@ namespace TequipWiseServer.Models
      
         public string? Comment { get; set; }
 
-        public float? TotalPrice { get; set; }
+        public float? TotalPrice { get; set; } = 0;
 
         //if is confirmed by all the actor the requestStatus is confirmed
         public bool? RequestStatus { get; set; } = null;

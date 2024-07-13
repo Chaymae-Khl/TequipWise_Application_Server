@@ -27,14 +27,18 @@ namespace TequipWiseServer.Services
         public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsByUserIdAsync(string userId)
         {
             var requests = await _dbContext.EquipmentRequests
-                .Where(r => r.UserId == userId)
-                .OrderByDescending(r => r.RequestDate)
-                .Include(u => u.User)
-                .Include(r => r.EquipmentSubRequests)
-                .ThenInclude(rd=>rd.DeparManag)
-                
-
-                .ToListAsync();
+        .Where(r => r.UserId == userId)
+        .OrderByDescending(r => r.RequestDate)
+        .Include(r => r.User)
+        .Include(r => r.EquipmentSubRequests)
+            .ThenInclude(sr => sr.DeparManag)
+        .Include(r => r.EquipmentSubRequests)
+            .ThenInclude(sr => sr.IT)
+        .Include(r => r.EquipmentSubRequests)
+            .ThenInclude(sr => sr.Controller)
+        .Include(r => r.EquipmentSubRequests)
+            .ThenInclude(sr => sr.Equipment)
+        .ToListAsync();
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }

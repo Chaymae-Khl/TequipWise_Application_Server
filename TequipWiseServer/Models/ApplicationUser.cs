@@ -32,7 +32,9 @@ namespace TequipWiseServer.Models
         public int? SapNumberId { get; set; } // Foreign key to SapNumber
         public SapNumber? SapNumber { get; set; } // Navigation property
 
-
+        // New properties for refresh token
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
         public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
 
         public virtual ICollection<EquipmentRequest>? UserEquipmentRequests { get; set; }

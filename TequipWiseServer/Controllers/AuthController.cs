@@ -106,9 +106,8 @@ namespace TequipWiseServer.Controllers
 
             return StatusCode(StatusCodes.Status400BadRequest,
                 new Response { Status = "Error", Message = $"Could not send link to email, please try again" });
-
         }
-
+    
 
     }
 }

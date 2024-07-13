@@ -51,35 +51,35 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "801e1bc0-97df-4fca-bb2a-0935aae2c539",
+                            Id = "127c3770-3ed5-49fb-a5e6-f29970ebc8f2",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "db499bf2-3de9-4c79-a894-3dff72eb7c86",
+                            Id = "a03ba0e1-b0dc-48c0-b846-f9c9cc661097",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "8441c60b-0a1f-4639-b52a-1197fdff3628",
+                            Id = "57f936f3-3fc8-412a-82a5-9d3277488348",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "61c23588-c403-4ff2-99a5-b105bc5c5c22",
+                            Id = "0f584139-0312-4217-8e49-45cae044c5db",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "1767fb01-9529-4803-aa38-2b3fbd0757e4",
+                            Id = "6b69938c-7f03-4f9b-9f8f-383be5514c22",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -605,6 +605,12 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<string>("ManagerId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("SapNumberId")
                         .HasColumnType("int");

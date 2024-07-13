@@ -16,6 +16,7 @@ using TequipWiseServer.Models.Authentication.SignUp;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
+using System.Security.Cryptography;
 namespace TequipWiseServer.Services
 {
     public class AuthService : IAuthentication
@@ -476,6 +477,6 @@ namespace TequipWiseServer.Services
             // Return null if no authenticated user is found
             return null;
         }
-
+      
     }
 }
