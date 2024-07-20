@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
+using TequipWiseServer.DTO.ApprovalDTO;
 using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
@@ -69,7 +70,7 @@ namespace TequipWiseServer.Controllers
             //assight the request to the autheticated user
             newrequest.UserId = userDetails.Id;
             //set the acual date
-            newrequest.RequestDate=DateTime.Now;
+            newrequest.RequestDate = DateTime.Now;
             // Save the request in the database
             var result = await _requestService.PassRequest(newrequest);
             if (result is OkObjectResult == false)
@@ -220,128 +221,148 @@ namespace TequipWiseServer.Controllers
         //    return Ok(new { Count = requestCount });
         //}
 
-        //[HttpGet("DepartmentRequests")]
-        //public async Task<IActionResult> GetDepartmentRequests()
+        [HttpGet("DepartmentRequests")]
+        public async Task<IActionResult> GetDepartmentRequests()
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
+            }
+
+            var roles = await _userManager.GetRolesAsync(new ApplicationUser { Id = userDetails.Id });
+
+            IEnumerable<EquipementRequestDTO> requests;
+
+            if (roles.Contains("Manager"))
+            {
+                requests = await _requestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
+            }
+            else if (roles.Contains("It Approver"))
+            {
+                requests = await _requestService.GetRequestsForLocationITApproverAsync(userDetails.Id);
+            }
+            else
+            {
+                return Forbid();
+            }
+
+            return Ok(requests);
+        }
+
+        //[HttpPut("UpdateSubEquipmentRequest")]
+        //public async Task<IActionResult> UpdateSubRequest([FromBody] SubEquipmentRequest updatedSubRequest)
         //{
+        //    // Retrieve the authenticated user info
         //    var userResult = await _authService.GetAuthenticatedUserAsync();
-
-        //    if (userResult is UnauthorizedResult)
-        //    {
-        //        return Unauthorized();
-        //    }
-
         //    var okResult = userResult as OkObjectResult;
-        //    if (okResult == null || okResult.Value == null)
+
+        //    if (okResult?.Value is not UserDetailsDTO userDetails)
         //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+        //        return StatusCode(StatusCodes.Status500InternalServerError,
+        //            new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
         //    }
 
-        //    var userDetails = okResult.Value as UserDetailsDTO;
-        //    if (userDetails == null)
+        //    // Retrieve the current sub-request details from the database
+        //    var currentSubRequestDetails = await _requestService.GetSubRequestByIdAsync(updatedSubRequest.SubEquipmentRequestId);
+
+        //    if (currentSubRequestDetails == null)
         //    {
-        //        return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
+        //        return NotFound(new Response { Status = "Error", Message = "Sub-Request not found." });
         //    }
 
-        //    var roles = await _userManager.GetRolesAsync(new ApplicationUser { Id = userDetails.Id });
-
-        //    IEnumerable<EquipementRequestDTO> requests;
-
-        //    if (roles.Contains("Manager"))
+        //    // Check if 'DepartmangconfirmStatus' has been modified
+        //    if (updatedSubRequest.DepartmangconfirmStatus != currentSubRequestDetails.DepartmangconfirmStatus)
         //    {
-        //        requests = await _requestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
-        //    }
-        //    else if (roles.Contains("It Approver"))
-        //    {
-        //        requests = await _requestService.GetRequestsForLocationITApproverAsync(userDetails.Id);
-        //    }
-        //    else
-        //    {
-        //        return Forbid();
-        //    }
+        //        updatedSubRequest.deptManagId = userDetails.Id;
+        //        updatedSubRequest.DepartmangconfirmedAt = DateTime.Now;
 
-        //    return Ok(requests);
-        //}
-
-        //[HttpPut("UpdateEquipemntRequest")]
-        //public async Task<IActionResult> UpdateRequest([FromBody] UserEquipmentRequest updatedRequest)
-        //{
-        //    // Retrieve the authenticationuser info
-
-        //    var userResult = await _authService.GetAuthenticatedUserAsync();
-
-
-        //    var okResult = userResult as OkObjectResult;
-        //    if (okResult == null || okResult.Value == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
-        //    }
-
-        //    var userDetails = okResult.Value as UserDetailsDTO;
-        //    if (userDetails == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
-        //    }
-
-
-
-        //    // Retrieve the current request details from the database
-        //    var currentrequestDetails = await _requestService.GetRequestByIdAsync(updatedRequest.UserEquipmentRequestId);
-        //    //get the user Email
-        //    var userEmail = currentrequestDetails.User.Email;
-        //    //get the itAPprover Email
-        //    var ItApproverEmail = currentrequestDetails.User.Plant.ItApprover.Email;
-
-        //    if (currentrequestDetails == null)
-        //    {
-        //        return NotFound(new Response { Status = "Error", Message = "Equipement not found." });
-        //    }
-
-        //    // Check if a specific field 'DepartmangconfirmStatus' has been modified
-        //    if (updatedRequest.DepartmangconfirmStatus != currentrequestDetails.DepartmangconfirmStatus)
-        //    {
-
-        //        updatedRequest.deptManagId = userDetails.Id;
-        //        updatedRequest.DepartmangconfirmedAt = DateTime.Now;
         //        var ItApproverLink = FixedemailLink + "RequestConfirmation";
 
-        //        //when the manager approver an emai should be sent to the it approver
-        //        if (ItApproverEmail != null)
+        //        if (currentSubRequestDetails.IT != null)
         //        {
-
         //            var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
         //            var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-        //            var emailContent = emailTemplate.Replace("{{resetLink}}", ItApproverLink)
-        //                     .Replace("{{TeNum}}", currentrequestDetails.NameOfUser);
+        //            var emailContent = emailTemplate
+        //                .Replace("{{resetLink}}", ItApproverLink)
+        //                .Replace("{{TeNum}}", currentSubRequestDetails.EquipRequest.User.TeNum);
 
-        //            var message = new Message(new string[] { ItApproverEmail }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
+        //            var message = new Message(new[] { currentSubRequestDetails.IT.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
         //            _emailService.SendEmail(message);
         //        }
-
         //    }
 
-        //    //change the global status of the request to false if the manager or the itapprover or the financeappror reject
-        //    if (updatedRequest.DepartmangconfirmStatus == false || updatedRequest.ITconfirmSatuts == false || updatedRequest.FinanceconfirmSatuts == false)
+        //    // Change the global status of the request to false if rejected
+        //    if (updatedSubRequest.DepartmangconfirmStatus==false || updatedSubRequest.ITconfirmSatuts==false || updatedSubRequest.FinanceconfirmSatuts==false)
         //    {
-        //        var rejectionlink = FixedemailLink + "EquipmentList";
+        //        var rejectionLink = FixedemailLink + "EquipmentList";
         //        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
         //        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-        //        var emailContent = emailTemplate.Replace("{{resetLink}}", rejectionlink)
-        //            .Replace("{{equipment}}", currentrequestDetails.EquipmentName)
-        //            .Replace("{{UserName}}", currentrequestDetails.NameOfUser);
-        //        updatedRequest.RequestStatus = false;
+        //        var emailContent = emailTemplate
+        //            .Replace("{{resetLink}}", rejectionLink)
+        //            .Replace("{{equipment}}", currentSubRequestDetails.Equipment.EquipName)
+        //            .Replace("{{UserName}}", currentSubRequestDetails.EquipRequest.User.TeNum);
 
-        //        //send the rejection email to the user
+        //        updatedSubRequest.SubRequestStatus = false;
 
-        //        var message = new Message(new string[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
+        //        var message = new Message(new[] { currentSubRequestDetails.EquipRequest.User.Email }, "Equipment Request Rejection", emailContent, isHtml: true);
         //        _emailService.SendEmail(message);
-        //        Console.WriteLine("=================== the request is rejcted ");
+        //        Console.WriteLine("=================== the sub-request is rejected ");
         //    }
 
+        //    // Update the sub-request
+        //    _dbContext.Entry(updatedSubRequest).State = EntityState.Modified;
 
-        //    var result = await _requestService.UpdateRequest(updatedRequest);
+        //    try
+        //    {
+        //        await _dbContext.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!_dbContext.subEquipmentRequests.Any(e => e.SubEquipmentRequestId == updatedSubRequest.SubEquipmentRequestId))
+        //        {
+        //            return new NotFoundResult();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-        //    return result;
+        //    return new OkObjectResult(new Response { Status = "Success", Message = "Sub-Request updated successfully!" });
         //}
+
+
+        [HttpPut("{equipmentRequestId}/subrequests/{subRequestId}")]
+        public async Task<IActionResult> UpdateSubRequest(int equipmentRequestId, int subRequestId, [FromBody] SubEquipmentRequest updatedSubRequest)
+        {
+            if (subRequestId != updatedSubRequest.SubEquipmentRequestId)
+            {
+                return BadRequest("Sub-request ID mismatch.");
+            }
+
+            var result = await _requestService.UpdateSubRequestAsync(equipmentRequestId, updatedSubRequest);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
 
         //[HttpPost("UploadSupplierOffer")]
         //public async Task<IActionResult> UploadSupplierOffer([FromForm] int requestId, [FromForm] IFormFile file)
@@ -376,6 +397,17 @@ namespace TequipWiseServer.Controllers
             var Equipmentname = await _equipmentService.GetEquipemntInfoAsync();
             return Ok(Equipmentname);
         }
+        //[HttpGet("{subRequestId}")]
+        //public async Task<IActionResult> GetSubRequestById(int subRequestId)
+        //{
+        //    var subRequest = await _requestService.GetSubRequestByIdAsync(subRequestId);
+        //    if (subRequest == null)
+        //    {
+        //        return NotFound(new Response { Status = "Error", Message = "Sub-Request not found." });
+        //    }
+
+        //    return Ok(subRequest);
+        //}
     }
 
 
