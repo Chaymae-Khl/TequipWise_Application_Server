@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.DTO.ApprovalDTO;
@@ -364,6 +365,77 @@ namespace TequipWiseServer.Controllers
             return Ok(result);
         }
 
+        [HttpPut("ItOfferAndPrice/{equipmentRequestId}")]
+        public async Task<IActionResult> RequestSupplierOfferAndPUPrice(int equipmentRequestId, IFormFile file, [FromForm] string updatedRequestJson)
+        {
+            // Deserialize the JSON string to your EquipmentRequest model
+            EquipmentRequest updatedRequest;
+            try
+            {
+                updatedRequest = JsonConvert.DeserializeObject<EquipmentRequest>(updatedRequestJson);
+            }
+            catch (JsonException ex)
+            {
+                return BadRequest(new Response { Status = "Error", Message = "Invalid JSON format" });
+            }
+
+            // Validate the updatedRequest model
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Check if file is provided
+            if (file == null)
+            {
+                return BadRequest(new Response { Status = "Error", Message = "No file uploaded" });
+            }
+
+            // Upload supplier offer
+            var fileUploadHelper = new FileUploadHelper();
+            string filePath;
+            try
+            {
+                filePath = await fileUploadHelper.UploadFileAsync(file);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new Response { Status = "Error", Message = ex.Message });
+            }
+
+            // Set the file path to SupplierOffer
+            updatedRequest.SupplierOffer = filePath;
+
+            // Update the totale for each sub-request and calculate the total price of the main request
+            float totalRequestPrice = 0;
+            foreach (var subRequest in updatedRequest.EquipmentSubRequests)
+            {
+                if (subRequest.PU.HasValue && subRequest.QtEquipment.HasValue)
+                {
+                    subRequest.Totale = subRequest.PU.Value * subRequest.QtEquipment.Value;
+                }
+                else
+                {
+                    subRequest.Totale = 0; // Set to 0 if either PU or QtEquipment is null
+                }
+                totalRequestPrice += subRequest.Totale;
+            }
+
+            // Set the total price of the main request
+            updatedRequest.TotalPrice = totalRequestPrice;
+
+            // Update the equipment request
+            var result = await _requestService.RequestSupplierOfferAndPU(equipmentRequestId, updatedRequest);
+
+            // Check if the update was successful
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            // Return the updated equipment request
+            return Ok(result);
+        }
         //[HttpPost("UploadSupplierOffer")]
         //public async Task<IActionResult> UploadSupplierOffer([FromForm] int requestId, [FromForm] IFormFile file)
         //{

@@ -267,8 +267,54 @@ namespace TequipWiseServer.Services
         }
 
 
+        public async Task<EquipmentRequest?> RequestSupplierOfferAndPU(int equipmentRequestId, EquipmentRequest updatedRequest)
+        {
+            // Retrieve current request of the subrequest
+            var equipmentRequest = await _dbContext.EquipmentRequests
+                .Include(er => er.EquipmentSubRequests)
+                .Include(u => u.User)
+                .ThenInclude(up => up.Plant)
+                .ThenInclude(pi => pi.ItApprover)
+                .FirstOrDefaultAsync(er => er.EquipmentRequestId == equipmentRequestId);
 
+            if (equipmentRequest == null)
+            {
+                Console.WriteLine("Request not found");
+                return null; // Main request not found
+            }
 
+            // Detach tracked sub-requests to avoid conflict
+            foreach (var subRequest in equipmentRequest.EquipmentSubRequests)
+            {
+                _dbContext.Entry(subRequest).State = EntityState.Detached;
+            }
+
+            // Update only the properties that are not null in updatedRequest, excluding key properties
+            var properties = typeof(EquipmentRequest).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                if (property.Name == nameof(EquipmentRequest.EquipmentRequestId))
+                {
+                    continue; // Skip updating key property
+                }
+
+                var newValue = property.GetValue(updatedRequest);
+                if (newValue != null)
+                {
+                    property.SetValue(equipmentRequest, newValue);
+                }
+            }
+
+            // Reattach updated sub-requests
+            foreach (var subRequest in updatedRequest.EquipmentSubRequests)
+            {
+                _dbContext.Entry(subRequest).State = EntityState.Modified;
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return equipmentRequest;
+        }
 
 
 

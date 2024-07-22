@@ -35,4 +35,8 @@
     <ProjectReference Include="..\User.Managmenet.Service\User.Managmenet.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>
