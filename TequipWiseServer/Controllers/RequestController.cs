@@ -29,9 +29,9 @@ namespace TequipWiseServer.Controllers
         private readonly IEquipment _equipmentService;
         private readonly IMapper _mapper;
         private readonly AppDbContext _dbContext;
+        private readonly NotificationService _notificationService;
 
-
-        public RequestController(IEquipementRequest requestService, IAuthentication authService, IEMailService emailService, UserManager<ApplicationUser> userManager, IEquipment equipmentService, IMapper mapper, AppDbContext dbContext)
+        public RequestController(IEquipementRequest requestService, IAuthentication authService, IEMailService emailService, UserManager<ApplicationUser> userManager, IEquipment equipmentService, IMapper mapper, AppDbContext dbContext, NotificationService notificationService)
         {
             _requestService = requestService;
             _authService = authService;
@@ -40,6 +40,7 @@ namespace TequipWiseServer.Controllers
             _equipmentService = equipmentService;
             _mapper = mapper;
             _dbContext = dbContext;
+            _notificationService = notificationService;
         }
 
         public string FixedemailLink = "http://localhost:4200/";
@@ -78,6 +79,7 @@ namespace TequipWiseServer.Controllers
             {
                 return result;
             }
+            await _notificationService.SendNotificationAsync(userDetails.Id, "Your request has been sent!");
 
             var haveApprover = userDetails.ApproverActive;
             var haveBackupApprover = userDetails.ManagerBackupApproverActive;
@@ -161,7 +163,9 @@ namespace TequipWiseServer.Controllers
                     }
                 }
             }
-            return result;
+
+            return StatusCode(StatusCodes.Status200OK,
+                new Response { Status = "Success", Message = "Request processed and notification sent." });
 
         }
 
@@ -255,6 +259,10 @@ namespace TequipWiseServer.Controllers
             else if (roles.Contains("It Approver"))
             {
                 requests = await _requestService.GetRequestsForLocationITApproverAsync(userDetails.Id);
+            }
+            else if (roles.Contains("Controller"))
+            {
+                requests = await _requestService.GetRequestsForSapControllerAsync(userDetails.Id);
             }
             else
             {
@@ -436,32 +444,7 @@ namespace TequipWiseServer.Controllers
             // Return the updated equipment request
             return Ok(result);
         }
-        //[HttpPost("UploadSupplierOffer")]
-        //public async Task<IActionResult> UploadSupplierOffer([FromForm] int requestId, [FromForm] IFormFile file)
-        //{
-        //    var fileUploadHelper = new FileUploadHelper();
-
-        //    string filePath;
-        //    try
-        //    {
-        //        filePath = await fileUploadHelper.UploadFileAsync(file);
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        return BadRequest(new Response { Status = "Error", Message = ex.Message });
-        //    }
-
-        //    // Update the database record with the file path
-        //    var request = await _dbContext.UserEquipmentRequests.FindAsync(requestId);
-        //    if (request == null)
-        //        return NotFound(new Response { Status = "Error", Message = "Request not found." });
-
-        //    request.SupplierOffer = filePath;
-        //    _dbContext.Entry(request).State = EntityState.Modified;
-        //    await _dbContext.SaveChangesAsync();
-
-        //    return Ok(new Response { Status = "Success", Message = "File uploaded and request updated successfully!" });
-        //}
+       
 
         [HttpGet("EquipemntName")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetAllEquipemntName()
@@ -480,7 +463,14 @@ namespace TequipWiseServer.Controllers
 
         //    return Ok(subRequest);
         //}
-    }
+    
 
-
+    [HttpPost("TestNotification")]
+    public async Task<IActionResult> TestNotification()
+    {
+        var userId = "7d4b8e80-05eb-4be7-98b4-9bfb4e7e750d"; // Replace with a valid user ID
+        var message = "Test notification";
+        await _notificationService.SendNotificationAsync(userId, message);
+        return Ok("Notification sent");
+    }}
 }

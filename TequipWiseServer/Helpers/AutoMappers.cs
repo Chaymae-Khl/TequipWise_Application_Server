@@ -22,8 +22,10 @@ namespace TequipWiseServer.Helpers
             CreateMap<IdentityRole, RoleDTO>();
 
             CreateMap<EquipmentRequest, EquipementRequestDTO>()
-            .ForMember(dest => dest.NmaeOfUser, opt => opt.MapFrom(src => src.User != null ? src.User.TeNum : null));
-          
+            .ForMember(dest => dest.NmaeOfUser, opt => opt.MapFrom(src => src.User != null ? src.User.TeNum : null))
+            .ForMember(dest => dest.SapNumOfUser, opt => opt.MapFrom(src => src.User.SapNumber != null ? src.User.SapNumber.SapNum : null));
+            
+
             CreateMap<SubEquipmentRequest, EquipementSUBrequestDTO>()
             .ForMember(dest => dest.ItApproverName, opt => opt.MapFrom(src => src.IT != null ? src.IT.TeNum : null))
             .ForMember(dest => dest.ControllerName, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null))

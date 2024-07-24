@@ -31,7 +31,7 @@ namespace TequipWiseServer.DTO
         public string? PR_Not_ConfirmCause { get; set; }
 
         public string? NmaeOfUser { get; set; }
-
+        public string? SapNumOfUser { get; set; }
         public virtual ICollection<EquipementSUBrequestDTO>? EquipmentSubRequests { get; set; }
 
 

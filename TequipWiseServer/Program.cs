@@ -10,46 +10,41 @@ using TequipWiseServer.Data;
 using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
+using TequipWiseServer.Models.Notification;
 using TequipWiseServer.Services;
 using User.Managmenet.Service.Models;
 using User.Managmenet.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services.
-builder.Services.AddScoped<IAuthentication,AuthService>();
+// Add services to the container
+builder.Services.AddScoped<IAuthentication, AuthService>();
 builder.Services.AddScoped<IOpenData, OpdenDataService>();
-builder.Services.AddScoped<ILocation, LocationService>();   
+builder.Services.AddScoped<ILocation, LocationService>();
 builder.Services.AddScoped<Isupplier, SupplierService>();
-builder.Services.AddScoped<IEquipment,EquipementService>();
+builder.Services.AddScoped<IEquipment, EquipementService>();
 builder.Services.AddScoped<IEquipementRequest, EquipementRequestService>();
 builder.Services.AddScoped<ISapNum, SapService>();
+builder.Services.AddScoped<NotificationService>();
 
 builder.Services.AddAutoMapper(typeof(AutoMappers));
 builder.Services.AddScoped<IEMailService, EmailService>();
 builder.Services.AddHttpContextAccessor();
-var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
-                  .Get<EmailConfiguration>();
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 
-//For EF 
+// For EF
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-//For Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-//builder.Services.AddControllers().AddJsonOptions(options =>
-//{
-//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-//    options.JsonSerializerOptions.WriteIndented = true; // If you want the JSON to be nicely formatted
-//});
-//add email configuration
+// For Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
-
-
-//email send
+// Email send
 builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
 
 // Adding Authentication
@@ -58,27 +53,55 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+.AddJwtBearer(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:ValidAudience"],
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
-   
+    };
+
+    // SignalR JWT Authentication
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/notificationHub")))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
-// Add services to the container.
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// CORS Configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .WithOrigins("http://localhost:4200") // Angular development server URL
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()); // Allow credentials
+});
 
+// SignalR
+builder.Services.AddSignalR();
+
+// Add controllers
+builder.Services.AddControllers();
+
+// Swagger configuration
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Auth API", Version = "v1" });
@@ -98,45 +121,41 @@ builder.Services.AddSwaggerGen(option =>
             {
                 Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
             },
-            new string[]{}
+            new string[] { }
         }
     });
 });
 
-
-
-
-
-
-
-
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//Cors
-app.UseCors(x => x
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-
-// This should be in place to serve static files (to get the files from the back-end)
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
+// Use CORS
+app.UseCors("AllowSpecificOrigin");
+
+// Use Authentication and Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Map controllers
 app.MapControllers();
+
+// Map SignalR hub
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();

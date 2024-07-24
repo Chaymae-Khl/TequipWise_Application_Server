@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Http.HttpResults;
 namespace TequipWiseServer.Services
 {
     public class AuthService : IAuthentication
@@ -399,6 +400,7 @@ namespace TequipWiseServer.Services
                     .Include(u => u.Plant)
                     .Include(u => u.Backupaprover)
                     .Include(u => u.Manager)
+                    .Include(u => u.SapNumber)
                     .FirstOrDefaultAsync(u => u.UserName == userName);
 
                 if (user != null)
@@ -414,7 +416,7 @@ namespace TequipWiseServer.Services
                 }
             }
 
-            return new UnauthorizedResult();
+            return null;
         } 
 
         public async Task<IActionResult> ChangeUserPassword(string userId, string newPassword)
@@ -442,41 +444,41 @@ namespace TequipWiseServer.Services
                 return new BadRequestObjectResult(new Response { Status = "Error", Message = "Failed to change password." });
             }
         }
-        public async Task<List<UserDetailsDTO?>> GetAuthenticatedUser()
-        {
-            // Retrieve the user's identity from the current HttpContext
-            var userClaims = _httpContextAccessor.HttpContext?.User;
+    //    public async Task<List<UserDetailsDTO>> GetAuthenticatedUser()
+    //    {
+    //        // Retrieve the user's identity from the current HttpContext
+    //        var userClaims = _httpContextAccessor.HttpContext?.User;
 
-            if (userClaims != null && userClaims.Identity?.IsAuthenticated == true)
-            {
-                var users = await _userManager.Users
-         .Include(u => u.Location)
-    .Include(u => u.Department)
-        .ThenInclude(d => d.Manager)
-        .ThenInclude(m => m.Backupaprover)
-    .Include(u => u.Plant)
-        .ThenInclude(p => p.ItApprover)
-    .Include(u => u.SapNumber) // Ensure SapNumber is included
-    .Include(u => u.Subordinates)
-    .Include(u => u.Manager)
-        .ThenInclude(m => m.Backupaprover)
-    .ToListAsync();
+    //        if (userClaims != null && userClaims.Identity?.IsAuthenticated == true)
+    //        {
+    //            var users = await _userManager.Users
+    //     .Include(u => u.Location)
+    //.Include(u => u.Department)
+    //    .ThenInclude(d => d.Manager)
+    //    .ThenInclude(m => m.Backupaprover)
+    //.Include(u => u.Plant)
+    //    .ThenInclude(p => p.ItApprover)
+    //.Include(u => u.SapNumber) // Ensure SapNumber is included
+    //.Include(u => u.Subordinates)
+    //.Include(u => u.Manager)
+    //    .ThenInclude(m => m.Backupaprover)
+    //.ToListAsync();
 
 
-                var userDetailsList = new List<UserDetailsDTO>();
-                foreach (var user in users)
-                {
-                    var roles = await _userManager.GetRolesAsync(user);
-                    var userDetails = _mapper.Map<UserDetailsDTO>(user);
-                    userDetails.Roles = roles.ToList();
-                    userDetailsList.Add(userDetails);
-                }
-                return userDetailsList;
-            }
+    //            var userDetailsList = new List<UserDetailsDTO>();
+    //            foreach (var user in users)
+    //            {
+    //                var roles = await _userManager.GetRolesAsync(user);
+    //                var userDetails = _mapper.Map<UserDetailsDTO>(user);
+    //                userDetails.Roles = roles.ToList();
+    //                userDetailsList.Add(userDetails);
+    //            }
+    //            return userDetailsList;
+    //        }
 
-            // Return null if no authenticated user is found
-            return null;
-        }
+    //        // Return null if no authenticated user is found
+    //        return null;
+    //    }
       
     }
 }
