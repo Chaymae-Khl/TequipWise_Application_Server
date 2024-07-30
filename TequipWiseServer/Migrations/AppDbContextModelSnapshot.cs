@@ -51,35 +51,35 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "127c3770-3ed5-49fb-a5e6-f29970ebc8f2",
+                            Id = "7fc086b9-875c-4560-8e17-6733fe4b5fa7",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "a03ba0e1-b0dc-48c0-b846-f9c9cc661097",
+                            Id = "9093bf41-de98-4f97-8714-707f63c617e9",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "57f936f3-3fc8-412a-82a5-9d3277488348",
+                            Id = "d52a3b5e-d2a4-439d-9885-92a3b15b3ba5",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "0f584139-0312-4217-8e49-45cae044c5db",
+                            Id = "ae8878a6-912a-43f8-bd79-00dc27095e58",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "6b69938c-7f03-4f9b-9f8f-383be5514c22",
+                            Id = "66980243-815b-41b0-8781-fb47c7a1e35b",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -324,29 +324,11 @@ namespace TequipWiseServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EquipmentRequestId"));
 
-                    b.Property<string>("CC")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NewHireName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PONum")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PRNum")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PR_Not_ConfirmCause")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("PR_Status")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
@@ -363,11 +345,11 @@ namespace TequipWiseServer.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("currency")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("isNewhire")
                         .HasColumnType("bit");
-
-                    b.Property<string>("order")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EquipmentRequestId");
 
@@ -488,6 +470,9 @@ namespace TequipWiseServer.Migrations
                     b.Property<string>("ApplicationUserId2")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("CC")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -513,6 +498,9 @@ namespace TequipWiseServer.Migrations
                     b.Property<DateTime?>("FinanceconfirmedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("GL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IT_Not_confirmCause")
                         .HasColumnType("nvarchar(max)");
 
@@ -521,6 +509,18 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<DateTime?>("ITconfirmedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PONum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PRNum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PR_Not_ConfirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PR_Status")
+                        .HasColumnType("bit");
 
                     b.Property<float?>("PU")
                         .HasColumnType("real");
@@ -548,6 +548,9 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<string>("itId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("order")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubEquipmentRequestId");
 

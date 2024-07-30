@@ -49,7 +49,7 @@ namespace TequipWiseServer.Services
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }
-   async public Task<IActionResult> PassRequest(EquipmentRequest request)
+        async public Task<IActionResult> PassRequest(EquipmentRequest request)
         {
             _dbContext.EquipmentRequests.Add(request);
             await _dbContext.SaveChangesAsync();
@@ -71,9 +71,9 @@ namespace TequipWiseServer.Services
                                            .Where(r => r.User.Department.ManagerId == managerId)
                                            .OrderByDescending(r => r.RequestDate)
                                            .Include(r => r.User)
-                                           .ThenInclude(rs=>rs.SapNumber)
+                                           .ThenInclude(rs => rs.SapNumber)
                                            .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sb=>sb.IT)
+                                           .ThenInclude(sb => sb.IT)
                                            .Include(r => r.EquipmentSubRequests)
                                            .ThenInclude(sb => sb.Controller)
                                            .Include(r => r.EquipmentSubRequests)
@@ -113,6 +113,7 @@ namespace TequipWiseServer.Services
                                                        r.EquipmentSubRequests.Any(sub => sub.DepartmangconfirmStatus == true))
                                            .OrderByDescending(r => r.RequestDate)
                                            .Include(r => r.User)
+                                            .ThenInclude(rs => rs.SapNumber)
                                            .Include(r => r.EquipmentSubRequests)
                                            .ThenInclude(sb => sb.IT)
                                            .Include(r => r.EquipmentSubRequests)
@@ -154,9 +155,36 @@ namespace TequipWiseServer.Services
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }
+        public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForAdminAsync(string controllerId)
+        {
+            var requests = await _dbContext.EquipmentRequests
+                                           .OrderByDescending(r => r.RequestDate)
+                                           .Include(r => r.User)
+                                           .ThenInclude(u => u.SapNumber)
+                                           .Include(r => r.EquipmentSubRequests)
+                                           .ThenInclude(sr => sr.IT)
+                                           .Include(r => r.EquipmentSubRequests)
+                                           .ThenInclude(sr => sr.Controller)
+                                           .Include(r => r.EquipmentSubRequests)
+                                           .ThenInclude(sr => sr.DeparManag)
+                                           .Include(r => r.EquipmentSubRequests)
+                                           .ThenInclude(sr => sr.Equipment)
+                                           .AsNoTracking()
+                                           .ToListAsync();
 
+            return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
+        }
+        //using the class
+        public async Task<EquipmentRequest?> GetRequestByIdAsyncOrig(int equipmentRequestId)
+        {
+            return await _dbContext.EquipmentRequests
+                .Include(u=>u.User)
+                .Include(s=>s.EquipmentSubRequests)
+                 .AsNoTracking()
+                .FirstOrDefaultAsync(r=>r.EquipmentRequestId==equipmentRequestId);
+        }
 
-
+        //using dto
         public async Task<EquipementRequestDTO> GetRequestByIdAsync(int requestId)
         {
             var request = await _dbContext.EquipmentRequests
@@ -186,156 +214,171 @@ namespace TequipWiseServer.Services
         //when the manager approves
         public async Task<SubEquipmentRequest?> UpdateSubRequestAsync(int equipmentRequestId, SubEquipmentRequest updatedSubRequest)
         {
+            // Retrieve main request of the subrequest
+            var equipmentRequest = await _dbContext.EquipmentRequests
+                .Include(er => er.EquipmentSubRequests)
+                .Include(u => u.User)
+                .ThenInclude(up => up.Plant)
+                .ThenInclude(pi => pi.ItApprover)
+                .ThenInclude(bb => bb.Backupaprover)
+                .FirstOrDefaultAsync(er => er.EquipmentRequestId == equipmentRequestId);
+
+            if (equipmentRequest == null)
             {
-                // Retrieve main request of the subrequest
-                var equipmentRequest = await _dbContext.EquipmentRequests
-                    .Include(er => er.EquipmentSubRequests)
-                    .Include(u => u.User)
-                    .ThenInclude(up => up.Plant)
-                    .ThenInclude(pi => pi.ItApprover)
-                    .ThenInclude(bb=>bb.Backupaprover)
-                    .FirstOrDefaultAsync(er => er.EquipmentRequestId == equipmentRequestId);
+                Console.WriteLine("Main request not found");
+                return null; // Main request not found
+            }
 
-                if (equipmentRequest == null)
+            // Retrieve the current sub-request details from the database
+            var currentSubRequestDetails = await GetSubRequestByIdAsync(updatedSubRequest.SubEquipmentRequestId);
+            if (currentSubRequestDetails == null)
+            {
+                Console.WriteLine("Sub-request details not found");
+                return null;
+            }
+
+            // Retrieve the authenticated user info
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+            var okResult = userResult as OkObjectResult;
+
+            if (okResult?.Value is not UserDetailsDTO userDetails)
+            {
+                Console.WriteLine("Authenticated user not found");
+                return null;
+            }
+
+            bool statusChanged = false;
+
+            // Check if 'DepartmangconfirmStatus' has been modified
+            if (updatedSubRequest.DepartmangconfirmStatus != currentSubRequestDetails.DepartmangconfirmStatus)
+            {
+                updatedSubRequest.deptManagId = userDetails.Id;
+                updatedSubRequest.DepartmangconfirmedAt = DateTime.Now;
+                statusChanged = true;
+
+                // Send email to IT Approver or Backup when the manager approves
+                await SendEmailAsync(equipmentRequest, "Manager Approval", "RequestConfirmation", "RequestApprovalTemplate.html", "Equipment Request Confirmation Link");
+            }
+
+            // Check if the finance status has been changed
+            if (updatedSubRequest.FinanceconfirmSatuts != currentSubRequestDetails.FinanceconfirmSatuts)
+            {
+                updatedSubRequest.controllerid = userDetails.Id;
+                updatedSubRequest.FinanceconfirmedAt = DateTime.Now;
+                statusChanged = true;
+                await SendEmailAsync(equipmentRequest, "Controller Approval", "RequestConfirmation", "RequestApprovalTemplate.html", "Equipment Request Confirmation Link");
+
+            }
+
+            // Check if PR_Status has been changed
+            if (updatedSubRequest.PR_Status != currentSubRequestDetails.PR_Status)
+            {
+                updatedSubRequest.itId = userDetails.Id;
+                updatedSubRequest.ITconfirmedAt = DateTime.Now;
+
+                if (updatedSubRequest.PR_Status == false)
                 {
-                    Console.WriteLine("Main request not found");
-                    return null; // Main request not found
-                }
-
-                // Retrieve the current sub-request details from the database
-                var currentSubRequestDetails = await GetSubRequestByIdAsync(updatedSubRequest.SubEquipmentRequestId);
-                if (currentSubRequestDetails == null)
-                {
-                    Console.WriteLine("Sub-request details not found");
-                    return null;
-                }
-
-                // Retrieve the authenticated user info
-                var userResult = await _authService.GetAuthenticatedUserAsync();
-                var okResult = userResult as OkObjectResult;
-
-                if (okResult?.Value is not UserDetailsDTO userDetails)
-                {
-                    Console.WriteLine("Authenticated user not found");
-                    return null;
-                }
-
-                // Check if 'DepartmangconfirmStatus' has been modified
-                if (updatedSubRequest.DepartmangconfirmStatus != currentSubRequestDetails.DepartmangconfirmStatus)
-                {
-                    updatedSubRequest.deptManagId = userDetails.Id;
-                    updatedSubRequest.DepartmangconfirmedAt = DateTime.Now;
-
-                    var itApproverEmail = equipmentRequest.User.Plant?.ItApprover?.Email;
-                    var ItApproverBackup = equipmentRequest.User.Plant?.ItApprover?.Backupaprover?.Email;
-                    Console.WriteLine("IT Approver Email: " + itApproverEmail);
-                    Console.WriteLine("IT Approver backup Email: " + ItApproverBackup);
-
-                    if (!string.IsNullOrEmpty(itApproverEmail))
-                    {
-                        var itApproverLink = FixedemailLink + "RequestConfirmation";
-                        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
-                        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-                        var emailContent = emailTemplate
-                            .Replace("{{resetLink}}", itApproverLink)
-                            .Replace("{{TeNum}}", equipmentRequest.User.TeNum);
-
-                        if (equipmentRequest.User.Plant?.ItApprover?.backupActive == true)
-                        {
-                            var message = new Message(new[] { ItApproverBackup }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
-                            _emailService.SendEmail(message);
-                        }
-                        else { 
-                        var message2 = new Message(new[] { itApproverEmail }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
-                        _emailService.SendEmail(message2);}
-                    }
-                    else
-                    {
-                        Console.WriteLine("IT Approver email is null or empty.");
-                    }
-                }
-                //check if the finance stataus has been changed
-                if (updatedSubRequest.FinanceconfirmSatuts != currentSubRequestDetails.FinanceconfirmSatuts)
-                {
-                    updatedSubRequest.controllerid = userDetails.Id;
-                    updatedSubRequest.FinanceconfirmedAt = DateTime.Now;
-
-                    var itApproverEmail = equipmentRequest.User.Plant?.ItApprover?.Email;
-                    var ItApproverBackup = equipmentRequest.User.Plant?.ItApprover?.Backupaprover.Email;
-                    Console.WriteLine("IT Approver Email: " + itApproverEmail);
-                    Console.WriteLine("IT Approver backup Email: " + ItApproverBackup);
-
-                    if (!string.IsNullOrEmpty(itApproverEmail))
-                    {
-                        var itApproverLink = FixedemailLink + "RequestConfirmation";
-                        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
-                        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-                        var emailContent = emailTemplate
-                            .Replace("{{resetLink}}", itApproverLink)
-                            .Replace("{{TeNum}}", equipmentRequest.User.TeNum);
-
-                        if (equipmentRequest.User.Plant?.ItApprover?.backupActive == true)
-                        {
-                            var message = new Message(new[] { ItApproverBackup }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
-                            _emailService.SendEmail(message);
-                        }
-                        else
-                        {
-                            var message2 = new Message(new[] { itApproverEmail }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
-                            _emailService.SendEmail(message2);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("IT Approver email is null or empty.");
-                    }
-                }
-
-
-                // Change the global status of the request to false if rejected
-                if (updatedSubRequest.DepartmangconfirmStatus == false || updatedSubRequest.ITconfirmSatuts == false || updatedSubRequest.FinanceconfirmSatuts == false)
-                {
-                    var rejectionLink = FixedemailLink + "EquipmentList";
-                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
-                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-                    var emailContent = emailTemplate
-                        .Replace("{{resetLink}}", rejectionLink)
-                        .Replace("{{equipment}}", currentSubRequestDetails.Equipment.EquipName)
-                        .Replace("{{UserName}}", equipmentRequest.User.TeNum);
-
                     updatedSubRequest.SubRequestStatus = false;
-
-                    var userEmail = equipmentRequest.User?.Email;
-                    if (!string.IsNullOrEmpty(userEmail))
-                    {
-                        var message = new Message(new[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
-                        _emailService.SendEmail(message);
-                        Console.WriteLine("Rejection email sent to: " + userEmail);
-                    }
-                    else
-                    {
-                        Console.WriteLine("User email is null or empty.");
-                    }
-
+                    equipmentRequest.RequestStatus = false;
+                    await SendEmailAsync(equipmentRequest, "Rejection", "UserEquipementRequest", "EmailRequestConfirmed.html", "Equipment Request Rejection");
                     Console.WriteLine("=================== the sub-request is rejected ");
                 }
+                statusChanged = true;
+            }
 
-                // Update only the properties that are not null in updatedSubRequest
-                var properties = typeof(SubEquipmentRequest).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (var property in properties)
+            // Check if PONum has been changed
+            if (updatedSubRequest.PONum != currentSubRequestDetails.PONum)
+            {
+                updatedSubRequest.itId = userDetails.Id;
+                updatedSubRequest.ITconfirmSatuts = true;
+                updatedSubRequest.ITconfirmedAt = DateTime.Now;
+                updatedSubRequest.SubRequestStatus = true;
+                equipmentRequest.RequestStatus = true;
+                await SendEmailAsync(equipmentRequest, "Confirmation", "UserEquipementRequest", "EmailRequestConfirmed.html", "Equipment Request Confirmation");
+                Console.WriteLine("=================== the sub-request is approved ");
+                statusChanged = true;
+            }
+
+            // Change the global status of the request to false if rejected
+            if (updatedSubRequest.DepartmangconfirmStatus == false || updatedSubRequest.ITconfirmSatuts == false || updatedSubRequest.FinanceconfirmSatuts == false)
+            {
+                var rejectionLink = FixedemailLink + "UserEquipementRequest";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", rejectionLink)
+                    .Replace("{{equipment}}", currentSubRequestDetails.Equipment.EquipName)
+                    .Replace("{{UserName}}", equipmentRequest.User.TeNum);
+
+                updatedSubRequest.SubRequestStatus = false;
+
+                var userEmail = equipmentRequest.User?.Email;
+                if (!string.IsNullOrEmpty(userEmail))
                 {
-                    var newValue = property.GetValue(updatedSubRequest);
-                    if (newValue != null)
-                    {
-                        property.SetValue(currentSubRequestDetails, newValue);
-                    }
+                    var message = new Message(new[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                    Console.WriteLine("Rejection email sent to: " + userEmail);
+                }
+                else
+                {
+                    Console.WriteLine("User email is null or empty.");
                 }
 
-                await _dbContext.SaveChangesAsync();
+                Console.WriteLine("=================== the sub-request is rejected ");
+            }
 
-                return currentSubRequestDetails;
+            // Update only the properties that are not null in updatedSubRequest
+            var properties = typeof(SubEquipmentRequest).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                var newValue = property.GetValue(updatedSubRequest);
+                if (newValue != null)
+                {
+                    property.SetValue(currentSubRequestDetails, newValue);
+                }
+            }
+
+            if (statusChanged)
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return currentSubRequestDetails;
+        }
+
+        private async Task SendEmailAsync(EquipmentRequest equipmentRequest, string emailType, string linkPath, string templateName, string subject)
+        {
+            var itApproverEmail = equipmentRequest.User.Plant?.ItApprover?.Email;
+            var itApproverBackup = equipmentRequest.User.Plant?.ItApprover?.Backupaprover?.Email;
+            Console.WriteLine("IT Approver Email: " + itApproverEmail);
+            Console.WriteLine("IT Approver backup Email: " + itApproverBackup);
+
+            if (!string.IsNullOrEmpty(itApproverEmail))
+            {
+                var itApproverLink = FixedemailLink + linkPath;
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateName);
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", itApproverLink)
+                    .Replace("{{TeNum}}", equipmentRequest.User.TeNum);
+
+                if (equipmentRequest.User.Plant?.ItApprover?.backupActive == true && !string.IsNullOrEmpty(itApproverBackup))
+                {
+                    var message = new Message(new[] { itApproverBackup }, subject, emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                }
+                else
+                {
+                    var message = new Message(new[] { itApproverEmail }, subject, emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("IT Approver email is null or empty.");
             }
         }
+
 
 
         public async Task<EquipmentRequest?> RequestSupplierOfferAndPU(int equipmentRequestId, EquipmentRequest updatedRequest)
@@ -433,7 +476,7 @@ namespace TequipWiseServer.Services
 
 
 
-     
+       
 
         async public Task<SubEquipmentRequest> GetSubRequestByIdAsync(int subRequestId)
         {

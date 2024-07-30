@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\0d790bb6-2b4d-40b6-9938-83dba35c6d8f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\0d790bb6-2b4d-40b6-9938-83dba35c6d8f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\1526e857-216b-46a1-bdff-60bf197db2ba_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\1526e857-216b-46a1-bdff-60bf197db2ba_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
@@ -13,8 +17,28 @@
       "PackagePath": "staticwebassets\\uploads\\1fa8fa2c-0429-490c-9d10-9900f227f1e2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\20c74df4-85d3-4787-ae7b-4d07edb5ab73_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\20c74df4-85d3-4787-ae7b-4d07edb5ab73_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\2abe4940-3473-413d-a7a8-818d9ae83804_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\2abe4940-3473-413d-a7a8-818d9ae83804_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\2ae79da2-135d-4078-b373-d267ed1ac5a1_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\2ae79da2-135d-4078-b373-d267ed1ac5a1_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\2e87986c-513e-4297-acec-9691fa3f9dbd_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\2e87986c-513e-4297-acec-9691fa3f9dbd_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\3179cbce-1285-41b2-a143-474b0b518633_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\3179cbce-1285-41b2-a143-474b0b518633_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\390e8b25-83c4-4e83-8b1f-64edb46b58f0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\390e8b25-83c4-4e83-8b1f-64edb46b58f0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\395917f7-81ec-4cc6-a084-b3e587cce867_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
@@ -33,8 +57,16 @@
       "PackagePath": "staticwebassets\\uploads\\45c8792b-57a4-401a-bd2c-d14284e2c70e_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\495ca7dc-98c5-4eba-8417-c9520495750d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\495ca7dc-98c5-4eba-8417-c9520495750d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\55ae331b-1747-4b14-9b0a-25975a5fe29e_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\55ae331b-1747-4b14-9b0a-25975a5fe29e_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\653d42b3-2a6a-4b96-b9b2-85956eb503fc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\653d42b3-2a6a-4b96-b9b2-85956eb503fc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\716ef07c-d9b4-445f-83b2-69735bc41f13_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
@@ -53,8 +85,16 @@
       "PackagePath": "staticwebassets\\uploads\\81bd7cc0-d5a0-46cd-ad65-b918477f65dc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\83c365df-44b1-47a1-b47c-b99a110132e6_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\83c365df-44b1-47a1-b47c-b99a110132e6_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\845d8da9-a3d5-47c6-8436-28d7424cb2c0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\845d8da9-a3d5-47c6-8436-28d7424cb2c0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\8bcb7316-f8b8-4c9a-8976-c8629ba541e0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\8bcb7316-f8b8-4c9a-8976-c8629ba541e0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\900ae0f2-8a00-4989-8393-6d6b48a3f006_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
@@ -65,16 +105,32 @@
       "PackagePath": "staticwebassets\\uploads\\9385d926-930b-4104-b915-614cfe0227ce_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\a55a3938-f716-48af-8798-532218f89868_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\a55a3938-f716-48af-8798-532218f89868_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\a593ba42-1dc2-46eb-82a5-9f76668b20b2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\a593ba42-1dc2-46eb-82a5-9f76668b20b2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\ab41c13a-b9f3-4f19-bb4b-72280d7dc708_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\ab41c13a-b9f3-4f19-bb4b-72280d7dc708_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\b8f0d6c9-86ce-421c-b717-fa1f4126f1ae_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\b8f0d6c9-86ce-421c-b717-fa1f4126f1ae_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\dc2e6e9c-1f82-460e-a42c-f11008ec6050_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\dc2e6e9c-1f82-460e-a42c-f11008ec6050_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\dcd8b2a6-0ad3-4974-a4df-6554dfa0f5ee_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\dcd8b2a6-0ad3-4974-a4df-6554dfa0f5ee_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\ee3b6a6d-e36f-4153-b452-13aa09dc713d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\ee3b6a6d-e36f-4153-b452-13aa09dc713d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\f40213e5-5be8-48fa-8c06-3daa9473856c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",

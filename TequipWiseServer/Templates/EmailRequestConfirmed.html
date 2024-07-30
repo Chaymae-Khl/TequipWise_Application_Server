@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <style>
+        .email-container {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .header {
+            padding: 60px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.8em;
+            color: #777;
+        }
+
+        a {
+            color: #ffffff;
+            background-color: #EA8300;
+            border: solid 2px;
+            padding: 10px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        #button {
+            text-align: center;
+        }
+
+        #img1 {
+            width: 20%;
+            float: left;
+        }
+
+        #img2 {
+            width: 5%;
+            float: right;
+        }
+
+        img {
+            margin-top: -40px;
+        }
+
+        h2 {
+            color: #EA8300;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+
+        <div class="header">
+            <div class="logo">
+                <img id="img1" src="logo.png" alt="">
+                <img id="img2" src="Te-img.jpg" alt="">
+            </div>
+        </div>
+        <h2> Request Appoval</h2>
+        <div class="content">
+            <p>Hi, {{TeNum}}</p>
+            <p> you're request Number {{RequestNum}} is approved. click on the button to see the details: </p>
+            <p id="button"><a href="{{resetLink}}">Request List</a></p>
+            <p> Best regards ...</p>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Te Connectivity.</p>
+        </div>
+    </div>
+</body>
+
+</html>

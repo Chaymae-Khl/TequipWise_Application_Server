@@ -16,5 +16,6 @@ namespace TequipWiseServer.Interfaces
         Task<EquipementRequestDTO> GetRequestByIdAsync(int requestId);
         Task<EquipmentRequest?> RequestSupplierOfferAndPU(int equipmentRequestId, EquipmentRequest updatedRequest);
         Task<SubEquipmentRequest?> UpdateSubRequestAsync(int equipmentRequestId, SubEquipmentRequest updatedSubRequest);
+        Task<IEnumerable<EquipementRequestDTO>> GetRequestsForAdminAsync(string controllerId);
     }
 }

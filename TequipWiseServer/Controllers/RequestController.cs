@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
@@ -30,7 +31,6 @@ namespace TequipWiseServer.Controllers
         private readonly IMapper _mapper;
         private readonly AppDbContext _dbContext;
         private readonly NotificationService _notificationService;
-
         public RequestController(IEquipementRequest requestService, IAuthentication authService, IEMailService emailService, UserManager<ApplicationUser> userManager, IEquipment equipmentService, IMapper mapper, AppDbContext dbContext, NotificationService notificationService)
         {
             _requestService = requestService;
@@ -41,6 +41,7 @@ namespace TequipWiseServer.Controllers
             _mapper = mapper;
             _dbContext = dbContext;
             _notificationService = notificationService;
+            
         }
 
         public string FixedemailLink = "http://localhost:4200/";
@@ -264,6 +265,10 @@ namespace TequipWiseServer.Controllers
             {
                 requests = await _requestService.GetRequestsForSapControllerAsync(userDetails.Id);
             }
+            else if (roles.Contains("Admin"))
+            {
+                requests = await _requestService.GetRequestsForAdminAsync(userDetails.Id);
+            }
             else
             {
                 return Forbid();
@@ -373,6 +378,8 @@ namespace TequipWiseServer.Controllers
             return Ok(result);
         }
 
+      
+    
         [HttpPut("ItOfferAndPrice/{equipmentRequestId}")]
         public async Task<IActionResult> RequestSupplierOfferAndPUPrice(int equipmentRequestId, IFormFile file, [FromForm] string updatedRequestJson)
         {

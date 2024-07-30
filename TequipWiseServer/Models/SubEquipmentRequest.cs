@@ -17,7 +17,16 @@ namespace TequipWiseServer.Models
 
         //prix unitaire
         public float? PU { get; set; } = 0;
+        public string? GL { get; set; }
 
+        public string? CC { get; set; }
+        public string? order { get; set; }
+        public string? PONum { get; set; }
+
+        public string? PRNum { get; set; }
+
+        public bool? PR_Status { get; set; } = null;
+        public string? PR_Not_ConfirmCause { get; set; }
         public float Totale { get; set; }= 0;
         //the approver iDS
         public string? deptManagId { get; set; }
