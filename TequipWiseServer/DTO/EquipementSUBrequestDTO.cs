@@ -52,5 +52,11 @@ namespace TequipWiseServer.DTO
 
         public string? CC { get; set; }
         public string? order { get; set; }
+        public DateTime? AssetReceiveByEMployeAt { get; set; }
+        public bool? ReceptionStatus { get; set; } = null;
+
+        public string? supplierrid { get; set; }
+        public string? supplierName { get; set; }
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TequipWiseServer.Data;
 
@@ -11,9 +12,11 @@ using TequipWiseServer.Data;
 namespace TequipWiseServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240731090346_supplierForSubRequest")]
+    partial class supplierForSubRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,35 +54,35 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7215bac3-859e-43c4-a26f-3e3ab06b5bdc",
+                            Id = "4e7b0d48-07aa-42b6-b599-0b97f4ebf5fe",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "6eaf201f-7dbc-4a7c-9b26-11f15aa6942a",
+                            Id = "5889aead-77e0-4f75-a2b2-290f6eeb9a0a",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "6e8daf90-c8dd-4601-a27c-ca148119fc77",
+                            Id = "4423dc10-2d66-499a-a9ad-f3d33d23057f",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "6884d8a5-5657-4175-80ef-50e07a8c5989",
+                            Id = "484f1514-3cce-4fde-88f3-e7cc29df855f",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "427e995b-b4e3-486a-b5e6-26c420b1b89d",
+                            Id = "e7d3cf42-32b5-43bb-a112-a126435f6b01",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
@@ -470,9 +473,6 @@ namespace TequipWiseServer.Migrations
                     b.Property<string>("ApplicationUserId2")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("AssetReceiveByEMployeAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CC")
                         .HasColumnType("nvarchar(max)");
 
@@ -530,9 +530,6 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<int?>("QtEquipment")
                         .HasColumnType("int");
-
-                    b.Property<bool?>("ReceptionStatus")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("RequestId")
                         .HasColumnType("int");

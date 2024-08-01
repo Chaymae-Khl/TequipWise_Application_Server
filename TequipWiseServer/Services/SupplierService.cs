@@ -42,7 +42,7 @@ namespace TequipWiseServer.Services
 
         public async Task<IEnumerable<Supplier>> GetSuppliers()
         {
-            return await _dbContext.Suppliers.Include(s => s.Equipements).ToListAsync();
+            return await _dbContext.Suppliers.ToListAsync();
         }
 
 

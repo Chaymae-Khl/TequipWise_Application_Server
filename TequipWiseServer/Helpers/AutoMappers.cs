@@ -30,9 +30,11 @@ namespace TequipWiseServer.Helpers
             .ForMember(dest => dest.ItApproverName, opt => opt.MapFrom(src => src.IT != null ? src.IT.TeNum : null))
             .ForMember(dest => dest.ControllerName, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null))
             .ForMember(dest => dest.departementManagerName, opt => opt.MapFrom(src => src.DeparManag != null ? src.DeparManag.TeNum : null))
-            .ForMember(dest => dest.EquipementName, opt => opt.MapFrom(src => src.Equipment != null ? src.Equipment.EquipName : null));
+            .ForMember(dest => dest.EquipementName, opt => opt.MapFrom(src => src.Equipment != null ? src.Equipment.EquipName : null))
+                .ForMember(dest => dest.supplierName, opt => opt.MapFrom(src => src.supplier.suuplier_name));
+            ;
 
-                
+
 
             CreateMap<SapNumber, SapNumberDto>()
                 .ForMember(dest => dest.Controller_name, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null)).ReverseMap();

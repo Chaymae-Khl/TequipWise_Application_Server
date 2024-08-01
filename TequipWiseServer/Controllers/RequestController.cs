@@ -31,7 +31,14 @@ namespace TequipWiseServer.Controllers
         private readonly IMapper _mapper;
         private readonly AppDbContext _dbContext;
         private readonly NotificationService _notificationService;
-        public RequestController(IEquipementRequest requestService, IAuthentication authService, IEMailService emailService, UserManager<ApplicationUser> userManager, IEquipment equipmentService, IMapper mapper, AppDbContext dbContext, NotificationService notificationService)
+        private readonly Isupplier _supplierService;
+        public RequestController(IEquipementRequest requestService, 
+            IAuthentication authService, IEMailService emailService, 
+            UserManager<ApplicationUser> userManager,
+            IEquipment equipmentService, IMapper mapper, 
+            AppDbContext dbContext,
+            NotificationService notificationService,
+            Isupplier supplierService)
         {
             _requestService = requestService;
             _authService = authService;
@@ -41,7 +48,7 @@ namespace TequipWiseServer.Controllers
             _mapper = mapper;
             _dbContext = dbContext;
             _notificationService = notificationService;
-            
+            _supplierService = supplierService;
         }
 
         public string FixedemailLink = "http://localhost:4200/";
@@ -200,32 +207,7 @@ namespace TequipWiseServer.Controllers
             return Ok(userRequests);
         }
 
-        //[HttpGet("GetUserRequestCount")]
-        //public async Task<IActionResult> GetUserRequestCount()
-        //{
-        //    var userResult = await _authService.GetAuthenticatedUserAsync();
-
-        //    if (userResult is UnauthorizedResult)
-        //    {
-        //        return Unauthorized();
-        //    }
-
-        //    var okResult = userResult as OkObjectResult;
-        //    if (okResult == null || okResult.Value == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
-        //    }
-
-        //    var userDetails = okResult.Value as UserDetailsDTO;
-        //    if (userDetails == null)
-        //    {
-        //        return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
-        //    }
-
-        //    var requestCount = await _requestService.GetRequestCountByUserIdAsync(userDetails.Id);
-
-        //    return Ok(new { Count = requestCount });
-        //}
+     
 
         [HttpGet("DepartmentRequests")]
         public async Task<IActionResult> GetDepartmentRequests()
@@ -277,92 +259,12 @@ namespace TequipWiseServer.Controllers
             return Ok(requests);
         }
 
-        //[HttpPut("UpdateSubEquipmentRequest")]
-        //public async Task<IActionResult> UpdateSubRequest([FromBody] SubEquipmentRequest updatedSubRequest)
-        //{
-        //    // Retrieve the authenticated user info
-        //    var userResult = await _authService.GetAuthenticatedUserAsync();
-        //    var okResult = userResult as OkObjectResult;
-
-        //    if (okResult?.Value is not UserDetailsDTO userDetails)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError,
-        //            new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
-        //    }
-
-        //    // Retrieve the current sub-request details from the database
-        //    var currentSubRequestDetails = await _requestService.GetSubRequestByIdAsync(updatedSubRequest.SubEquipmentRequestId);
-
-        //    if (currentSubRequestDetails == null)
-        //    {
-        //        return NotFound(new Response { Status = "Error", Message = "Sub-Request not found." });
-        //    }
-
-        //    // Check if 'DepartmangconfirmStatus' has been modified
-        //    if (updatedSubRequest.DepartmangconfirmStatus != currentSubRequestDetails.DepartmangconfirmStatus)
-        //    {
-        //        updatedSubRequest.deptManagId = userDetails.Id;
-        //        updatedSubRequest.DepartmangconfirmedAt = DateTime.Now;
-
-        //        var ItApproverLink = FixedemailLink + "RequestConfirmation";
-
-        //        if (currentSubRequestDetails.IT != null)
-        //        {
-        //            var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
-        //            var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-        //            var emailContent = emailTemplate
-        //                .Replace("{{resetLink}}", ItApproverLink)
-        //                .Replace("{{TeNum}}", currentSubRequestDetails.EquipRequest.User.TeNum);
-
-        //            var message = new Message(new[] { currentSubRequestDetails.IT.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
-        //            _emailService.SendEmail(message);
-        //        }
-        //    }
-
-        //    // Change the global status of the request to false if rejected
-        //    if (updatedSubRequest.DepartmangconfirmStatus==false || updatedSubRequest.ITconfirmSatuts==false || updatedSubRequest.FinanceconfirmSatuts==false)
-        //    {
-        //        var rejectionLink = FixedemailLink + "EquipmentList";
-        //        var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
-        //        var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-        //        var emailContent = emailTemplate
-        //            .Replace("{{resetLink}}", rejectionLink)
-        //            .Replace("{{equipment}}", currentSubRequestDetails.Equipment.EquipName)
-        //            .Replace("{{UserName}}", currentSubRequestDetails.EquipRequest.User.TeNum);
-
-        //        updatedSubRequest.SubRequestStatus = false;
-
-        //        var message = new Message(new[] { currentSubRequestDetails.EquipRequest.User.Email }, "Equipment Request Rejection", emailContent, isHtml: true);
-        //        _emailService.SendEmail(message);
-        //        Console.WriteLine("=================== the sub-request is rejected ");
-        //    }
-
-        //    // Update the sub-request
-        //    _dbContext.Entry(updatedSubRequest).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _dbContext.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!_dbContext.subEquipmentRequests.Any(e => e.SubEquipmentRequestId == updatedSubRequest.SubEquipmentRequestId))
-        //        {
-        //            return new NotFoundResult();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return new OkObjectResult(new Response { Status = "Success", Message = "Sub-Request updated successfully!" });
-        //}
-
+        
 
         [HttpPut("{equipmentRequestId}/subrequests/{subRequestId}")]
         public async Task<IActionResult> UpdateSubRequest(int equipmentRequestId, int subRequestId, [FromBody] SubEquipmentRequest updatedSubRequest)
         {
+            Console.WriteLine("=====================" + updatedSubRequest.supplierrid);
             if (subRequestId != updatedSubRequest.SubEquipmentRequestId)
             {
                 return BadRequest("Sub-request ID mismatch.");
@@ -479,5 +381,16 @@ namespace TequipWiseServer.Controllers
         var message = "Test notification";
         await _notificationService.SendNotificationAsync(userId, message);
         return Ok("Notification sent");
-    }}
+    }
+
+
+
+    //get Id and name of supplier
+    [HttpGet("SuppliersName")]
+    public async Task<ActionResult<IEnumerable<dynamic>>> GetAllSuppliersName()
+    {
+        var suppliersname = await _supplierService.GetSupplierInfoAsync();
+        return Ok(suppliersname);
+    }
+}
 }

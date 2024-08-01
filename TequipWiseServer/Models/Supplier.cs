@@ -14,7 +14,10 @@ namespace TequipWiseServer.Models
         public string? address { get; set; }
         public string? email { get; set; }
 
+        [JsonIgnore]
         public ICollection<Equipment>? Equipements { get; set; }
+        [JsonIgnore]
+        public ICollection<SubEquipmentRequest>? subrequests { get; set; }
 
     }
 }

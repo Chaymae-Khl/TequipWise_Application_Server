@@ -168,13 +168,15 @@ namespace TequipWiseServer.Data
              .HasMany(s => s.Equipements)
              .WithOne(e => e.supplier)
              .HasForeignKey(e => e.supplierrid);
+            builder.Entity<Supplier>()
+        .HasMany(s => s.subrequests)
+        .WithOne(e => e.supplier)
+        .HasForeignKey(e => e.supplierrid);
             //Sapnum relatuions
             builder.Entity<SapNumber>()
            .HasOne(p => p.Controller)
             .WithMany()
             .HasForeignKey(p => p.Idcontroller);
-
-
         }
 
         private void SeedRoles(ModelBuilder builder)

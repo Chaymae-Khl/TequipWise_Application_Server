@@ -335,6 +335,7 @@ namespace TequipWiseServer.Services
                 if (newValue != null)
                 {
                     property.SetValue(currentSubRequestDetails, newValue);
+                    statusChanged = true;
                 }
             }
 

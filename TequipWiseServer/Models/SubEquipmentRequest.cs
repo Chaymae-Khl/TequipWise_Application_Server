@@ -61,15 +61,19 @@ namespace TequipWiseServer.Models
         public bool? ITconfirmSatuts { get; set; } = null;
 
         public string? IT_Not_confirmCause { get; set; }
+        public DateTime? AssetReceiveByEMployeAt { get; set; }
+        public bool? ReceptionStatus { get; set; } = null;
 
         //forein keys
+        public string? supplierrid { get; set; }
 
         public int? RequestId { get; set; }
         [Required]
         public int EquipmentId { get; set; }
 
         // Navigation properties
-
+        [JsonIgnore]
+        public Supplier? supplier { get; set; }
         [JsonIgnore]
         public virtual EquipmentRequest? EquipRequest { get; set; }
 

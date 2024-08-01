@@ -229,13 +229,7 @@ namespace TequipWiseServer.Controllers
             var numsuppliers = await _supplierService.GetSuppliersCount();
             return Ok(numsuppliers);
         }
-        //get Id and name of supplier
-        [HttpGet("SuppliersName")]
-        public async Task<ActionResult<IEnumerable<dynamic>>> GetAllSuppliersName()
-        {
-            var suppliersname = await _supplierService.GetSupplierInfoAsync();
-            return Ok(suppliersname);
-        }
+       
 
 
 
