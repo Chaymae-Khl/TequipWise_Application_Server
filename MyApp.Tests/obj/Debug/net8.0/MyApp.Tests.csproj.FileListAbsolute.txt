@@ -1,9 +1,3 @@
-C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.csproj.AssemblyReference.cache
-C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.AssemblyInfoInputs.cache
-C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.AssemblyInfo.cs
-C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.csproj.CoreCompileInputs.cache
-C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.sourcelink.json
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\CoverletSourceRootsMapping_MyApp.Tests
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\testhost.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\TequipWiseServer.deps.json
@@ -160,6 +154,12 @@ C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\User.Managmenet.Service.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\TequipWiseServer.pdb
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\bin\Debug\net8.0\User.Managmenet.Service.pdb
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.csproj.AssemblyReference.cache
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.AssemblyInfoInputs.cache
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.AssemblyInfo.cs
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.sourcelink.json
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.csproj.CopyComplete
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\MyApp.Tests.dll
 C:\Users\hp\Desktop\perso\PFE\TequipWise(FullStack)\TequipWiseServer\MyApp.Tests\obj\Debug\net8.0\refint\MyApp.Tests.dll

@@ -91,8 +91,8 @@ namespace TequipWiseServer.Controllers
 
             var haveApprover = userDetails.ApproverActive;
             var haveBackupApprover = userDetails.ManagerBackupApproverActive;
-
-
+            Console.WriteLine("=============="+userDetails.TeNum);
+            
             if (haveApprover == true)
             {
                 var ApproverEmail = userDetails.ApproverEmail;
@@ -103,12 +103,15 @@ namespace TequipWiseServer.Controllers
                 }
 
                 var approver = await _userManager.FindByEmailAsync(ApproverEmail);
-                if (approver != null)
+                Console.WriteLine("=================="+approver.TeNum);
+
+                if (approver != null && userDetails!=null)
                 {
                     var deptmangLink = FixedemailLink + "RequestConfirmation";
                     var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
                     var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-                    var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink);
+                    var emailContent = emailTemplate
+                           .Replace("{{resetLink}}", deptmangLink);
                     var message = new Message(new string[] { approver.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
                     return StatusCode(StatusCodes.Status200OK,
@@ -160,7 +163,7 @@ namespace TequipWiseServer.Controllers
                         var deptmangLink = FixedemailLink + "RequestConfirmation";
                         var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
                         var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
-                        var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink);
+                        var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink); 
 
 
                         var message = new Message(new string[] { manager.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
@@ -206,8 +209,34 @@ namespace TequipWiseServer.Controllers
 
             return Ok(userRequests);
         }
+        [HttpGet("user-assets")]
+        public async Task<IActionResult> GetUserITAssets()
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
 
-     
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Response { Status = "Error", Message = "User details are missing." });
+            }
+
+            var userRequests = await _requestService.GetAssignedAssetsForUserAsync(userDetails.Id);
+
+            return Ok(userRequests);
+        }
+
 
         [HttpGet("DepartmentRequests")]
         public async Task<IActionResult> GetDepartmentRequests()
@@ -235,7 +264,7 @@ namespace TequipWiseServer.Controllers
 
             IEnumerable<EquipementRequestDTO> requests;
 
-            if (roles.Contains("Manager"))
+            if (roles.Contains("Manager") || roles.Contains("BackupApprover"))
             {
                 requests = await _requestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
             }
@@ -285,7 +314,6 @@ namespace TequipWiseServer.Controllers
         [HttpPut("ItOfferAndPrice/{equipmentRequestId}")]
         public async Task<IActionResult> RequestSupplierOfferAndPUPrice(int equipmentRequestId, IFormFile file, [FromForm] string updatedRequestJson)
         {
-            // Deserialize the JSON string to your EquipmentRequest model
             EquipmentRequest updatedRequest;
             try
             {
@@ -296,61 +324,33 @@ namespace TequipWiseServer.Controllers
                 return BadRequest(new Response { Status = "Error", Message = "Invalid JSON format" });
             }
 
-            // Validate the updatedRequest model
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Check if file is provided
-            if (file == null)
+            if (file != null)
             {
-                return BadRequest(new Response { Status = "Error", Message = "No file uploaded" });
-            }
-
-            // Upload supplier offer
-            var fileUploadHelper = new FileUploadHelper();
-            string filePath;
-            try
-            {
-                filePath = await fileUploadHelper.UploadFileAsync(file);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new Response { Status = "Error", Message = ex.Message });
-            }
-
-            // Set the file path to SupplierOffer
-            updatedRequest.SupplierOffer = filePath;
-
-            // Update the totale for each sub-request and calculate the total price of the main request
-            float totalRequestPrice = 0;
-            foreach (var subRequest in updatedRequest.EquipmentSubRequests)
-            {
-                if (subRequest.PU.HasValue && subRequest.QtEquipment.HasValue)
+                var fileUploadHelper = new FileUploadHelper();
+                string filePath;
+                try
                 {
-                    subRequest.Totale = subRequest.PU.Value * subRequest.QtEquipment.Value;
+                    filePath = await fileUploadHelper.UploadFileAsync(file);
                 }
-                else
+                catch (ArgumentException ex)
                 {
-                    subRequest.Totale = 0; // Set to 0 if either PU or QtEquipment is null
+                    return BadRequest(new Response { Status = "Error", Message = ex.Message });
                 }
-                totalRequestPrice += subRequest.Totale;
+                updatedRequest.SupplierOffer = filePath;
             }
 
-            // Set the total price of the main request
-            updatedRequest.TotalPrice = totalRequestPrice;
-
-            // Update the equipment request
             var result = await _requestService.RequestSupplierOfferAndPU(equipmentRequestId, updatedRequest);
 
-            // Check if the update was successful
             if (result == null)
             {
                 return NotFound();
             }
 
-            // Return the updated equipment request
             return Ok(result);
         }
        

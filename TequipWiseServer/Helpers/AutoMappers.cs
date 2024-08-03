@@ -32,8 +32,12 @@ namespace TequipWiseServer.Helpers
             .ForMember(dest => dest.departementManagerName, opt => opt.MapFrom(src => src.DeparManag != null ? src.DeparManag.TeNum : null))
             .ForMember(dest => dest.EquipementName, opt => opt.MapFrom(src => src.Equipment != null ? src.Equipment.EquipName : null))
                 .ForMember(dest => dest.supplierName, opt => opt.MapFrom(src => src.supplier.suuplier_name));
-            ;
-
+            
+            CreateMap<SubEquipmentRequest, AssignedAssetDTO>()
+            .ForMember(dest => dest.EquipmentName, opt => opt.MapFrom(src => src.Equipment != null ? src.Equipment.EquipName : null))
+                ;
+          
+            
 
 
             CreateMap<SapNumber, SapNumberDto>()

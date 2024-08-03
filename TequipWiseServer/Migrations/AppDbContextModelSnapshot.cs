@@ -51,38 +51,52 @@ namespace TequipWiseServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7215bac3-859e-43c4-a26f-3e3ab06b5bdc",
+                            Id = "4c638833-37cd-45f3-bf43-92ae77e1df82",
                             ConcurrencyStamp = "1",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "6eaf201f-7dbc-4a7c-9b26-11f15aa6942a",
+                            Id = "446541c0-abc9-4e0c-aa95-1da114a92ad8",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "6e8daf90-c8dd-4601-a27c-ca148119fc77",
+                            Id = "ed52572e-83ce-4841-8a49-3090368c6a8e",
                             ConcurrencyStamp = "3",
                             Name = "Manager",
                             NormalizedName = "Manager"
                         },
                         new
                         {
-                            Id = "6884d8a5-5657-4175-80ef-50e07a8c5989",
+                            Id = "44f4e7f6-99ea-4ab6-accb-94def11668dd",
                             ConcurrencyStamp = "4",
                             Name = "It Approver",
                             NormalizedName = "It Approver"
                         },
                         new
                         {
-                            Id = "427e995b-b4e3-486a-b5e6-26c420b1b89d",
+                            Id = "86c8ce0c-1b17-4716-95d6-4160b0edc388",
                             ConcurrencyStamp = "5",
                             Name = "Controller",
                             NormalizedName = "Controller"
+                        },
+                        new
+                        {
+                            Id = "eb00318e-85a6-42b7-872b-c175bc62b1ad",
+                            ConcurrencyStamp = "6",
+                            Name = "BackupApprover",
+                            NormalizedName = "BackupApprover"
+                        },
+                        new
+                        {
+                            Id = "2f307ee7-5566-4dc7-a98c-3e7f526e1044",
+                            ConcurrencyStamp = "7",
+                            Name = "Approver",
+                            NormalizedName = "Approver"
                         });
                 });
 

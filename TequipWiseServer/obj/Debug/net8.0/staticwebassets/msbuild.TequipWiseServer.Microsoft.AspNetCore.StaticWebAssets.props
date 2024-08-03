@@ -1,5 +1,21 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\0c153885-aa66-4ea7-b100-3d9386b1a61f_uploads\68681d87-6bfc-4860-a58a-c2cbc7549052_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/0c153885-aa66-4ea7-b100-3d9386b1a61f_uploads/68681d87-6bfc-4860-a58a-c2cbc7549052_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\0c153885-aa66-4ea7-b100-3d9386b1a61f_uploads\68681d87-6bfc-4860-a58a-c2cbc7549052_Process.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\0d790bb6-2b4d-40b6-9938-83dba35c6d8f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
@@ -15,6 +31,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\0d790bb6-2b4d-40b6-9938-83dba35c6d8f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\0f82d59b-2959-4284-93fd-82d3b90604fc_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/0f82d59b-2959-4284-93fd-82d3b90604fc_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\0f82d59b-2959-4284-93fd-82d3b90604fc_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\1526e857-216b-46a1-bdff-60bf197db2ba_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
@@ -47,6 +79,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\16f86c8d-d7de-4737-8dcf-9e670c597898_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\18457a24-4e0a-4ecd-a16d-51d9858b9e4f_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/18457a24-4e0a-4ecd-a16d-51d9858b9e4f_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\18457a24-4e0a-4ecd-a16d-51d9858b9e4f_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\1fa8fa2c-0429-490c-9d10-9900f227f1e2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
@@ -111,6 +159,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\2ae79da2-135d-4078-b373-d267ed1ac5a1_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\2b06b179-5a40-4451-a671-7ade69ec1bb1_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/2b06b179-5a40-4451-a671-7ade69ec1bb1_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\2b06b179-5a40-4451-a671-7ade69ec1bb1_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\2e87986c-513e-4297-acec-9691fa3f9dbd_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
@@ -256,6 +320,54 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\55ae331b-1747-4b14-9b0a-25975a5fe29e_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\56662a3e-2a2a-4e59-aa73-6c9da4d78435_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/56662a3e-2a2a-4e59-aa73-6c9da4d78435_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\56662a3e-2a2a-4e59-aa73-6c9da4d78435_Process.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5cc01f84-9618-424b-8865-739cacfddad1_uploads\9413eb4d-c857-4763-9b1e-9379fd229996_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/5cc01f84-9618-424b-8865-739cacfddad1_uploads/9413eb4d-c857-4763-9b1e-9379fd229996_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5cc01f84-9618-424b-8865-739cacfddad1_uploads\9413eb4d-c857-4763-9b1e-9379fd229996_Process.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\60dda43f-42bb-4e61-9a71-416ea5650f88_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/60dda43f-42bb-4e61-9a71-416ea5650f88_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\60dda43f-42bb-4e61-9a71-416ea5650f88_Process.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\653d42b3-2a6a-4b96-b9b2-85956eb503fc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
@@ -272,6 +384,38 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\653d42b3-2a6a-4b96-b9b2-85956eb503fc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\68681d87-6bfc-4860-a58a-c2cbc7549052_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/68681d87-6bfc-4860-a58a-c2cbc7549052_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\68681d87-6bfc-4860-a58a-c2cbc7549052_Process.pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\6ad958f7-c299-4fc9-b02a-8c4d04b7c1af_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/6ad958f7-c299-4fc9-b02a-8c4d04b7c1af_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\6ad958f7-c299-4fc9-b02a-8c4d04b7c1af_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\716ef07c-d9b4-445f-83b2-69735bc41f13_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
@@ -287,6 +431,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\716ef07c-d9b4-445f-83b2-69735bc41f13_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\716f5400-70bd-4140-bed4-c6d0be681723_Process.pdf))">
+      <SourceType>Package</SourceType>
+      <SourceId>TequipWiseServer</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/TequipWiseServer</BasePath>
+      <RelativePath>uploads/716f5400-70bd-4140-bed4-c6d0be681723_Process.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\716f5400-70bd-4140-bed4-c6d0be681723_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\72b798db-c9a4-4bb8-9ccf-61498cb96c44_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
       <SourceType>Package</SourceType>
@@ -368,12 +528,12 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\845d8da9-a3d5-47c6-8436-28d7424cb2c0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\85f6dc4e-8e62-4ba9-a24e-c5ba8aa7985b_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\8b278caa-5287-4270-b8af-819a845a6cdd_uploads\60dda43f-42bb-4e61-9a71-416ea5650f88_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/85f6dc4e-8e62-4ba9-a24e-c5ba8aa7985b_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/8b278caa-5287-4270-b8af-819a845a6cdd_uploads/60dda43f-42bb-4e61-9a71-416ea5650f88_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -382,14 +542,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\85f6dc4e-8e62-4ba9-a24e-c5ba8aa7985b_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\8b278caa-5287-4270-b8af-819a845a6cdd_uploads\60dda43f-42bb-4e61-9a71-416ea5650f88_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\8bcb7316-f8b8-4c9a-8976-c8629ba541e0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\8bb0c35f-c5e3-4716-ae89-de6ae7d84275_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/8bcb7316-f8b8-4c9a-8976-c8629ba541e0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/8bb0c35f-c5e3-4716-ae89-de6ae7d84275_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -398,14 +558,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\8bcb7316-f8b8-4c9a-8976-c8629ba541e0_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\8bb0c35f-c5e3-4716-ae89-de6ae7d84275_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\900ae0f2-8a00-4989-8393-6d6b48a3f006_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\9413eb4d-c857-4763-9b1e-9379fd229996_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/900ae0f2-8a00-4989-8393-6d6b48a3f006_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/9413eb4d-c857-4763-9b1e-9379fd229996_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -414,14 +574,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\900ae0f2-8a00-4989-8393-6d6b48a3f006_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\9413eb4d-c857-4763-9b1e-9379fd229996_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\9385d926-930b-4104-b915-614cfe0227ce_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a142025c-d02c-4f16-a6bb-7408c740d920_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/9385d926-930b-4104-b915-614cfe0227ce_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/a142025c-d02c-4f16-a6bb-7408c740d920_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -430,14 +590,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\9385d926-930b-4104-b915-614cfe0227ce_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a142025c-d02c-4f16-a6bb-7408c740d920_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a55a3938-f716-48af-8798-532218f89868_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a9437021-8d6d-4935-a8c2-61d5f313491e_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/a55a3938-f716-48af-8798-532218f89868_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/a9437021-8d6d-4935-a8c2-61d5f313491e_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -446,14 +606,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a55a3938-f716-48af-8798-532218f89868_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a9437021-8d6d-4935-a8c2-61d5f313491e_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a593ba42-1dc2-46eb-82a5-9f76668b20b2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ab914687-807f-45a7-b842-5a3242cc945f_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/a593ba42-1dc2-46eb-82a5-9f76668b20b2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/ab914687-807f-45a7-b842-5a3242cc945f_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -462,14 +622,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\a593ba42-1dc2-46eb-82a5-9f76668b20b2_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ab914687-807f-45a7-b842-5a3242cc945f_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ab41c13a-b9f3-4f19-bb4b-72280d7dc708_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\b0083ee9-6c13-4c9d-8c67-aa6ac3cfbaed_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/ab41c13a-b9f3-4f19-bb4b-72280d7dc708_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/b0083ee9-6c13-4c9d-8c67-aa6ac3cfbaed_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -478,14 +638,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ab41c13a-b9f3-4f19-bb4b-72280d7dc708_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\b0083ee9-6c13-4c9d-8c67-aa6ac3cfbaed_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\b8f0d6c9-86ce-421c-b717-fa1f4126f1ae_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\d1b55e95-e55c-4ac1-aed2-38e2c4b106f7_uploads\0f82d59b-2959-4284-93fd-82d3b90604fc_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/b8f0d6c9-86ce-421c-b717-fa1f4126f1ae_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/d1b55e95-e55c-4ac1-aed2-38e2c4b106f7_uploads/0f82d59b-2959-4284-93fd-82d3b90604fc_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -494,14 +654,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\b8f0d6c9-86ce-421c-b717-fa1f4126f1ae_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\d1b55e95-e55c-4ac1-aed2-38e2c4b106f7_uploads\0f82d59b-2959-4284-93fd-82d3b90604fc_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\cce72e20-a591-4014-893a-7b67f708e14f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (1).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\e3ef29a5-65e2-48dd-b14c-e8b29ecd9e2a_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/cce72e20-a591-4014-893a-7b67f708e14f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (1).pdf</RelativePath>
+      <RelativePath>uploads/e3ef29a5-65e2-48dd-b14c-e8b29ecd9e2a_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -510,14 +670,14 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\cce72e20-a591-4014-893a-7b67f708e14f_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (1).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\e3ef29a5-65e2-48dd-b14c-e8b29ecd9e2a_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\dc2e6e9c-1f82-460e-a42c-f11008ec6050_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\efb716d6-aa66-4681-9a62-64b98cb12238_Process.pdf))">
       <SourceType>Package</SourceType>
       <SourceId>TequipWiseServer</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/dc2e6e9c-1f82-460e-a42c-f11008ec6050_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
+      <RelativePath>uploads/efb716d6-aa66-4681-9a62-64b98cb12238_Process.pdf</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
@@ -526,103 +686,7 @@
       <AssetTraitValue></AssetTraitValue>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\dc2e6e9c-1f82-460e-a42c-f11008ec6050_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\dcd8b2a6-0ad3-4974-a4df-6554dfa0f5ee_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TequipWiseServer</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/dcd8b2a6-0ad3-4974-a4df-6554dfa0f5ee_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\dcd8b2a6-0ad3-4974-a4df-6554dfa0f5ee_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ee3b6a6d-e36f-4153-b452-13aa09dc713d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TequipWiseServer</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/ee3b6a6d-e36f-4153-b452-13aa09dc713d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ee3b6a6d-e36f-4153-b452-13aa09dc713d_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ef5be155-baab-457e-94fe-d00abf81fb92_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TequipWiseServer</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/ef5be155-baab-457e-94fe-d00abf81fb92_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\ef5be155-baab-457e-94fe-d00abf81fb92_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\f40213e5-5be8-48fa-8c06-3daa9473856c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TequipWiseServer</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/f40213e5-5be8-48fa-8c06-3daa9473856c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\f40213e5-5be8-48fa-8c06-3daa9473856c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\f9ce7dcf-645d-4759-863e-82bbe8bd652c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TequipWiseServer</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/f9ce7dcf-645d-4759-863e-82bbe8bd652c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\f9ce7dcf-645d-4759-863e-82bbe8bd652c_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
-    </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\fa083f18-6bdf-444e-8ff0-3542cf113ce3_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))">
-      <SourceType>Package</SourceType>
-      <SourceId>TequipWiseServer</SourceId>
-      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
-      <BasePath>_content/TequipWiseServer</BasePath>
-      <RelativePath>uploads/fa083f18-6bdf-444e-8ff0-3542cf113ce3_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf</RelativePath>
-      <AssetKind>All</AssetKind>
-      <AssetMode>All</AssetMode>
-      <AssetRole>Primary</AssetRole>
-      <RelatedAsset></RelatedAsset>
-      <AssetTraitName></AssetTraitName>
-      <AssetTraitValue></AssetTraitValue>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\fa083f18-6bdf-444e-8ff0-3542cf113ce3_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\efb716d6-aa66-4681-9a62-64b98cb12238_Process.pdf))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

@@ -491,6 +491,20 @@ namespace TequipWiseServer.Services
                                .ThenInclude(eu => eu.User)
                                .FirstOrDefaultAsync(s => s.SubEquipmentRequestId == subRequestId);
         }
+
+
+        public async Task<IEnumerable<AssignedAssetDTO>> GetAssignedAssetsForUserAsync(string userId)
+        {
+            // Assuming 'IsAssigned' is a property in 'SubEquipmentRequest' class that indicates asset assignment
+            var assignedAssets = await _dbContext.subEquipmentRequests
+                .Include(sr => sr.Equipment) // Include equipment details
+                .Include(sr => sr.EquipRequest) // Include the parent request
+                .Where(sr => sr.EquipRequest.UserId == userId && sr.ReceptionStatus == true) // Filter by user and assignment status
+                .ToListAsync();
+
+            // Map the data to DTO
+            return _mapper.Map<IEnumerable<AssignedAssetDTO>>(assignedAssets);
+        }
     }
     }
 

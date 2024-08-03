@@ -278,6 +278,15 @@ namespace TequipWiseServer.Services
             if (!string.IsNullOrEmpty(updatedUserDetails.ManagerName))
             {
                 var manager = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.ManagerName);
+                if (updatedUserDetails.ManagerBackupApproverActive == true)
+                {
+                    await _userManager.AddToRoleAsync(manager, "Approver");
+
+                }
+                else if(updatedUserDetails.ManagerBackupApproverActive == false)
+                {
+                    await _userManager.RemoveFromRoleAsync(manager, "Approver");
+                }
                 if (manager != null)
                 {
                     user.Manager = manager;
@@ -286,10 +295,21 @@ namespace TequipWiseServer.Services
 
             }
 
+           
+
             // Update the backup approver by TeNum if provided
             if (!string.IsNullOrEmpty(updatedUserDetails.Backupaprover_Name))
             {
                 var backupApprover = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.Backupaprover_Name);
+                if (updatedUserDetails.backupActive == true)
+                {
+                    await _userManager.AddToRoleAsync(backupApprover, "BackupApprover");
+
+                }
+                else if (updatedUserDetails.backupActive == false)
+                {
+                    await _userManager.RemoveFromRoleAsync(backupApprover, "BackupApprover");
+                }
                 if (backupApprover != null)
                 {
                     user.Backupaprover = backupApprover;

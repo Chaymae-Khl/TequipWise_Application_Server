@@ -186,7 +186,10 @@ namespace TequipWiseServer.Data
                new IdentityRole() { Name = "User", ConcurrencyStamp = "2", NormalizedName = "User" },
                new IdentityRole() { Name = "Manager", ConcurrencyStamp = "3", NormalizedName = "Manager" },
                new IdentityRole() { Name = "It Approver", ConcurrencyStamp = "4", NormalizedName = "It Approver" },
-               new IdentityRole() { Name = "Controller", ConcurrencyStamp = "5", NormalizedName = "Controller" }
+               new IdentityRole() { Name = "Controller", ConcurrencyStamp = "5", NormalizedName = "Controller" },
+               new IdentityRole() { Name = "BackupApprover", ConcurrencyStamp = "6", NormalizedName = "BackupApprover" },
+               new IdentityRole() { Name = "Approver", ConcurrencyStamp = "7", NormalizedName = "Approver" }
+
                 );
         }
     }
