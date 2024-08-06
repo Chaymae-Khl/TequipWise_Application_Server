@@ -58,43 +58,71 @@ namespace TequipWiseServer.Services
         }
 
 
-        public async Task<int> GetRequestCountByUserIdAsync(string userId)
+        public async Task<int> GetRequestCountIdAsync()
         {
             return await _dbContext.EquipmentRequests
-                .CountAsync(r => r.UserId == userId);
+                .CountAsync();
         }
+
+   
+
+
 
         // Get the requests of the department manager
         public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForDepartmentManagerAsync(string managerId)
         {
             var requests = await _dbContext.EquipmentRequests
-                                           .Where(r => r.User.Department.ManagerId == managerId)
-                                           .OrderByDescending(r => r.RequestDate)
-                                           .Include(r => r.User)
-                                           .ThenInclude(rs => rs.SapNumber)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sb => sb.IT)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sb => sb.Controller)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sb => sb.DeparManag)
-                                            .Include(r => r.EquipmentSubRequests)
-                                            .ThenInclude(sr => sr.Equipment)
-                                           .AsNoTracking()
-                                           .ToListAsync();
+                                               .Where(r => r.User.Department.ManagerId == managerId ||
+                                               r.User.Department.Manager.BackupaproverId == managerId)
+                                   .OrderByDescending(r => r.RequestDate)
+                                   .Include(r => r.User)
+                                   .ThenInclude(rs => rs.SapNumber)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(sb => sb.IT)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(sb => sb.Controller)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(sb => sb.DeparManag)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(sr => sr.Equipment)
+                                   .AsNoTracking()
+                                   .ToListAsync();
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }
-        public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForLocationITApproverAsync(string Itapproverid)
+
+
+        public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForApproverAsync(string managerId)
         {
-            // Step 1: Find the plant IDs where the user is the IT approver
+            var requests = await _dbContext.EquipmentRequests
+                                      .Where(r => r.User.ManagerId == managerId)
+                                   .OrderByDescending(r => r.RequestDate)
+                                   .Include(r => r.User)
+                                   .ThenInclude(u => u.SapNumber)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(s => s.IT)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(s => s.Controller)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(s => s.DeparManag)
+                                   .Include(r => r.EquipmentSubRequests)
+                                   .ThenInclude(s => s.Equipment)
+                                   .AsNoTracking()
+                                   .ToListAsync();
+
+            return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
+        }
+        public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForLocationITApproverAsync(string itApproverId)
+        {
+            // Step 1: Find the plant IDs where the user is the IT approver or the backup IT approver
             var plantIds = await _dbContext.Plants
-                                           .Where(p => p.ITApproverId == Itapproverid)
+                                           .Where(p => p.ITApproverId == itApproverId ||
+                                                       p.ItApprover.BackupaproverId == itApproverId)
                                            .Select(p => p.PlantNumber)
                                            .ToListAsync();
 
             // Debug: Log or inspect plant IDs
-            Console.WriteLine("Plant IDs where the user is IT approver:");
+            Console.WriteLine("Plant IDs where the user is IT approver or backup IT approver:");
             foreach (var id in plantIds)
             {
                 Console.WriteLine($"Plant ID: {id}");
@@ -103,7 +131,7 @@ namespace TequipWiseServer.Services
             // Check if plantIds is empty
             if (!plantIds.Any())
             {
-                Console.WriteLine("No plant IDs found for the given IT approver.");
+                Console.WriteLine("No plant IDs found for the given IT approver or backup IT approver.");
                 return Enumerable.Empty<EquipementRequestDTO>();
             }
 
@@ -113,7 +141,7 @@ namespace TequipWiseServer.Services
                                                        r.EquipmentSubRequests.Any(sub => sub.DepartmangconfirmStatus == true))
                                            .OrderByDescending(r => r.RequestDate)
                                            .Include(r => r.User)
-                                            .ThenInclude(rs => rs.SapNumber)
+                                           .ThenInclude(rs => rs.SapNumber)
                                            .Include(r => r.EquipmentSubRequests)
                                            .ThenInclude(sb => sb.IT)
                                            .Include(r => r.EquipmentSubRequests)
@@ -138,20 +166,22 @@ namespace TequipWiseServer.Services
         public async Task<IEnumerable<EquipementRequestDTO>> GetRequestsForSapControllerAsync(string controllerId)
         {
             var requests = await _dbContext.EquipmentRequests
-                                           .Where(r => r.User.SapNumber.Idcontroller == controllerId && r.SupplierOffer != null)
-                                           .OrderByDescending(r => r.RequestDate)
-                                           .Include(r => r.User)
-                                           .ThenInclude(u => u.SapNumber)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sr => sr.IT)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sr => sr.Controller)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sr => sr.DeparManag)
-                                           .Include(r => r.EquipmentSubRequests)
-                                           .ThenInclude(sr => sr.Equipment)
-                                           .AsNoTracking()
-                                           .ToListAsync();
+                                 .Where(r => (r.User.SapNumber.Idcontroller == controllerId ||
+                                              r.User.SapNumber.Controller.BackupaproverId == controllerId) &&
+                                              r.SupplierOffer != null)
+                                 .OrderByDescending(r => r.RequestDate)
+                                 .Include(r => r.User)
+                                 .ThenInclude(u => u.SapNumber)
+                                 .Include(r => r.EquipmentSubRequests)
+                                 .ThenInclude(sr => sr.IT)
+                                 .Include(r => r.EquipmentSubRequests)
+                                 .ThenInclude(sr => sr.Controller)
+                                 .Include(r => r.EquipmentSubRequests)
+                                 .ThenInclude(sr => sr.DeparManag)
+                                 .Include(r => r.EquipmentSubRequests)
+                                 .ThenInclude(sr => sr.Equipment)
+                                 .AsNoTracking()
+                                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<EquipementRequestDTO>>(requests);
         }
@@ -347,6 +377,112 @@ namespace TequipWiseServer.Services
             return currentSubRequestDetails;
         }
 
+
+
+        public async Task<SubEquipmentRequest?> AdminUpdateSubRequestAsync(int equipmentRequestId, SubEquipmentRequest updatedSubRequest)
+        {
+            // Retrieve main request of the subrequest
+            var equipmentRequest = await _dbContext.EquipmentRequests
+                .Include(er => er.EquipmentSubRequests)
+                .Include(u => u.User)
+                .ThenInclude(up => up.Plant)
+                .ThenInclude(pi => pi.ItApprover)
+                .ThenInclude(bb => bb.Backupaprover)
+                .FirstOrDefaultAsync(er => er.EquipmentRequestId == equipmentRequestId);
+
+            if (equipmentRequest == null)
+            {
+                Console.WriteLine("Main request not found");
+                return null; // Main request not found
+            }
+
+            // Retrieve the current sub-request details from the database
+            var currentSubRequestDetails = await GetSubRequestByIdAsync(updatedSubRequest.SubEquipmentRequestId);
+            if (currentSubRequestDetails == null)
+            {
+                Console.WriteLine("Sub-request details not found");
+                return null;
+            }
+
+           
+                updatedSubRequest.DepartmangconfirmedAt = DateTime.Now;
+            updatedSubRequest.FinanceconfirmedAt = DateTime.Now;
+
+           
+
+            // Check if PR_Status has been changed
+            if (updatedSubRequest.PR_Status != currentSubRequestDetails.PR_Status)
+            {
+                updatedSubRequest.ITconfirmedAt = DateTime.Now;
+
+                if (updatedSubRequest.PR_Status == false)
+                {
+                    updatedSubRequest.SubRequestStatus = false;
+                    equipmentRequest.RequestStatus = false;
+                    await SendEmailAsync(equipmentRequest, "Rejection", "UserEquipementRequest", "EmailRequestConfirmed.html", "Equipment Request Rejection");
+                    Console.WriteLine("=================== the sub-request is rejected ");
+                }
+            }
+
+            // Check if PONum has been changed
+            if (updatedSubRequest.PONum != currentSubRequestDetails.PONum)
+            {
+                updatedSubRequest.ITconfirmSatuts = true;
+                updatedSubRequest.ITconfirmedAt = DateTime.Now;
+                updatedSubRequest.SubRequestStatus = true;
+                equipmentRequest.RequestStatus = true;
+                await SendEmailAsync(equipmentRequest, "Confirmation", "UserEquipementRequest", "EmailRequestConfirmed.html", "Equipment Request Confirmation");
+                Console.WriteLine("=================== the sub-request is approved ");
+            }
+
+            // Change the global status of the request to false if rejected
+            if (updatedSubRequest.DepartmangconfirmStatus == false || updatedSubRequest.ITconfirmSatuts == false || updatedSubRequest.FinanceconfirmSatuts == false)
+            {
+                var rejectionLink = FixedemailLink + "UserEquipementRequest";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", rejectionLink)
+                    .Replace("{{equipment}}", currentSubRequestDetails.Equipment.EquipName)
+                    .Replace("{{UserName}}", equipmentRequest.User.TeNum);
+
+                updatedSubRequest.SubRequestStatus = false;
+
+                var userEmail = equipmentRequest.User?.Email;
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    var message = new Message(new[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                    Console.WriteLine("Rejection email sent to: " + userEmail);
+                }
+                else
+                {
+                    Console.WriteLine("User email is null or empty.");
+                }
+
+                Console.WriteLine("=================== the sub-request is rejected ");
+            }
+
+            // Update only the properties that are not null in updatedSubRequest
+            var properties = typeof(SubEquipmentRequest).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (var property in properties)
+            {
+                var newValue = property.GetValue(updatedSubRequest);
+                if (newValue != null)
+                {
+                    property.SetValue(currentSubRequestDetails, newValue);
+                }
+            }
+
+           
+                await _dbContext.SaveChangesAsync();
+
+            return currentSubRequestDetails;
+        }
+
+
+
+
         private async Task SendEmailAsync(EquipmentRequest equipmentRequest, string emailType, string linkPath, string templateName, string subject)
         {
             var itApproverEmail = equipmentRequest.User.Plant?.ItApprover?.Email;
@@ -464,11 +600,14 @@ namespace TequipWiseServer.Services
                 }
             }
 
-            // Reattach updated sub-requests
+            // Calculate the total price for each sub-request and the main request
             foreach (var subRequest in updatedRequest.EquipmentSubRequests)
             {
+                subRequest.Totale = (subRequest.PU ?? 0) * (subRequest.QtEquipment ?? 0);
                 _dbContext.Entry(subRequest).State = EntityState.Modified;
             }
+
+            equipmentRequest.TotalPrice = updatedRequest.EquipmentSubRequests.Sum(sr => sr.Totale);
 
             await _dbContext.SaveChangesAsync();
 
@@ -477,7 +616,6 @@ namespace TequipWiseServer.Services
 
 
 
-       
 
         async public Task<SubEquipmentRequest> GetSubRequestByIdAsync(int subRequestId)
         {
@@ -505,6 +643,7 @@ namespace TequipWiseServer.Services
             // Map the data to DTO
             return _mapper.Map<IEnumerable<AssignedAssetDTO>>(assignedAssets);
         }
+
     }
     }
 

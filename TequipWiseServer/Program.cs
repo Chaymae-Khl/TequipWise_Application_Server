@@ -157,5 +157,10 @@ app.MapControllers();
 
 // Map SignalR hub
 app.MapHub<NotificationHub>("/notificationHub");
-
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    IdentityDataInitializer.SeedData(userManager, roleManager);
+}
 app.Run();

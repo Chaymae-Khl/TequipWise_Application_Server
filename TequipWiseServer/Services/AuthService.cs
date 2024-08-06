@@ -149,7 +149,7 @@ namespace TequipWiseServer.Services
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddHours(3),
+                expires: DateTime.Now.AddHours(9),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
@@ -278,7 +278,7 @@ namespace TequipWiseServer.Services
             if (!string.IsNullOrEmpty(updatedUserDetails.ManagerName))
             {
                 var manager = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.ManagerName);
-                if (updatedUserDetails.ManagerBackupApproverActive == true)
+                if (updatedUserDetails.ApproverActive == true)
                 {
                     await _userManager.AddToRoleAsync(manager, "Approver");
 
@@ -303,12 +303,42 @@ namespace TequipWiseServer.Services
                 var backupApprover = await _userManager.Users.FirstOrDefaultAsync(u => u.TeNum == updatedUserDetails.Backupaprover_Name);
                 if (updatedUserDetails.backupActive == true)
                 {
-                    await _userManager.AddToRoleAsync(backupApprover, "BackupApprover");
+                    foreach(var role in updatedUserDetails.Roles)
+                    {
+                        if (role == "Manager")
+                        {
+                            await _userManager.AddToRoleAsync(backupApprover, "ManagerBackupApprover");
+                        }
+                        else if (role == "It Approver")
+                            {
+                                await _userManager.AddToRoleAsync(backupApprover, "ItBackupApprover");
+                            }
+                        else if (role == "Controller")
+                        {
+                            await _userManager.AddToRoleAsync(backupApprover, "ControllerBackupApprover");
+                        }
+                    }
+                  
 
                 }
                 else if (updatedUserDetails.backupActive == false)
                 {
-                    await _userManager.RemoveFromRoleAsync(backupApprover, "BackupApprover");
+                   
+                    foreach (var role in updatedUserDetails.Roles)
+                    {
+                        if (role == "Manager")
+                        {
+                            await _userManager.RemoveFromRoleAsync(backupApprover, "ManagerBackupApprover");
+                        }
+                        else if (role == "It Approver")
+                        {
+                            await _userManager.RemoveFromRoleAsync(backupApprover, "ItBackupApprover");
+                        }
+                        else if (role == "Controller")
+                        {
+                            await _userManager.RemoveFromRoleAsync(backupApprover, "ControllerBackupApprover");
+                        }
+                    }
                 }
                 if (backupApprover != null)
                 {

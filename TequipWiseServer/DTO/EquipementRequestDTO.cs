@@ -12,7 +12,7 @@ namespace TequipWiseServer.DTO
 
         public bool? RequestStatus { get; set; } = null;
 
-        public bool? isNewhire { get; set; } = false;
+        public string? ForWho { get; set; }
         public string? currency { get; set; }
 
         public string? NewHireName { get; set; }

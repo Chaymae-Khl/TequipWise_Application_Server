@@ -20,7 +20,7 @@ namespace TequipWiseServer.Models
         //if is confirmed by all the actor the requestStatus is confirmed
         public bool? RequestStatus { get; set; } = null;
 
-        public bool? isNewhire { get; set; } = false;
+        public string? ForWho { get; set; }
 
         public string? NewHireName { get; set; }
        

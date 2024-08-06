@@ -63,7 +63,8 @@ namespace TequipWiseServer.Models
         public string? IT_Not_confirmCause { get; set; }
         public DateTime? AssetReceiveByEMployeAt { get; set; }
         public bool? ReceptionStatus { get; set; } = null;
-
+        public string? AssetSN { get; set; }
+        public string? AssetModele { get; set; }
         //forein keys
         public string? supplierrid { get; set; }
 

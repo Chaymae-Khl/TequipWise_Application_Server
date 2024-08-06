@@ -27,6 +27,8 @@ namespace TequipWiseServer.Data
         {
             base.OnModelCreating(builder);
             SeedRoles(builder);
+         
+
             // Define the relationships
             //Location/Plant/Departemnt Relations
             builder.Entity<LocationPlant>()
@@ -182,15 +184,18 @@ namespace TequipWiseServer.Data
         private void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(
-               new IdentityRole() { Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin" },
-               new IdentityRole() { Name = "User", ConcurrencyStamp = "2", NormalizedName = "User" },
-               new IdentityRole() { Name = "Manager", ConcurrencyStamp = "3", NormalizedName = "Manager" },
-               new IdentityRole() { Name = "It Approver", ConcurrencyStamp = "4", NormalizedName = "It Approver" },
-               new IdentityRole() { Name = "Controller", ConcurrencyStamp = "5", NormalizedName = "Controller" },
-               new IdentityRole() { Name = "BackupApprover", ConcurrencyStamp = "6", NormalizedName = "BackupApprover" },
-               new IdentityRole() { Name = "Approver", ConcurrencyStamp = "7", NormalizedName = "Approver" }
-
-                );
+                new IdentityRole { Id = "1", Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "ADMIN" },
+                new IdentityRole { Id = "2", Name = "User", ConcurrencyStamp = "2", NormalizedName = "USER" },
+                new IdentityRole { Id = "3", Name = "Manager", ConcurrencyStamp = "3", NormalizedName = "MANAGER" },
+                new IdentityRole { Id = "4", Name = "It Approver", ConcurrencyStamp = "4", NormalizedName = "IT APPROVER" },
+                new IdentityRole { Id = "5", Name = "Controller", ConcurrencyStamp = "5", NormalizedName = "CONTROLLER" },
+                new IdentityRole { Id = "6", Name = "ManagerBackupApprover", ConcurrencyStamp = "6", NormalizedName = "MANAGERBACKUPAPPROVER" },
+                new IdentityRole { Id = "7", Name = "ItBackupApprover", ConcurrencyStamp = "7", NormalizedName = "ITBACKUPAPPROVER" },
+                new IdentityRole { Id = "8", Name = "ControllerBackupApprover", ConcurrencyStamp = "8", NormalizedName = "CONTROLLERBACKUPAPPROVER" },
+                new IdentityRole { Id = "9", Name = "Approver", ConcurrencyStamp = "9", NormalizedName = "APPROVER" }
+            );
         }
+
+       
     }
 }

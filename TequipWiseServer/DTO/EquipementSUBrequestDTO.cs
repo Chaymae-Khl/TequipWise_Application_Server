@@ -13,7 +13,8 @@ namespace TequipWiseServer.DTO
         
         
         public bool? SubRequestStatus { get; set; }
-
+        public string? AssetSN { get; set; }
+        public string? AssetModele { get; set; }
         public int? QtEquipment { get; set; }
 
         //departmenent manager request part

@@ -32,13 +32,15 @@ namespace TequipWiseServer.Controllers
         private readonly AppDbContext _dbContext;
         private readonly NotificationService _notificationService;
         private readonly Isupplier _supplierService;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+
         public RequestController(IEquipementRequest requestService, 
             IAuthentication authService, IEMailService emailService, 
             UserManager<ApplicationUser> userManager,
             IEquipment equipmentService, IMapper mapper, 
             AppDbContext dbContext,
             NotificationService notificationService,
-            Isupplier supplierService)
+            Isupplier supplierService, IWebHostEnvironment hostingEnvironment)
         {
             _requestService = requestService;
             _authService = authService;
@@ -49,6 +51,7 @@ namespace TequipWiseServer.Controllers
             _dbContext = dbContext;
             _notificationService = notificationService;
             _supplierService = supplierService;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public string FixedemailLink = "http://localhost:4200/";
@@ -179,7 +182,12 @@ namespace TequipWiseServer.Controllers
                 new Response { Status = "Success", Message = "Request processed and notification sent." });
 
         }
-
+        [HttpGet("GetRequestCount")]
+        public async Task<ActionResult<int>> GetNumberofUsers()
+        {
+            var numReq = await _requestService.GetRequestCountIdAsync();
+            return Ok(numReq);
+        }
         ////get the requests of the authenticated user
 
         [HttpGet("GetUserRequests")]
@@ -264,21 +272,25 @@ namespace TequipWiseServer.Controllers
 
             IEnumerable<EquipementRequestDTO> requests;
 
-            if (roles.Contains("Manager") || roles.Contains("BackupApprover"))
+            if (roles.Contains("Manager") || roles.Contains("ManagerBackupApprover"))
             {
                 requests = await _requestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
             }
-            else if (roles.Contains("It Approver"))
+            else if (roles.Contains("It Approver") || roles.Contains("ItBackupApprover"))
             {
                 requests = await _requestService.GetRequestsForLocationITApproverAsync(userDetails.Id);
             }
-            else if (roles.Contains("Controller"))
+            else if (roles.Contains("Controller") || roles.Contains("ControllerBackupApprover"))
             {
                 requests = await _requestService.GetRequestsForSapControllerAsync(userDetails.Id);
             }
             else if (roles.Contains("Admin"))
             {
                 requests = await _requestService.GetRequestsForAdminAsync(userDetails.Id);
+            }
+            else if (roles.Contains("Approver"))
+            {
+                requests = await _requestService.GetRequestsForApproverAsync(userDetails.Id);
             }
             else
             {
@@ -309,8 +321,26 @@ namespace TequipWiseServer.Controllers
             return Ok(result);
         }
 
-      
-    
+        [HttpPut("{equipmentRequestId}/Adminsubrequests/{subRequestId}")]
+        public async Task<IActionResult> AdminUpdateSubRequest(int equipmentRequestId, int subRequestId, [FromBody] SubEquipmentRequest updatedSubRequest)
+        {
+            Console.WriteLine("=====================" + updatedSubRequest.supplierrid);
+            if (subRequestId != updatedSubRequest.SubEquipmentRequestId)
+            {
+                return BadRequest("Sub-request ID mismatch.");
+            }
+
+            var result = await _requestService.AdminUpdateSubRequestAsync(equipmentRequestId, updatedSubRequest);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+
         [HttpPut("ItOfferAndPrice/{equipmentRequestId}")]
         public async Task<IActionResult> RequestSupplierOfferAndPUPrice(int equipmentRequestId, IFormFile file, [FromForm] string updatedRequestJson)
         {
@@ -353,7 +383,7 @@ namespace TequipWiseServer.Controllers
 
             return Ok(result);
         }
-       
+
 
         [HttpGet("EquipemntName")]
         public async Task<ActionResult<IEnumerable<dynamic>>> GetAllEquipemntName()
