@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TequipWiseServer.DTO;
+using TequipWiseServer.DTO.KPI_DTO;
 using TequipWiseServer.Models;
 
 namespace TequipWiseServer.Interfaces
@@ -21,5 +22,15 @@ namespace TequipWiseServer.Interfaces
         Task<SubEquipmentRequest?> AdminUpdateSubRequestAsync(int equipmentRequestId, SubEquipmentRequest updatedSubRequest);
         Task<EquipmentRequest?> GetRequestByIdAsyncOrig(int equipmentRequestId);
         Task<IEnumerable<EquipementRequestDTO>> GetRequestsForApproverAsync(string managerId);
+       //for the KPIS
+        Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(int year);
+        int GetRejectedRequestsCount();
+        int GetInProgressRequestsCount();
+        int GetWaitingForFinanceApprovalCount();
+        int GetWaitingForPRCount();
+        int GetWaitingForPOCount();
+        int GetApprovedRequestsCount();
+        int GetOfferRequestsCount();
+        int GetOpenRequestsCount();
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
+using TequipWiseServer.DTO.KPI_DTO;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using User.Managmenet.Service.Models;
@@ -643,6 +644,102 @@ namespace TequipWiseServer.Services
             // Map the data to DTO
             return _mapper.Map<IEnumerable<AssignedAssetDTO>>(assignedAssets);
         }
+
+
+
+
+
+
+        //Functions for the KPIS
+        public async Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(int year)
+        {
+            var result = await _dbContext.subEquipmentRequests
+                .Where(s => s.SubRequestDate.Year == year && s.PONum != null)
+                .GroupBy(s => new { s.SubRequestDate.Year, s.SubRequestDate.Month })
+                .Select(g => new MonthlyExpenditure
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Total = g.Sum(s => s.Totale)
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
+
+        public int GetRejectedRequestsCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.DepartmangconfirmStatus == false ||
+                             sr.ITconfirmSatuts == false ||
+                             sr.FinanceconfirmSatuts == false ||
+                             sr.PR_Status == false);
+        }
+
+        public int GetInProgressRequestsCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.DepartmangconfirmStatus == true &&
+                             sr.ITconfirmSatuts == null &&
+                             sr.EquipRequest.SupplierOffer == null);
+        }
+
+        public int GetWaitingForFinanceApprovalCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.DepartmangconfirmStatus == true &&
+                             sr.EquipRequest.SupplierOffer != null &&
+                             sr.FinanceconfirmSatuts == null);
+        }
+
+        public int GetWaitingForPRCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.FinanceconfirmSatuts == true &&
+                             sr.PR_Status == null);
+        }
+
+        public int GetWaitingForPOCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.PR_Status == true &&
+                             sr.PONum == null);
+        }
+
+        public int GetApprovedRequestsCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.PR_Status == true &&
+                             sr.SubRequestStatus == true);
+        }
+
+        public int GetOfferRequestsCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => sr.EquipRequest.SupplierOffer != null &&
+                             sr.ITconfirmSatuts == null);
+        }
+
+        public int GetOpenRequestsCount()
+        {
+            return _dbContext.subEquipmentRequests
+                .Count(sr => !(
+                    sr.DepartmangconfirmStatus == false ||
+                    sr.ITconfirmSatuts == false ||
+                    sr.FinanceconfirmSatuts == false ||
+                    sr.PR_Status == false ||
+                    (sr.DepartmangconfirmStatus == true && sr.ITconfirmSatuts == null && sr.EquipRequest.SupplierOffer == null) ||
+                    (sr.DepartmangconfirmStatus == true && sr.EquipRequest.SupplierOffer != null && sr.FinanceconfirmSatuts == null) ||
+                    (sr.FinanceconfirmSatuts == true && sr.PR_Status == null) ||
+                    (sr.PR_Status == true && sr.PONum == null) ||
+                    (sr.PR_Status == true && sr.SubRequestStatus == true) ||
+                    (sr.EquipRequest.SupplierOffer != null && sr.ITconfirmSatuts == null)
+                ));
+        }
+
+
+
 
     }
     }

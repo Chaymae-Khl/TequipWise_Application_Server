@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.DTO.ApprovalDTO;
+using TequipWiseServer.DTO.KPI_DTO;
 using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
@@ -84,6 +85,11 @@ namespace TequipWiseServer.Controllers
             newrequest.UserId = userDetails.Id;
             //set the acual date
             newrequest.RequestDate = DateTime.Now;
+
+            foreach(var subreq in newrequest.EquipmentSubRequests)
+            {
+                subreq.SubRequestDate= DateTime.Now;
+            }
             // Save the request in the database
             var result = await _requestService.PassRequest(newrequest);
             if (result is OkObjectResult == false)
@@ -422,5 +428,33 @@ namespace TequipWiseServer.Controllers
         var suppliersname = await _supplierService.GetSupplierInfoAsync();
         return Ok(suppliersname);
     }
-}
+
+
+
+        //For KPIs
+        [HttpGet("monthly-expenditure")]
+        public async Task<ActionResult<List<MonthlyExpenditure>>> GetFilteredSubEquipmentRequests([FromQuery] int year)
+        {
+            var data = await _requestService.GetFilteredSubEquipmentRequests(year);
+            return Ok(data);
+        }
+
+        [HttpGet("counts")]
+        public IActionResult GetRequestCounts()
+        {
+            var counts = new
+            {
+                Open = _requestService.GetOpenRequestsCount(),
+                InProgress = _requestService.GetInProgressRequestsCount(),
+                WaitingForFinanceApproval = _requestService.GetWaitingForFinanceApprovalCount(),
+                WaitingForPR = _requestService.GetWaitingForPRCount(),
+                WaitingForPO = _requestService.GetWaitingForPOCount(),
+                Approved = _requestService.GetApprovedRequestsCount(),
+                Rejected = _requestService.GetRejectedRequestsCount(),
+            };
+
+            return Ok(counts);
+        }
+
+    }
 }
