@@ -14,9 +14,12 @@ namespace TequipWiseServer.Controllers
     public class PhoneRequestController : ControllerBase
     {
         private readonly IPhoneRequest _PhonerequestService;
-        public PhoneRequestController(IPhoneRequest requestService)
+        private readonly IAuthentication _authService;
+        public PhoneRequestController(IPhoneRequest requestService, IAuthentication authService)
         {
             _PhonerequestService = requestService;
+            _authService = authService;
+
         }
 
         [HttpPost("PassPhoneRequest")]
@@ -32,7 +35,35 @@ namespace TequipWiseServer.Controllers
                 new Response { Status = "Success", Message = "Request processed and notification sent." });
 
         }
+        ////get the phone requests of the authenticated user
 
+        [HttpGet("GetUserPhoneRequests")]
+        public async Task<IActionResult> GetUserRequests()
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Response { Status = "Error", Message = "User details are missing." });
+            }
+
+            var userRequests = await _PhonerequestService.GetRequestsByUserIdAsync(userDetails.Id);
+
+            return Ok(userRequests);
+        }
 
     }
 }

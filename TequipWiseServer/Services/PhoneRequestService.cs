@@ -26,6 +26,8 @@ namespace TequipWiseServer.Services
             _emailService = emailService;
         }
 
+       
+
         public async Task<IActionResult> PassPhoneRequest(PhoneRequest request)
         {
             // Get the authenticated user details
@@ -57,6 +59,18 @@ namespace TequipWiseServer.Services
             await _dbContext.SaveChangesAsync();
 
             return new OkObjectResult(new Response { Status = "Success", Message = "Request passed successfully!" });
+        }
+       async public Task<IEnumerable<PhoneRequestDTO>> GetRequestsByUserIdAsync(string userId)
+        {
+            var requests = await _dbContext.PhoneRequests
+       .Where(r => r.UserId == userId)
+       .OrderByDescending(r => r.RequestDate)
+       .Include(r => r.User)
+       .Include(r=>r.HR)
+       .Include(r=>r.DeparManag)
+       .ToListAsync();
+
+            return _mapper.Map<IEnumerable<PhoneRequestDTO>>(requests);
         }
     }
 }

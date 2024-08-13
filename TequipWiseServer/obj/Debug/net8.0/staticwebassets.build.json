@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7lg+FNcFnukZyqU9bc9+C4pB3Fa2Glg0M+Bwn+dLV5k=",
+  "Hash": "ix6o2fx9UkxmOFpzsVT51ddg0XOe3MB6ukm6TBhzDGA=",
   "Source": "TequipWiseServer",
   "BasePath": "_content/TequipWiseServer",
   "Mode": "Default",
@@ -110,6 +110,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\1526e857-216b-46a1-bdff-60bf197db2ba_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\2d0c545e-330a-4917-8726-b8a801c0c2ab_Process.pdf",
+      "SourceId": "TequipWiseServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\",
+      "BasePath": "_content/TequipWiseServer",
+      "RelativePath": "uploads/2d0c545e-330a-4917-8726-b8a801c0c2ab_Process.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\2d0c545e-330a-4917-8726-b8a801c0c2ab_Process.pdf"
     },
     {
       "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\3301f49a-d9e7-4fa1-9f02-d7d362c4580e.pdf",
@@ -243,6 +262,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\5fa0793c-d4b2-4e34-8bc2-7d3cc6801430_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\66225ba7-61f4-48a3-a5d9-4a1ee3802070_Process.pdf",
+      "SourceId": "TequipWiseServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\",
+      "BasePath": "_content/TequipWiseServer",
+      "RelativePath": "uploads/66225ba7-61f4-48a3-a5d9-4a1ee3802070_Process.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\66225ba7-61f4-48a3-a5d9-4a1ee3802070_Process.pdf"
     },
     {
       "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\67eac378-00c7-40b3-a4eb-e41533e9d9a7_Process.pdf",
@@ -454,6 +492,25 @@
       "OriginalItemSpec": "wwwroot\\uploads\\a465ba66-497e-4693-b2d4-cb7d36e454e4_Process.pdf"
     },
     {
+      "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\b04e7f56-5eca-4508-9b9e-c72582005c8a_Process.pdf",
+      "SourceId": "TequipWiseServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\",
+      "BasePath": "_content/TequipWiseServer",
+      "RelativePath": "uploads/b04e7f56-5eca-4508-9b9e-c72582005c8a_Process.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\b04e7f56-5eca-4508-9b9e-c72582005c8a_Process.pdf"
+    },
+    {
       "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\b7d8862e-b07d-4a1b-ba06-c4cf7f30d74f_Process.pdf",
       "SourceId": "TequipWiseServer",
       "SourceType": "Discovered",
@@ -566,6 +623,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\e3de8b01-e44f-4b3f-985a-4fee812a048d_Process.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\efb172ea-6b5d-40f4-b3a2-291cb41cdabe_Process.pdf",
+      "SourceId": "TequipWiseServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\",
+      "BasePath": "_content/TequipWiseServer",
+      "RelativePath": "uploads/efb172ea-6b5d-40f4-b3a2-291cb41cdabe_Process.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\efb172ea-6b5d-40f4-b3a2-291cb41cdabe_Process.pdf"
     }
   ]
 }
