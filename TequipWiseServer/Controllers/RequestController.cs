@@ -433,12 +433,11 @@ namespace TequipWiseServer.Controllers
 
         //For KPIs
         [HttpGet("monthly-expenditure")]
-        public async Task<ActionResult<List<MonthlyExpenditure>>> GetFilteredSubEquipmentRequests([FromQuery] int year)
+        public async Task<ActionResult<List<MonthlyExpenditure>>> GetFilteredSubEquipmentRequests([FromQuery] int year, [FromQuery] int? month = null, [FromQuery] int? day = null)
         {
-            var data = await _requestService.GetFilteredSubEquipmentRequests(year);
+            var data = await _requestService.GetFilteredSubEquipmentRequests(year, month, day);
             return Ok(data);
         }
-
         [HttpGet("counts")]
         public IActionResult GetRequestCounts()
         {

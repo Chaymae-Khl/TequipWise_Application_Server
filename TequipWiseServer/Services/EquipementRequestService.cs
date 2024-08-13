@@ -651,15 +651,28 @@ namespace TequipWiseServer.Services
 
 
         //Functions for the KPIS
-        public async Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(int year)
+        public async Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(int year, int? month = null, int? day = null)
         {
-            var result = await _dbContext.subEquipmentRequests
-                .Where(s => s.SubRequestDate.Year == year && s.PONum != null)
-                .GroupBy(s => new { s.SubRequestDate.Year, s.SubRequestDate.Month })
+            var query = _dbContext.subEquipmentRequests
+                .Where(s => s.SubRequestDate.Year == year && s.PONum != null);
+
+            if (month.HasValue)
+            {
+                query = query.Where(s => s.SubRequestDate.Month == month.Value);
+            }
+
+            if (day.HasValue)
+            {
+                query = query.Where(s => s.SubRequestDate.Day == day.Value);
+            }
+
+            var result = await query
+                .GroupBy(s => new { s.SubRequestDate.Year, s.SubRequestDate.Month, s.SubRequestDate.Day })
                 .Select(g => new MonthlyExpenditure
                 {
                     Year = g.Key.Year,
                     Month = g.Key.Month,
+                    Day = g.Key.Day,
                     Total = g.Sum(s => s.Totale)
                 })
                 .ToListAsync();

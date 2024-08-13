@@ -38,6 +38,10 @@ namespace TequipWiseServer.Models
         public virtual ICollection<ApplicationUser>? Subordinates { get; set; }
 
         public virtual ICollection<EquipmentRequest>? UserEquipmentRequests { get; set; }
+        public virtual ICollection<PhoneRequest>? PhoneRequests { get; set; }
+        public virtual ICollection<PhoneRequest>? DeptMangPhoneRequestsToApprove { get; set; }
+        public virtual ICollection<PhoneRequest>? ItRequestsPhoneToApprove { get; set; }
+        public virtual ICollection<PhoneRequest>? HRRequestsPhoneToApprove { get; set; }
         public virtual ICollection<SubEquipmentRequest>? ItRequestToApprove { get; set; }
         public virtual ICollection<SubEquipmentRequest>? ControllerRequestToApprove { get; set; }
         public virtual ICollection<SubEquipmentRequest>? DeptMangRequestToApprove { get; set; }

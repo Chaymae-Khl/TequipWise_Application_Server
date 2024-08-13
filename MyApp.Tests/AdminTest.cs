@@ -52,8 +52,8 @@ namespace MyApp.Tests
 
         //Equipment Tests
           //getAllEquipments
+        
         [Fact]
-
         public async Task GetAllEquipments()
         {
             // Arrange

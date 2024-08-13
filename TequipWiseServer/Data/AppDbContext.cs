@@ -17,6 +17,7 @@ namespace TequipWiseServer.Data
         public DbSet<LocationDepartment> LocationDepartments { get; set; }
         public DbSet<SubEquipmentRequest> subEquipmentRequests { get; set; }
         public DbSet<EquipmentRequest> EquipmentRequests { get; set; }
+        public DbSet<PhoneRequest> PhoneRequests { get; set; }
 
         public DbSet<SapNumber> SapNumbers { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
@@ -178,8 +179,33 @@ namespace TequipWiseServer.Data
             builder.Entity<SapNumber>()
            .HasOne(p => p.Controller)
             .WithMany()
-            .HasForeignKey(p => p.Idcontroller);
+            .HasForeignKey(p => p.Idcontroller); 
+        //phone request relations
+
+        builder.Entity<PhoneRequest>()
+        .HasOne(pr => pr.User)
+        .WithMany(u => u.PhoneRequests)
+        .HasForeignKey(pr => pr.UserId);
+
+        builder.Entity<PhoneRequest>()
+        .HasOne(pr => pr.DeparManag)
+        .WithMany()
+        .HasForeignKey(pr => pr.deptManagId);
+
+        builder.Entity<PhoneRequest>()
+        .HasOne(pr => pr.IT)
+        .WithMany()
+        .HasForeignKey(pr => pr.itId);
+
+        builder.Entity<PhoneRequest>()
+        .HasOne(pr => pr.HR)
+        .WithMany()
+        .HasForeignKey(pr => pr.HRId);
+
         }
+
+       
+
 
         private void SeedRoles(ModelBuilder builder)
         {

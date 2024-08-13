@@ -24,6 +24,10 @@ builder.Services.AddScoped<ILocation, LocationService>();
 builder.Services.AddScoped<Isupplier, SupplierService>();
 builder.Services.AddScoped<IEquipment, EquipementService>();
 builder.Services.AddScoped<IEquipementRequest, EquipementRequestService>();
+builder.Services.AddScoped<IPhoneRequest, PhoneRequestService>();
+
+
+
 builder.Services.AddScoped<ISapNum, SapService>();
 builder.Services.AddScoped<NotificationService>();
 
