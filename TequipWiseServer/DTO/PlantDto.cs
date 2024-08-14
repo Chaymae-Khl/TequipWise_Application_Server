@@ -11,5 +11,9 @@ namespace TequipWiseServer.DTO
   
         public string? ITApproverId { get; set; }
         public string? ITApprover_name { get; set; }
+        public string? HrApproverId { get; set; }
+
+        public string? HrApprover_name { get; set; }
+
     }
 }

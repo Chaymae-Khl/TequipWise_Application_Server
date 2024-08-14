@@ -69,7 +69,10 @@ namespace TequipWiseServer.Data
               .HasOne(p => p.ItApprover)
               .WithMany()
               .HasForeignKey(p => p.ITApproverId);
-
+            builder.Entity<Plant>()
+             .HasOne(p => p.HRApprover)
+             .WithMany()
+             .HasForeignKey(p => p.HRApproverId);
             //user relations
             builder.Entity<ApplicationUser>()
                 .HasOne(u => u.Backupaprover)
@@ -218,7 +221,9 @@ namespace TequipWiseServer.Data
                 new IdentityRole { Id = "6", Name = "ManagerBackupApprover", ConcurrencyStamp = "6", NormalizedName = "MANAGERBACKUPAPPROVER" },
                 new IdentityRole { Id = "7", Name = "ItBackupApprover", ConcurrencyStamp = "7", NormalizedName = "ITBACKUPAPPROVER" },
                 new IdentityRole { Id = "8", Name = "ControllerBackupApprover", ConcurrencyStamp = "8", NormalizedName = "CONTROLLERBACKUPAPPROVER" },
-                new IdentityRole { Id = "9", Name = "Approver", ConcurrencyStamp = "9", NormalizedName = "APPROVER" }
+                new IdentityRole { Id = "9", Name = "Approver", ConcurrencyStamp = "9", NormalizedName = "APPROVER" },
+                new IdentityRole { Id = "10", Name = "HR Approver", ConcurrencyStamp = "10", NormalizedName = "HR APPROVER" }
+
             );
         }
 

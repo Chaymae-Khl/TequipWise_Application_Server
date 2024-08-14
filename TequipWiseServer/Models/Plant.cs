@@ -15,12 +15,14 @@ namespace TequipWiseServer.Models
 
         //It Approver
         public string? ITApproverId { get; set; }
+        public string? HRApproverId { get; set; }
 
 
         public ICollection<ApplicationUser>? Users { get; set; }
 
         public ICollection<LocationPlant>? LocationPlants { get; set; }
         public ApplicationUser? ItApprover { get; set; }
+        public ApplicationUser? HRApprover { get; set; }
 
 
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TequipWiseServer.Data;
 
@@ -11,9 +12,11 @@ using TequipWiseServer.Data;
 namespace TequipWiseServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240813235503_hrapproveradded")]
+    partial class hrapproveradded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,13 +114,6 @@ namespace TequipWiseServer.Migrations
                             ConcurrencyStamp = "9",
                             Name = "Approver",
                             NormalizedName = "APPROVER"
-                        },
-                        new
-                        {
-                            Id = "10",
-                            ConcurrencyStamp = "10",
-                            Name = "HR Approver",
-                            NormalizedName = "HR APPROVER"
                         });
                 });
 

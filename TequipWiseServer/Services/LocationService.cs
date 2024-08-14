@@ -102,7 +102,9 @@ namespace TequipWiseServer.Services
                     var plant = new Plant
                     {
                         plant_name = plantDto.plant_name,
-                        ITApproverId = plantDto.ITApproverId
+                        ITApproverId = plantDto.ITApproverId,
+                        HRApproverId = plantDto.HrApproverId
+
                     };
                     plants.Add(plant);
                 }
@@ -200,8 +202,8 @@ namespace TequipWiseServer.Services
                 var newPlant = new Plant
                 {
                     plant_name = plantDto.plant_name,
-                   
-                    ITApproverId = plantDto.ITApproverId
+                    ITApproverId = plantDto.ITApproverId,
+                    HRApproverId = plantDto.HrApproverId
 
                 };
 
@@ -259,7 +261,7 @@ namespace TequipWiseServer.Services
 
                 // Update the plant entity
                 plant.plant_name = plantDto.plant_name;
-               
+                plant.HRApproverId = plantDto.HrApproverId;
                 plant.ITApproverId = plantDto.ITApproverId;
 
                 _dbContext.Plants.Update(plant);
