@@ -15,11 +15,12 @@ namespace TequipWiseServer.Controllers
     {
         private readonly IPhoneRequest _PhonerequestService;
         private readonly IAuthentication _authService;
-        public PhoneRequestController(IPhoneRequest requestService, IAuthentication authService)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public PhoneRequestController(IPhoneRequest requestService, IAuthentication authService, UserManager<ApplicationUser> userManager)
         {
             _PhonerequestService = requestService;
             _authService = authService;
-
+            _userManager = userManager;
         }
 
         [HttpPost("PassPhoneRequest")]
@@ -65,5 +66,63 @@ namespace TequipWiseServer.Controllers
             return Ok(userRequests);
         }
 
+        [HttpGet("ApproversRequests")]
+        public async Task<IActionResult> GetDepartmentRequests()
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new Response { Status = "Error", Message = "User details are missing." });
+            }
+
+            var roles = await _userManager.GetRolesAsync(new ApplicationUser { Id = userDetails.Id });
+
+            IEnumerable<PhoneRequestDTO> requests;
+
+            if (roles.Contains("Manager") || roles.Contains("ManagerBackupApprover"))
+            {
+                requests = await _PhonerequestService.GetRequestsForDepartmentManagerAsync(userDetails.Id);
+            }
+            else if (roles.Contains("It Approver") || roles.Contains("ItBackupApprover"))
+            {
+                requests = await _PhonerequestService.GetRequestsForPlantITApproverAsync(userDetails.Id);
+            }
+            else if (roles.Contains("HR Approver") || roles.Contains("HRBackupApprover"))
+            {
+                requests = await _PhonerequestService.GetRequestsForPlantHRApproverAsync(userDetails.Id);
+            }
+            else
+            {
+                return Forbid();
+            }
+
+            return Ok(requests);
+        }
+
+        [HttpPatch("UpdatePhoneRequest/{id}")]
+        public async Task<IActionResult> UpdateRequest(int id, [FromBody] PhoneRequest updatedRequest)
+        {
+            if (updatedRequest == null)
+            {
+                return BadRequest(new Response { Status = "Error", Message = "Invalid request data." });
+            }
+
+            var result = await _PhonerequestService.UpdatePhoneRequest(id, updatedRequest);
+
+            return result;
+        }
     }
 }
