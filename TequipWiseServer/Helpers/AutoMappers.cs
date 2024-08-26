@@ -45,7 +45,7 @@ namespace TequipWiseServer.Helpers
            .ForMember(dest => dest.ItApproverName, opt => opt.MapFrom(src => src.IT != null ? src.IT.TeNum : null))
            .ForMember(dest => dest.HRApproverName, opt => opt.MapFrom(src => src.HR != null ? src.HR.TeNum : null));
 
-
+            CreateMap<PhoneRequest, AssignedPhoneDTO>();
 
             CreateMap<SapNumber, SapNumberDto>()
                 .ForMember(dest => dest.Controller_name, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null)).ReverseMap();

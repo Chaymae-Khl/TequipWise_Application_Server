@@ -12,5 +12,15 @@ namespace TequipWiseServer.Interfaces
         Task<IEnumerable<PhoneRequestDTO>> GetRequestsForPlantITApproverAsync(string Itapproverid);
         Task<IEnumerable<PhoneRequestDTO>> GetRequestsForPlantHRApproverAsync(string HRapproverid);
         Task<IActionResult> UpdatePhoneRequest(int requestId, PhoneRequest updatedRequest);
+        Task<IEnumerable<AssignedPhoneDTO>> GetAssignedPhonesForUserAsync(string userId);
+        Task<IEnumerable<PhoneRequestDTO>> GetRequestsForAdminAsync(string AdminId);
+        Task<IActionResult> UpdatePhoneRequestforAdmin(int requestId, PhoneRequest updatedRequest);
+        Task<int> GetRequestPhneCountIdAsync();
+        int GetInProgressRequestsCount();
+        int GetWaitingForHRRequestsCount();
+        int GetOpenRequestsCount();
+        int GetApprovedRequestsCount();
+        int GetWaitingForITRequestsCount();
+        int GetRejectedRequestsCount();
     }
 }

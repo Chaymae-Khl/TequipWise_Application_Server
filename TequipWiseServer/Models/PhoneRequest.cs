@@ -22,6 +22,8 @@ namespace TequipWiseServer.Models
         public string? ForWho { get; set; }
 
         public string? NewHireName { get; set; }
+        public string? NewHireEmail { get; set; }
+
         public string? AssetType { get; set; }
         public string? phoneRequestType { get; set; }
         public string? ReplacemnetType { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TequipWiseServer.DTO;
@@ -11,6 +12,8 @@ namespace TequipWiseServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+
     public class PhoneRequestController : ControllerBase
     {
         private readonly IPhoneRequest _PhonerequestService;
@@ -104,6 +107,10 @@ namespace TequipWiseServer.Controllers
             {
                 requests = await _PhonerequestService.GetRequestsForPlantHRApproverAsync(userDetails.Id);
             }
+            else if (roles.Contains("Admin"))
+            {
+                requests = await _PhonerequestService.GetRequestsForAdminAsync(userDetails.Id);
+            }
             else
             {
                 return Forbid();
@@ -123,6 +130,67 @@ namespace TequipWiseServer.Controllers
             var result = await _PhonerequestService.UpdatePhoneRequest(id, updatedRequest);
 
             return result;
+        }
+
+        [HttpPatch("UpdatePhoneRequestAdmin/{id}")]
+        public async Task<IActionResult> UpdateRequestAdmin(int id, [FromBody] PhoneRequest updatedRequest)
+        {
+            if (updatedRequest == null)
+            {
+                return BadRequest(new Response { Status = "Error", Message = "Invalid request data." });
+            }
+
+            var result = await _PhonerequestService.UpdatePhoneRequestforAdmin(id, updatedRequest);
+
+            return result;
+        }
+        [HttpGet("user-phones")]
+        public async Task<IActionResult> GetUserPhones()
+        {
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return Unauthorized();
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "Failed to retrieve authenticated user details." });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Response { Status = "Error", Message = "User details are missing." });
+            }
+
+            var userRequests = await _PhonerequestService.GetAssignedPhonesForUserAsync(userDetails.Id);
+
+            return Ok(userRequests);
+        }
+        [HttpGet("GetPhoneRequestCount")]
+        public async Task<ActionResult<int>> GetNumberofUsers()
+        {
+            var numReq = await _PhonerequestService.GetRequestPhneCountIdAsync();
+            return Ok(numReq);
+        }
+        [HttpGet("counts")]
+        public IActionResult GetRequestCounts()
+        {
+            var counts = new
+            {
+                Open = _PhonerequestService.GetOpenRequestsCount(),
+                InProgress = _PhonerequestService.GetInProgressRequestsCount(),
+                WaitingForIT = _PhonerequestService.GetWaitingForITRequestsCount(),
+                WaitingForHR = _PhonerequestService.GetWaitingForHRRequestsCount(),
+                Approved = _PhonerequestService.GetApprovedRequestsCount(),
+                Rejected = _PhonerequestService.GetRejectedRequestsCount(),
+            };
+
+            return Ok(counts);
         }
     }
 }

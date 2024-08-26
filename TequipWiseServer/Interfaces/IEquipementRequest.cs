@@ -23,7 +23,7 @@ namespace TequipWiseServer.Interfaces
         Task<EquipmentRequest?> GetRequestByIdAsyncOrig(int equipmentRequestId);
         Task<IEnumerable<EquipementRequestDTO>> GetRequestsForApproverAsync(string managerId);
         //for the KPIS
-        Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(int year, int? month = null, int? day = null);
+        Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(DateTime startDate, DateTime? endDate = null);
         int GetRejectedRequestsCount();
         int GetInProgressRequestsCount();
         int GetWaitingForFinanceApprovalCount();

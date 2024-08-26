@@ -122,7 +122,7 @@ namespace TequipWiseServer.Services
             var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
             var emailContent = emailTemplate.Replace("{{resetLink}}", deptmangLink);
 
-            var message = new Message(new string[] { email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
+            var message = new Message(new string[] { email }, "Phone Request Confirmation Link", emailContent, isHtml: true);
             _emailService.SendEmail(message);
         }
 
@@ -239,11 +239,21 @@ namespace TequipWiseServer.Services
 
             return _mapper.Map<IEnumerable<PhoneRequestDTO>>(requests);
         }
+        public async Task<IEnumerable<PhoneRequestDTO>> GetRequestsForAdminAsync(string AdminId)
+        {
+            var requests = await _dbContext.PhoneRequests
+                                           .OrderByDescending(r => r.RequestDate)
+                                           .Include(r => r.User)
+                                         .Include(r => r.HR)
+                                         .Include(r => r.DeparManag)
+                                         .ToListAsync();
 
+            return _mapper.Map<IEnumerable<PhoneRequestDTO>>(requests);
+        }
         public async Task<IActionResult> UpdatePhoneRequest(int requestId, PhoneRequest updatedRequest)
         {
             // Find the existing phone request in the database
-            var existingRequest = await _dbContext.PhoneRequests.FindAsync(requestId);
+            var existingRequest = await GetphoneRequestByIdAsync(requestId);
 
             if (existingRequest == null)
             {
@@ -320,7 +330,7 @@ namespace TequipWiseServer.Services
                     var Useremail = existingRequest?.User?.Email;
                     if (!string.IsNullOrEmpty(Useremail))
                     {
-                        var rejectionLink = FixedemailLink + "PhoneRequestConfirmation";
+                        var rejectionLink = FixedemailLink + "UserPhoneRequest";
                         var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailRequestConfirmed.html");
                         var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                         var emailContent = emailTemplate
@@ -335,7 +345,7 @@ namespace TequipWiseServer.Services
             // Change the global status of the request to false if rejected
             if (updatedRequest.DepartmangconfirmStatus == false || updatedRequest.ITconfirmSatuts == false || updatedRequest.HRconfirmSatuts == false)
             {
-                var rejectionLink = FixedemailLink + "PhoneRequestConfirmation";
+                var rejectionLink = FixedemailLink + "UserPhoneRequest";
                 var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
                 var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                 var emailContent = emailTemplate
@@ -368,6 +378,57 @@ namespace TequipWiseServer.Services
 
             return new OkObjectResult(new Response { Status = "Success", Message = "Request updated successfully." });
         }
+
+
+
+
+
+
+        public async Task<IActionResult> UpdatePhoneRequestforAdmin(int requestId, PhoneRequest updatedRequest)
+        {
+            // Find the existing phone request in the database
+            var existingRequest = await GetphoneRequestByIdAsync(requestId);
+
+            if (existingRequest == null)
+            {
+                return new NotFoundObjectResult(new Response { Status = "Error", Message = "Request not found." });
+            }
+
+            // Get the authenticated user
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return new ObjectResult(new Response { Status = "Unauthorized", Message = "Authenticated user not retrieved!" });
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return new ObjectResult(new Response { Status = "Unauthorized", Message = "Authenticated user not retrieved!" });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null || userDetails.Department == null || userDetails.Department.Manager == null)
+            {
+                return new ObjectResult(new Response { Status = "Error", Message = "Authenticated user information not retrieved!" });
+            }
+
+
+            // Update only the fields that are not null in the updatedRequest object
+            _dbContext.Entry(existingRequest).CurrentValues.SetValues(updatedRequest);
+
+            // Save the changes to the database
+            await _dbContext.SaveChangesAsync();
+
+            return new OkObjectResult(new Response { Status = "Success", Message = "Request updated successfully." });
+        }
+
+
+
+
+
+
         async public Task<PhoneRequest> GetphoneRequestByIdAsync(int phoneRequestId)
         {
             return await _dbContext.PhoneRequests
@@ -375,9 +436,76 @@ namespace TequipWiseServer.Services
                                .Include(s => s.IT)
                                .Include(s=>s.HR)
                                .Include(u=>u.User)
+                               .ThenInclude(up=>up.Plant)
+                                .ThenInclude(ui=>ui.ItApprover)
+                                .ThenInclude(up => up.Plant)
+                                .ThenInclude(up => up.HRApprover)
                                .FirstOrDefaultAsync(s => s.PhoneRequestId == phoneRequestId);
         }
 
+        public async Task<IEnumerable<AssignedPhoneDTO>> GetAssignedPhonesForUserAsync(string userId)
+        {
+            // Assuming 'IsAssigned' is a property in 'SubEquipmentRequest' class that indicates asset assignment
+            var assignedAssets = await _dbContext.PhoneRequests
+                .Where(s=>s.UserId == userId && s.ReceptionStatus == true) // Filter by user and assignment status
+                .ToListAsync();
 
+            // Map the data to DTO
+            return _mapper.Map<IEnumerable<AssignedPhoneDTO>>(assignedAssets);
+        }
+
+
+        public async Task<int> GetRequestPhneCountIdAsync()
+        {
+            return await _dbContext.PhoneRequests
+                .CountAsync();
+        }
+
+
+        //functions for KPIS
+        public int GetRejectedRequestsCount()
+        {
+            return _dbContext.PhoneRequests
+                .Count(pr => pr.RequestStatus == false);
+        }
+
+        public int GetWaitingForHRRequestsCount()
+        {
+            return _dbContext.PhoneRequests
+                .Count(pr => pr.DepartmangconfirmStatus == true &&
+                             pr.HRconfirmSatuts == null &&
+                             pr.ITconfirmSatuts == null);
+        }
+
+        public int GetWaitingForITRequestsCount()
+        {
+            return _dbContext.PhoneRequests
+                .Count(pr => pr.DepartmangconfirmStatus == true &&
+                             pr.HRconfirmSatuts == true &&
+                             pr.ITconfirmSatuts == null);
+        }
+
+        public int GetApprovedRequestsCount()
+        {
+            return _dbContext.PhoneRequests
+                .Count(pr => pr.RequestStatus == true);
+        }
+
+        public int GetOpenRequestsCount()
+        {
+            return _dbContext.PhoneRequests
+                .Count(pr => pr.DepartmangconfirmStatus == null &&
+                             pr.HRconfirmSatuts == null &&
+                             pr.ITconfirmSatuts == null);
+        }
+
+        public int GetInProgressRequestsCount()
+        {
+            return _dbContext.PhoneRequests
+                .Count(pr => pr.DepartmangconfirmStatus != null &&
+                             pr.HRconfirmSatuts != null &&
+                             pr.ITconfirmSatuts != null &&
+                             pr.RequestStatus == null);
+        }
     }
 }

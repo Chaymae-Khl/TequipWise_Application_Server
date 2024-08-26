@@ -325,8 +325,18 @@ namespace TequipWiseServer.Services
                 updatedSubRequest.ITconfirmedAt = DateTime.Now;
                 updatedSubRequest.SubRequestStatus = true;
                 equipmentRequest.RequestStatus = true;
-                await SendEmailAsync(equipmentRequest, "Confirmation", "UserEquipementRequest", "EmailRequestConfirmed.html", "Equipment Request Confirmation");
-                Console.WriteLine("=================== the sub-request is approved ");
+                var Useremail = equipmentRequest?.User?.Email;
+                if (!string.IsNullOrEmpty(Useremail))
+                {
+                    var rejectionLink = FixedemailLink + "UserPhoneRequest";
+                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailRequestConfirmed.html");
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                    var emailContent = emailTemplate
+                        .Replace("{{resetLink}}", rejectionLink)
+                        .Replace("{{TeNum}}", equipmentRequest.User.TeNum);
+                    var message = new Message(new[] { Useremail }, "Phone Request Approval", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                }
                 statusChanged = true;
             }
 
@@ -651,19 +661,14 @@ namespace TequipWiseServer.Services
 
 
         //Functions for the KPIS
-        public async Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(int year, int? month = null, int? day = null)
+        public async Task<List<MonthlyExpenditure>> GetFilteredSubEquipmentRequests(DateTime startDate, DateTime? endDate = null)
         {
             var query = _dbContext.subEquipmentRequests
-                .Where(s => s.SubRequestDate.Year == year && s.PONum != null);
+                .Where(s => s.SubRequestDate >= startDate && s.PONum != null);
 
-            if (month.HasValue)
+            if (endDate.HasValue)
             {
-                query = query.Where(s => s.SubRequestDate.Month == month.Value);
-            }
-
-            if (day.HasValue)
-            {
-                query = query.Where(s => s.SubRequestDate.Day == day.Value);
+                query = query.Where(s => s.SubRequestDate <= endDate.Value);
             }
 
             var result = await query
