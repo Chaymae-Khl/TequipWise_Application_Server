@@ -71,7 +71,14 @@ namespace TequipWiseServer.Helpers
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<ApplicationUser, SubordinateDTO>();
-           
+
+            CreateMap<MaintenanceRequest, MaintenanceRequestDTO>()
+          .ForMember(dest => dest.requestUserName, opt => opt.MapFrom(src => src.User != null ? src.User.TeNum : null))
+          .ForMember(dest => dest.departementManagerName, opt => opt.MapFrom(src => src.DeptMnag != null ? src.DeptMnag.TeNum : null))
+          .ForMember(dest => dest.ItApproverName, opt => opt.MapFrom(src => src.IT != null ? src.IT.TeNum : null))
+          .ForMember(dest => dest.ControllerName, opt => opt.MapFrom(src => src.Controller != null ? src.Controller.TeNum : null))
+          .ForMember(dest => dest.supplierName, opt => opt.MapFrom(src => src.supplier != null ? src.supplier.suuplier_name : null))
+          ;
 
         }
     }

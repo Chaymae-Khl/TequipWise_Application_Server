@@ -27,7 +27,7 @@ namespace TequipWiseServer.Services
 
             // Use AutoMapper to map Plant entities to PlantDto objects
             var equipmentslist = _mapper.Map<List<EquipmentDTO>>(equipmentList);
-
+            
             return equipmentslist;
 
 

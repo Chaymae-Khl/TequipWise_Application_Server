@@ -248,7 +248,9 @@ namespace TequipWiseServer.Services
         public async Task<UserDetailsDTO> GetUserByIdAsync(string userId)
         {
             var user = await _userManager.Users
-       .Include(u => u.Manager) 
+       .Include(u => u.Manager)
+       .Include(u => u.Department)
+       .ThenInclude(d => d.Manager)
        .FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {

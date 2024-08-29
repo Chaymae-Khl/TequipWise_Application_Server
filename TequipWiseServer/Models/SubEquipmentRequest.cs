@@ -34,7 +34,7 @@ namespace TequipWiseServer.Models
         //the finance approver
         public string? controllerid { get; set; }
 
-
+        public string? NewHireEmail { get; set; }
         //if is confirmed by all the actor the requestStatus is confirmed
         public bool? SubRequestStatus { get; set; } = null;
 

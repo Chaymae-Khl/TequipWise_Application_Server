@@ -365,9 +365,6 @@ namespace TequipWiseServer.Migrations
                     b.Property<string>("ForWho")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NewHireEmail")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NewHireName")
                         .HasColumnType("nvarchar(max)");
 
@@ -446,6 +443,116 @@ namespace TequipWiseServer.Migrations
                     b.HasIndex("PlantId");
 
                     b.ToTable("LocationPlants");
+                });
+
+            modelBuilder.Entity("TequipWiseServer.Models.MaintenanceRequest", b =>
+                {
+                    b.Property<int>("MaintenanceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceId"));
+
+                    b.Property<string>("CC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ControllerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Controller_Not_confirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ControllerconfirmSatuts")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ControllerconfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Departmang_Not_confirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("DepartmangconfirmStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("DepartmangconfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IT_Not_confirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("ITconfirmSatuts")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ITconfirmedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PONum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PRNum")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PR_Not_ConfirmCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("PR_Status")
+                        .HasColumnType("bit");
+
+                    b.Property<float?>("PU")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("RequestStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("damageTYpe")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("deptManagId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("equipmentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("itId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("offer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("order")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("sn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("supplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MaintenanceId");
+
+                    b.HasIndex("ControllerId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("deptManagId");
+
+                    b.HasIndex("itId");
+
+                    b.HasIndex("supplierId");
+
+                    b.ToTable("MaintenanceRequests");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.PhoneRequest", b =>
@@ -681,6 +788,9 @@ namespace TequipWiseServer.Migrations
 
                     b.Property<DateTime?>("ITconfirmedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("NewHireEmail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PONum")
                         .HasColumnType("nvarchar(max)");
@@ -950,6 +1060,44 @@ namespace TequipWiseServer.Migrations
                     b.Navigation("Plant");
                 });
 
+            modelBuilder.Entity("TequipWiseServer.Models.MaintenanceRequest", b =>
+                {
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "Controller")
+                        .WithMany("ControllerMaintenanceRequests")
+                        .HasForeignKey("ControllerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "User")
+                        .WithMany("MaintenanceRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "DeptMnag")
+                        .WithMany("DeptMangMaintenanceRequests")
+                        .HasForeignKey("deptManagId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TequipWiseServer.Models.ApplicationUser", "IT")
+                        .WithMany("ITMaintenanceRequests")
+                        .HasForeignKey("itId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TequipWiseServer.Models.Supplier", "supplier")
+                        .WithMany("MaintenanceRequests")
+                        .HasForeignKey("supplierId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Controller");
+
+                    b.Navigation("DeptMnag");
+
+                    b.Navigation("IT");
+
+                    b.Navigation("User");
+
+                    b.Navigation("supplier");
+                });
+
             modelBuilder.Entity("TequipWiseServer.Models.PhoneRequest", b =>
                 {
                     b.HasOne("TequipWiseServer.Models.ApplicationUser", null)
@@ -1145,12 +1293,18 @@ namespace TequipWiseServer.Migrations
                 {
                     b.Navigation("Equipements");
 
+                    b.Navigation("MaintenanceRequests");
+
                     b.Navigation("subrequests");
                 });
 
             modelBuilder.Entity("TequipWiseServer.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("ControllerMaintenanceRequests");
+
                     b.Navigation("ControllerRequestToApprove");
+
+                    b.Navigation("DeptMangMaintenanceRequests");
 
                     b.Navigation("DeptMangPhoneRequestsToApprove");
 
@@ -1158,9 +1312,13 @@ namespace TequipWiseServer.Migrations
 
                     b.Navigation("HRRequestsPhoneToApprove");
 
+                    b.Navigation("ITMaintenanceRequests");
+
                     b.Navigation("ItRequestToApprove");
 
                     b.Navigation("ItRequestsPhoneToApprove");
+
+                    b.Navigation("MaintenanceRequests");
 
                     b.Navigation("PhoneRequests");
 

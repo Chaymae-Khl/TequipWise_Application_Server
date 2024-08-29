@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -339,9 +340,31 @@ namespace TequipWiseServer.Services
                 }
                 statusChanged = true;
             }
+            if (updatedSubRequest.NewHireEmail != currentSubRequestDetails.NewHireEmail)
+            {
+                var userEmail = updatedSubRequest.NewHireEmail;
+                var rejectionLink = FixedemailLink + "register";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "NewHireAccountCreationTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", rejectionLink)
+                    .Replace("{{email}}", userEmail);
+                  
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    var message = new Message(new[] { userEmail }, "Tequipwise account creation", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                    Console.WriteLine("account creation email sent to: " + userEmail);
+                }
+                else
+                {
+                    Console.WriteLine("User email is null or empty.");
+                }
 
-            // Change the global status of the request to false if rejected
-            if (updatedSubRequest.DepartmangconfirmStatus == false || updatedSubRequest.ITconfirmSatuts == false || updatedSubRequest.FinanceconfirmSatuts == false)
+
+            }
+                // Change the global status of the request to false if rejected
+                if (updatedSubRequest.DepartmangconfirmStatus == false || updatedSubRequest.ITconfirmSatuts == false || updatedSubRequest.FinanceconfirmSatuts == false)
             {
                 var rejectionLink = FixedemailLink + "UserEquipementRequest";
                 var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RejectionTemplate.html");
@@ -419,7 +442,29 @@ namespace TequipWiseServer.Services
                 updatedSubRequest.DepartmangconfirmedAt = DateTime.Now;
             updatedSubRequest.FinanceconfirmedAt = DateTime.Now;
 
-           
+            if (updatedSubRequest.NewHireEmail != currentSubRequestDetails.NewHireEmail)
+            {
+                var userEmail = updatedSubRequest.NewHireEmail;
+                var rejectionLink = FixedemailLink + "register";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "NewHireAccountCreationTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", rejectionLink)
+                    .Replace("{{email}}", userEmail);
+
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    var message = new Message(new[] { userEmail }, "Tequipwise account creation", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                    Console.WriteLine("account creation email sent to: " + userEmail);
+                }
+                else
+                {
+                    Console.WriteLine("User email is null or empty.");
+                }
+
+
+            }
 
             // Check if PR_Status has been changed
             if (updatedSubRequest.PR_Status != currentSubRequestDetails.PR_Status)
@@ -644,13 +689,29 @@ namespace TequipWiseServer.Services
 
         public async Task<IEnumerable<AssignedAssetDTO>> GetAssignedAssetsForUserAsync(string userId)
         {
+            // Get the authenticated user details
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                throw new UnauthorizedAccessException("Authenticated user not retrieved!");
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                throw new Exception("Authenticated user not retrieved!");
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
             // Assuming 'IsAssigned' is a property in 'SubEquipmentRequest' class that indicates asset assignment
             var assignedAssets = await _dbContext.subEquipmentRequests
-                .Include(sr => sr.Equipment) // Include equipment details
-                .Include(sr => sr.EquipRequest) // Include the parent request
-                .Where(sr => sr.EquipRequest.UserId == userId && sr.ReceptionStatus == true) // Filter by user and assignment status
-                .ToListAsync();
-
+             .Include(sr => sr.Equipment) // Include equipment details
+             .Include(sr => sr.EquipRequest) // Include the parent request
+             .Where(sr => sr.ReceptionStatus == true &&
+            (sr.EquipRequest.UserId == userId &&
+            sr.EquipRequest.ForWho == "For me" || (sr.NewHireEmail == userDetails.Email)))
+             .ToListAsync();
             // Map the data to DTO
             return _mapper.Map<IEnumerable<AssignedAssetDTO>>(assignedAssets);
         }

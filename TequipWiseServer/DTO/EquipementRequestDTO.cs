@@ -16,7 +16,6 @@ namespace TequipWiseServer.DTO
         public string? currency { get; set; }
 
         public string? NewHireName { get; set; }
-        public string? NewHireEmail { get; set; }
 
 
 

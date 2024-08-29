@@ -10,8 +10,8 @@ namespace TequipWiseServer.DTO
         public string Comment { get; set; }
         public float? PU { get; set; }
         public float Totale { get; set; }
-        
-        
+        public string? NewHireEmail { get; set; }
+
         public bool? SubRequestStatus { get; set; }
         public string? AssetSN { get; set; }
         public string? AssetModele { get; set; }

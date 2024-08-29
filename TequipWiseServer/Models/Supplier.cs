@@ -19,5 +19,7 @@ namespace TequipWiseServer.Models
         [JsonIgnore]
         public ICollection<SubEquipmentRequest>? subrequests { get; set; }
 
+        [JsonIgnore]
+        public ICollection<MaintenanceRequest>? MaintenanceRequests { get; set; } // Add this property
     }
 }

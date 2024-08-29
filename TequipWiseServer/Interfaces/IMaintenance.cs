@@ -1,0 +1,16 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using TequipWiseServer.DTO;
+using TequipWiseServer.Models;
+
+namespace TequipWiseServer.Interfaces
+{
+    public interface IMaintenance
+    {
+        Task<IActionResult> PassMaintenanceRequest(MaintenanceRequest request);
+        Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForITAsync(string userId);
+        Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForAdminAsync(string controllerId);
+        Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForSapControllerAsync(string controllerId);
+        Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForApproverAsync(string managerId);
+        Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForDepartmentManagerAsync(string managerId);
+    }
+}

@@ -18,6 +18,7 @@ namespace TequipWiseServer.Data
         public DbSet<SubEquipmentRequest> subEquipmentRequests { get; set; }
         public DbSet<EquipmentRequest> EquipmentRequests { get; set; }
         public DbSet<PhoneRequest> PhoneRequests { get; set; }
+        public DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
 
         public DbSet<SapNumber> SapNumbers { get; set; }
         public AppDbContext(DbContextOptions options) : base(options)
@@ -204,6 +205,40 @@ namespace TequipWiseServer.Data
         .HasOne(pr => pr.HR)
         .WithMany()
         .HasForeignKey(pr => pr.HRId);
+
+
+
+            // maintenace request relations
+            builder.Entity<MaintenanceRequest>()
+           .HasOne(mr => mr.supplier)
+           .WithMany(s => s.MaintenanceRequests) // Assuming Supplier has a collection of MaintenanceRequests
+           .HasForeignKey(mr => mr.supplierId)
+           .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete if necessary
+
+            builder.Entity<MaintenanceRequest>()
+                .HasOne(mr => mr.User)
+                .WithMany(u => u.MaintenanceRequests) // Assuming ApplicationUser has a collection of MaintenanceRequests
+                .HasForeignKey(mr => mr.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<MaintenanceRequest>()
+                .HasOne(mr => mr.DeptMnag)
+                .WithMany(u => u.DeptMangMaintenanceRequests) // Assuming ApplicationUser has a collection for DeptMangMaintenanceRequests
+                .HasForeignKey(mr => mr.deptManagId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<MaintenanceRequest>()
+                .HasOne(mr => mr.IT)
+                .WithMany(u => u.ITMaintenanceRequests) // Assuming ApplicationUser has a collection for ITMaintenanceRequests
+                .HasForeignKey(mr => mr.itId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<MaintenanceRequest>()
+                .HasOne(mr => mr.Controller)
+                .WithMany(u => u.ControllerMaintenanceRequests) // Assuming ApplicationUser has a collection for ControllerMaintenanceRequests
+                .HasForeignKey(mr => mr.ControllerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
         }
 

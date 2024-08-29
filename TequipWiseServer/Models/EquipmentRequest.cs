@@ -24,7 +24,7 @@ namespace TequipWiseServer.Models
 
         public string? NewHireName { get; set; }
        
-        public string? NewHireEmail { get; set; }
+       
         public string? currency {  get; set; }
 
 

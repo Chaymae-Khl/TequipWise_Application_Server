@@ -6,6 +6,7 @@ using System.Net;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Interfaces;
+using TequipWiseServer.Migrations;
 using TequipWiseServer.Models;
 using User.Managmenet.Service.Models;
 using User.Managmenet.Service.Services;
@@ -51,6 +52,31 @@ namespace TequipWiseServer.Services
             if (userDetails == null || userDetails.Department == null || userDetails.Department.Manager == null)
             {
                 return new ObjectResult(new Response { Status = "Error", Message = "Authenticated user information not retrieved!" });
+            }
+
+            // Check if the request type is "Replacement" and ReplacementType is "renewal"
+            if (request.phoneRequestType == "Replacement" && request.ReplacemnetType == "renewal")
+            {
+                // Get the last assigned phone for the user
+                var lastPhoneRequest = await _dbContext.PhoneRequests
+                    .Where(pr => pr.UserId == userDetails.Id)
+                    .OrderByDescending(pr => pr.RequestDate)
+                    .FirstOrDefaultAsync();
+                Console.WriteLine("===========" + lastPhoneRequest.RequestDate);
+                if (lastPhoneRequest != null)
+                {
+                    // Check if the last phone was assigned less than 2 years ago
+                    var twoYearsAgo = DateTime.Now.AddYears(-2);
+                    if (lastPhoneRequest.RequestDate > twoYearsAgo)
+                    {
+                        // Return an error message without saving the request
+                        return new ObjectResult(new Response
+                        {
+                            Status = "Denied",
+                            Message = "You are not allowed to pass the request because the last assigned phone is under 2 years old."
+                        });
+                    }
+                }
             }
 
             // Assign the request to the authenticated user
@@ -370,6 +396,28 @@ namespace TequipWiseServer.Services
                 Console.WriteLine("=================== The sub-request is rejected");
             }
 
+            if (updatedRequest.NewHireEmail != existingRequest.NewHireEmail)
+            {
+                var userEmail = updatedRequest.NewHireEmail;
+                var rejectionLink = FixedemailLink + "register";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "NewHireAccountCreationTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", rejectionLink)
+                    .Replace("{{email}}", userEmail);
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    var message = new Message(new[] { userEmail }, "Tequipwise account creation", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                    Console.WriteLine("account creation email sent to: " + userEmail);
+                }
+                else
+                {
+                    Console.WriteLine("User email is null or empty.");
+                }
+            }
+
+
             // Update only the fields that are not null in the updatedRequest object
             _dbContext.Entry(existingRequest).CurrentValues.SetValues(updatedRequest);
 
@@ -413,7 +461,26 @@ namespace TequipWiseServer.Services
             {
                 return new ObjectResult(new Response { Status = "Error", Message = "Authenticated user information not retrieved!" });
             }
-
+            if (updatedRequest.NewHireEmail != existingRequest.NewHireEmail)
+            {
+                var userEmail = updatedRequest.NewHireEmail;
+                var rejectionLink = FixedemailLink + "register";
+                var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "NewHireAccountCreationTemplate.html");
+                var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                var emailContent = emailTemplate
+                    .Replace("{{resetLink}}", rejectionLink)
+                    .Replace("{{email}}", userEmail);
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    var message = new Message(new[] { userEmail }, "Tequipwise account creation", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                    Console.WriteLine("account creation email sent to: " + userEmail);
+                }
+                else
+                {
+                    Console.WriteLine("User email is null or empty.");
+                }
+            }
 
             // Update only the fields that are not null in the updatedRequest object
             _dbContext.Entry(existingRequest).CurrentValues.SetValues(updatedRequest);
@@ -445,9 +512,26 @@ namespace TequipWiseServer.Services
 
         public async Task<IEnumerable<AssignedPhoneDTO>> GetAssignedPhonesForUserAsync(string userId)
         {
+            // Get the authenticated user details
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                throw new UnauthorizedAccessException("Authenticated user not retrieved!");
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                throw new Exception("Authenticated user not retrieved!");
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
             // Assuming 'IsAssigned' is a property in 'SubEquipmentRequest' class that indicates asset assignment
             var assignedAssets = await _dbContext.PhoneRequests
-                .Where(s=>s.UserId == userId && s.ReceptionStatus == true) // Filter by user and assignment status
+                .Where(sr => sr.ReceptionStatus == true &&
+            (sr.UserId == userId &&
+            sr.ForWho == "For me" || (sr.NewHireEmail == userDetails.Email)))
                 .ToListAsync();
 
             // Map the data to DTO

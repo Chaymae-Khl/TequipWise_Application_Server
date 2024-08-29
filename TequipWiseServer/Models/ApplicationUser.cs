@@ -45,6 +45,9 @@ namespace TequipWiseServer.Models
         public virtual ICollection<SubEquipmentRequest>? ItRequestToApprove { get; set; }
         public virtual ICollection<SubEquipmentRequest>? ControllerRequestToApprove { get; set; }
         public virtual ICollection<SubEquipmentRequest>? DeptMangRequestToApprove { get; set; }
-
+        public ICollection<MaintenanceRequest> MaintenanceRequests { get; set; } // For UserId
+        public ICollection<MaintenanceRequest> DeptMangMaintenanceRequests { get; set; } // For DeptManagId
+        public ICollection<MaintenanceRequest> ITMaintenanceRequests { get; set; } // For ITId
+        public ICollection<MaintenanceRequest> ControllerMaintenanceRequests { get; set; } // For ControllerId
     }
 }
