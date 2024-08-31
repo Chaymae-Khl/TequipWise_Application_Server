@@ -107,6 +107,20 @@ namespace TequipWiseServer.Controllers
             return Ok(requests);
         }
 
+
+        [HttpPut("UpdateRequest/{id}")]
+        public async Task<IActionResult> UpdateRequest(int id, [FromBody] MaintenanceRequest updatedRequest)
+        {
+            if (updatedRequest == null)
+            {
+                return BadRequest(new Response { Status = "Error", Message = "Invalid request data." });
+            }
+
+            var result = await _MaintenacerequestService.UpdateRequestAsync(id, updatedRequest);
+
+            return Ok(result);
+        }
+
         [HttpGet("Users")]
         public async Task<ActionResult<List<UserDetailsDTO>>> GetAllUsers()
         {

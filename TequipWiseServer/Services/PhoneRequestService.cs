@@ -91,7 +91,18 @@ namespace TequipWiseServer.Services
 
             return new OkObjectResult(new Response { Status = "Success", Message = "Request passed successfully!" });
         }
+        public async Task<IEnumerable<PhoneRequestDTO>> GetRequestsForApproverAsync(string managerId)
+        {
+            var requests = await _dbContext.PhoneRequests
+                                      .Where(r => r.User.ManagerId == managerId)
+                                   .OrderByDescending(r => r.RequestDate)
+                                   .Include(r => r.User)
+                                   .Include(r => r.HR)
+                                   .Include(r => r.DeparManag)
+                                   .ToListAsync();
 
+            return _mapper.Map<IEnumerable<PhoneRequestDTO>>(requests);
+        }
         private async Task SendEmailForApprovalAsync(UserDetailsDTO userDetails)
         {
             var haveApprover = userDetails.ApproverActive;

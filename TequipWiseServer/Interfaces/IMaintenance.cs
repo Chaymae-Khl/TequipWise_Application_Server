@@ -12,5 +12,7 @@ namespace TequipWiseServer.Interfaces
         Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForSapControllerAsync(string controllerId);
         Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForApproverAsync(string managerId);
         Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForDepartmentManagerAsync(string managerId);
+        Task<MaintenanceRequest?> UpdateRequestAsync(int equipmentRequestId, MaintenanceRequest updatedRequest);
+
     }
 }

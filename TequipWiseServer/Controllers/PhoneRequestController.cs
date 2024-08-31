@@ -111,6 +111,10 @@ namespace TequipWiseServer.Controllers
             {
                 requests = await _PhonerequestService.GetRequestsForAdminAsync(userDetails.Id);
             }
+            else if (roles.Contains("Approver"))
+            {
+                requests = await _PhonerequestService.GetRequestsForApproverAsync(userDetails.Id);
+            }
             else
             {
                 return Forbid();
