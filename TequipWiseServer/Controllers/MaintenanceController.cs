@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 using TequipWiseServer.DTO;
 using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
@@ -31,7 +32,7 @@ namespace TequipWiseServer.Controllers
         [HttpPost("PassMaintenanceRequest")]
         public async Task<IActionResult> PassRequest([FromForm] MaintenanceRequest newrequest, IFormFile? file)
         {
-            if (file != null)
+            if (file != null )
             {
                 var fileUploadHelper = new FileUploadHelper();
                 string filePath;
@@ -44,10 +45,17 @@ namespace TequipWiseServer.Controllers
                     return BadRequest(new Response { Status = "Error", Message = ex.Message });
                 }
                 newrequest.offer = filePath;
+                await _MaintenacerequestService.PassMaintenanceRequest(newrequest);
+            }
+            else if(newrequest.damageTYpe == "Warenty")
+            {
+                await _MaintenacerequestService.PassMaintenanceRequest(newrequest);
+
             }
             // Save the request in the database
-            await _MaintenacerequestService.PassMaintenanceRequest(newrequest);
-
+            else { 
+            await _MaintenacerequestService.UpdateMaintenanceRequestgenerale(newrequest);
+}
 
             return StatusCode(StatusCodes.Status200OK,
                 new Response { Status = "Success", Message = "Request processed and notification sent." });
@@ -109,18 +117,45 @@ namespace TequipWiseServer.Controllers
 
 
         [HttpPut("UpdateRequest/{id}")]
-        public async Task<IActionResult> UpdateRequest(int id, [FromBody] MaintenanceRequest updatedRequest)
+        public async Task<IActionResult> UpdateRequest(int id, [FromForm] MaintenanceRequest updatedRequest, IFormFile? file)
+        {
+            //if (updatedRequest.offer != null)
+            //{
+            //    var fileUploadHelper = new FileUploadHelper();
+            //    string filePath;
+            //    try
+            //    {
+            //        filePath = await fileUploadHelper.UploadFileAsync(file);
+            //    }
+            //    catch (ArgumentException ex)
+            //    {
+            //        return BadRequest(new Response { Status = "Error", Message = ex.Message });
+            //    }
+            //    updatedRequest.offer = filePath;
+            //}
+
+
+            //if (updatedRequest == null)
+            //{
+            //    return BadRequest(new Response { Status = "Error", Message = "Invalid request data." });
+            //}
+
+            var result = await _MaintenacerequestService.UpdateRequestAsync(id, updatedRequest,file);
+
+            return Ok(result);
+        }
+        [HttpPatch("UpdateMaintenaceRequestAdmin/{id}")]
+        public async Task<IActionResult> UpdateRequestAdmin(int id, [FromBody] MaintenanceRequest updatedRequest)
         {
             if (updatedRequest == null)
             {
                 return BadRequest(new Response { Status = "Error", Message = "Invalid request data." });
             }
 
-            var result = await _MaintenacerequestService.UpdateRequestAsync(id, updatedRequest);
+            var result = await _MaintenacerequestService.UpdateMaintenanceRequestforAdmin(id, updatedRequest);
 
-            return Ok(result);
+            return result;
         }
-
         [HttpGet("Users")]
         public async Task<ActionResult<List<UserDetailsDTO>>> GetAllUsers()
         {
@@ -133,6 +168,28 @@ namespace TequipWiseServer.Controllers
         {
             var suppliers = await _supplierService.GetSuppliers();
             return Ok(suppliers);
+        }
+
+        [HttpGet("counts")]
+        public IActionResult GetRequestCounts()
+        {
+            var counts = new
+            {
+                Open = _MaintenacerequestService.GetOpenMaintenanceRequestsCount(),
+                WaitingForFinanceApproval = _MaintenacerequestService.GetWaitingForFinanceApprovalMaintenanceRequestsCount(),
+                WaitingForPR = _MaintenacerequestService.GetWaitingForPRMaintenanceRequestsCount(),
+                WaitingForPO = _MaintenacerequestService.GetWaitingForPOMaintenanceRequestsCount(),
+                Approved = _MaintenacerequestService.GetApprovedMaintenanceRequestsCount(),
+                Rejected = _MaintenacerequestService.GetRejectedMaintenanceRequestsCount(),
+            };
+
+            return Ok(counts);
+        }
+        [HttpGet("GetRequestCount")]
+        public async Task<ActionResult<int>> GetNumberofUsers()
+        {
+            var numReq = await _MaintenacerequestService.GetRequestCount();
+            return Ok(numReq);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Reflection;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
 using TequipWiseServer.DTO.KPI_DTO;
+using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using User.Managmenet.Service.Models;
@@ -289,7 +290,7 @@ namespace TequipWiseServer.Services
                 statusChanged = true;
 
                 // Send email to IT Approver or Backup when the manager approves
-                await SendEmailAsync(equipmentRequest, "Manager Approval", "RequestConfirmation", "RequestApprovalTemplate.html", "Equipment Request Confirmation Link");
+                await SendEmailAsync(equipmentRequest, "Manager Approval", "RequestConfirmation", "RequestApprovalTemplate.html", "IT asset Request Confirmation Link");
             }
 
             // Check if the finance status has been changed
@@ -312,7 +313,7 @@ namespace TequipWiseServer.Services
                 {
                     updatedSubRequest.SubRequestStatus = false;
                     equipmentRequest.RequestStatus = false;
-                    await SendEmailAsync(equipmentRequest, "Rejection", "UserEquipementRequest", "EmailRequestConfirmed.html", "Equipment Request Rejection");
+                    await SendEmailAsync(equipmentRequest, "Rejection", "UserEquipementRequest", "EmailRequestConfirmed.html", "IT asset Request Rejection");
                     Console.WriteLine("=================== the sub-request is rejected ");
                 }
                 statusChanged = true;
@@ -335,7 +336,7 @@ namespace TequipWiseServer.Services
                     var emailContent = emailTemplate
                         .Replace("{{resetLink}}", rejectionLink)
                         .Replace("{{TeNum}}", equipmentRequest.User.TeNum);
-                    var message = new Message(new[] { Useremail }, "Phone Request Approval", emailContent, isHtml: true);
+                    var message = new Message(new[] { Useremail }, "IT asset Request Approval", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
                 }
                 statusChanged = true;
@@ -379,7 +380,7 @@ namespace TequipWiseServer.Services
                 var userEmail = equipmentRequest.User?.Email;
                 if (!string.IsNullOrEmpty(userEmail))
                 {
-                    var message = new Message(new[] { userEmail }, "Equipment Request Rejection", emailContent, isHtml: true);
+                    var message = new Message(new[] { userEmail }, "IT asset Request Rejection", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
                     Console.WriteLine("Rejection email sent to: " + userEmail);
                 }
@@ -574,7 +575,7 @@ namespace TequipWiseServer.Services
 
 
 
-        public async Task<EquipmentRequest?> RequestSupplierOfferAndPU(int equipmentRequestId, EquipmentRequest updatedRequest)
+        public async Task<EquipmentRequest?> RequestSupplierOfferAndPU(int equipmentRequestId, EquipmentRequest updatedRequest, IFormFile? file)
         {
             // Retrieve current request of the subrequest
             var equipmentRequest = await _dbContext.EquipmentRequests
@@ -590,7 +591,17 @@ namespace TequipWiseServer.Services
                 Console.WriteLine("Request not found");
                 return null; // Main request not found
             }
-
+            if (file != null)
+            {
+                var fileUploadHelper = new FileUploadHelper();
+                try
+                {
+                    updatedRequest.SupplierOffer = await fileUploadHelper.UploadFileAsync(file);
+                }
+                catch (ArgumentException ex)
+                {
+                }
+            }
             // Detach tracked sub-requests to avoid conflict
             foreach (var subRequest in equipmentRequest.EquipmentSubRequests)
             {

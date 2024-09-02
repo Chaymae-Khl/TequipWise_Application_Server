@@ -61,6 +61,7 @@ namespace TequipWiseServer.Helpers
                 .ForMember(dest => dest.ManagerName, opt => opt.MapFrom(src => src.Manager != null ? src.Manager.TeNum : null))
                 .ForMember(dest => dest.ManagerEmail, opt => opt.MapFrom(src => src.Department != null ? src.Department.Manager.Email : null))
                 .ForMember(dest => dest.ItApproverEmail, opt => opt.MapFrom(src => src.Plant != null ? src.Plant.ItApprover.Email : null))
+                .ForMember(dest => dest.ItApproverName, opt => opt.MapFrom(src => src.Plant != null ? src.Plant.ItApprover.TeNum : null))
                 .ForMember(dest => dest.ApproverEmail, opt => opt.MapFrom(src => src.Manager != null ? src.Manager.Email : null))
                 .ForMember(dest => dest.ManagerBackupApproverEmail, opt => opt.MapFrom(src => src.Department != null && src.Department.Manager.Backupaprover != null ? src.Department.Manager.Backupaprover.Email : null))
                 .ForMember(dest => dest.ManagerBackupApproverActive, opt => opt.MapFrom(src => src.Department != null && src.Department.Manager != null ? src.Department.Manager.backupActive : null))

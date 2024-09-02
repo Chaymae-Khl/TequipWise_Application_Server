@@ -121,7 +121,7 @@ namespace TequipWiseServer.Controllers
                     var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                     var emailContent = emailTemplate
                            .Replace("{{resetLink}}", deptmangLink);
-                    var message = new Message(new string[] { approver.Email }, "Equipment Request Confirmation Link", emailContent, isHtml: true);
+                    var message = new Message(new string[] { approver.Email }, "IT asset Request Confirmation Link", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
                     return StatusCode(StatusCodes.Status200OK,
                         new Response { Status = "Success", Message = $"Equipment request confirmation link sent to your approver by email." });
@@ -348,7 +348,7 @@ namespace TequipWiseServer.Controllers
 
 
         [HttpPut("ItOfferAndPrice/{equipmentRequestId}")]
-        public async Task<IActionResult> RequestSupplierOfferAndPUPrice(int equipmentRequestId, IFormFile file, [FromForm] string updatedRequestJson)
+        public async Task<IActionResult> RequestSupplierOfferAndPUPrice(int equipmentRequestId, IFormFile? file, [FromForm] string updatedRequestJson)
         {
             EquipmentRequest updatedRequest;
             try
@@ -365,22 +365,22 @@ namespace TequipWiseServer.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (file != null)
-            {
-                var fileUploadHelper = new FileUploadHelper();
-                string filePath;
-                try
-                {
-                    filePath = await fileUploadHelper.UploadFileAsync(file);
-                }
-                catch (ArgumentException ex)
-                {
-                    return BadRequest(new Response { Status = "Error", Message = ex.Message });
-                }
-                updatedRequest.SupplierOffer = filePath;
-            }
+            //if (file != null)
+            //{
+            //    var fileUploadHelper = new FileUploadHelper();
+            //    string filePath;
+            //    try
+            //    {
+            //        filePath = await fileUploadHelper.UploadFileAsync(file);
+            //    }
+            //    catch (ArgumentException ex)
+            //    {
+            //        return BadRequest(new Response { Status = "Error", Message = ex.Message });
+            //    }
+            //    updatedRequest.SupplierOffer = filePath;
+            //}
 
-            var result = await _requestService.RequestSupplierOfferAndPU(equipmentRequestId, updatedRequest);
+            var result = await _requestService.RequestSupplierOfferAndPU(equipmentRequestId, updatedRequest,file);
 
             if (result == null)
             {

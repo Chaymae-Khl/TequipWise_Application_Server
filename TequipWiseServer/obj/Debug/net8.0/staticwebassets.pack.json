@@ -1,8 +1,32 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\1f8b3a72-88c4-4655-be55-7c00efb9e254_OFFER.pdf",
+      "PackagePath": "staticwebassets\\uploads\\1f8b3a72-88c4-4655-be55-7c00efb9e254_OFFER.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\21c69a68-0bf3-46ac-8023-519e5d0038ec_Grille d'appréciation des stages.pdf",
+      "PackagePath": "staticwebassets\\uploads\\21c69a68-0bf3-46ac-8023-519e5d0038ec_Grille d'appréciation des stages.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\2829164c-463a-45ed-8db1-19d627c4b063_cv-chaymaekhalil.pdf",
+      "PackagePath": "staticwebassets\\uploads\\2829164c-463a-45ed-8db1-19d627c4b063_cv-chaymaekhalil.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\312754e0-d27d-4841-82e9-44b652274a51_Grille d'appréciation des stages.pdf",
+      "PackagePath": "staticwebassets\\uploads\\312754e0-d27d-4841-82e9-44b652274a51_Grille d'appréciation des stages.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\3925986d-a5d5-4922-ae67-e5153d8fa195_cv-khl.pdf",
+      "PackagePath": "staticwebassets\\uploads\\3925986d-a5d5-4922-ae67-e5153d8fa195_cv-khl.pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\5036dcc1-e495-4449-ac29-a4b194f37037_cv-khl.pdf",
       "PackagePath": "staticwebassets\\uploads\\5036dcc1-e495-4449-ac29-a4b194f37037_cv-khl.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\59fd5fe0-778d-4a49-b4bb-8b7328716721_cv-khl.pdf",
+      "PackagePath": "staticwebassets\\uploads\\59fd5fe0-778d-4a49-b4bb-8b7328716721_cv-khl.pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\66e05439-a5de-4a14-8c84-6d67330cc780_OFFER.pdf",
@@ -13,8 +37,24 @@
       "PackagePath": "staticwebassets\\uploads\\67eac378-00c7-40b3-a4eb-e41533e9d9a7_Process.pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\71c8aefa-7e3d-44e2-a7b1-8eea877a7fcc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (3).pdf",
+      "PackagePath": "staticwebassets\\uploads\\71c8aefa-7e3d-44e2-a7b1-8eea877a7fcc_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (3).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\722c536c-4b59-4d16-965f-db3f07cacadf_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (1).pdf",
+      "PackagePath": "staticwebassets\\uploads\\722c536c-4b59-4d16-965f-db3f07cacadf_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (1).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\7b27b251-3d28-4a97-b8a1-e327aacda544_cv-chaymaekhalil.pdf",
+      "PackagePath": "staticwebassets\\uploads\\7b27b251-3d28-4a97-b8a1-e327aacda544_cv-chaymaekhalil.pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\7c06c24c-e67c-48db-8dfb-1aff3d1f5275_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
       "PackagePath": "staticwebassets\\uploads\\7c06c24c-e67c-48db-8dfb-1aff3d1f5275_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\7cd34743-a01e-44dc-af1b-d832307f56b7_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf",
+      "PackagePath": "staticwebassets\\uploads\\7cd34743-a01e-44dc-af1b-d832307f56b7_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\7fb07600-bc84-4292-aacb-fc4ab3350bde_OFFER.pdf",
@@ -45,8 +85,16 @@
       "PackagePath": "staticwebassets\\uploads\\a465ba66-497e-4693-b2d4-cb7d36e454e4_Process.pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\a64279b0-78c3-4d31-ac92-22efb47971af_cv-chaymaekhalil.pdf",
+      "PackagePath": "staticwebassets\\uploads\\a64279b0-78c3-4d31-ac92-22efb47971af_cv-chaymaekhalil.pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\a6e4476b-025a-4f6d-aa31-6350e7e117e0_OFFER.pdf",
       "PackagePath": "staticwebassets\\uploads\\a6e4476b-025a-4f6d-aa31-6350e7e117e0_OFFER.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\ab815260-9b0e-4647-a247-46b8527f9695_cv-chaymaekhalil.pdf",
+      "PackagePath": "staticwebassets\\uploads\\ab815260-9b0e-4647-a247-46b8527f9695_cv-chaymaekhalil.pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\b04e7f56-5eca-4508-9b9e-c72582005c8a_Process.pdf",
@@ -93,8 +141,20 @@
       "PackagePath": "staticwebassets\\uploads\\e3de8b01-e44f-4b3f-985a-4fee812a048d_Process.pdf"
     },
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\eaf9b148-9cc0-4797-bf6e-bd284e01db79_cv-chaymaekhalil.pdf",
+      "PackagePath": "staticwebassets\\uploads\\eaf9b148-9cc0-4797-bf6e-bd284e01db79_cv-chaymaekhalil.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\eee4c3c6-d2e0-4526-8420-a28a607d3bfc_Process.pdf",
+      "PackagePath": "staticwebassets\\uploads\\eee4c3c6-d2e0-4526-8420-a28a607d3bfc_Process.pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\efb172ea-6b5d-40f4-b3a2-291cb41cdabe_Process.pdf",
       "PackagePath": "staticwebassets\\uploads\\efb172ea-6b5d-40f4-b3a2-291cb41cdabe_Process.pdf"
+    },
+    {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\efd30807-389d-4d14-89fb-d3f4530203a9_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (3).pdf",
+      "PackagePath": "staticwebassets\\uploads\\efd30807-389d-4d14-89fb-d3f4530203a9_Rapport hebdomadaire ENSI PFE 2024 (khalil chaymae) (3).pdf"
     },
     {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\f2be1ace-6885-4cf5-ad26-2699a49ce4b9_cv-khl.pdf",

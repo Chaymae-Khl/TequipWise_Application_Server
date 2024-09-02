@@ -249,6 +249,14 @@ namespace TequipWiseServer.Services
         {
             var user = await _userManager.Users
        .Include(u => u.Manager)
+       .Include(p=>p.Plant)
+       .ThenInclude(p=>p.ItApprover)
+        .ThenInclude(p=>p.Backupaprover)
+       .Include(s=>s.SapNumber)
+       .ThenInclude(h=>h.Controller)
+       .ThenInclude(b=>b.Backupaprover)
+       .Include(hr=>hr.Plant)
+       .ThenInclude(hr=>hr.HRApprover)
        .Include(u => u.Department)
        .ThenInclude(d => d.Manager)
        .FirstOrDefaultAsync(u => u.Id == userId);

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TequipWiseServer.Data;
 using TequipWiseServer.DTO;
+using TequipWiseServer.Helpers;
 using TequipWiseServer.Interfaces;
 using TequipWiseServer.Models;
 using User.Managmenet.Service.Models;
@@ -113,8 +114,8 @@ namespace TequipWiseServer.Services
         public async Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForDepartmentManagerAsync(string managerId)
         {
             var requests = await _dbContext.MaintenanceRequests
-                                               .Where(r => r.User.Department.ManagerId == managerId ||
-                                               r.User.Department.Manager.BackupaproverId == managerId)
+                                               .Where(r => ((r.User.Department.ManagerId == managerId ||
+                                               r.User.Department.Manager.BackupaproverId == managerId || r.damageTYpe == "Warenty") && r.offer!=null))
                                    .OrderByDescending(r => r.RequestDate)
                                    .Include(r => r.User)
                                    .ThenInclude(rs => rs.SapNumber)
@@ -124,7 +125,6 @@ namespace TequipWiseServer.Services
                                    .Include(sb => sb.supplier)
                                    .AsNoTracking()
                                    .ToListAsync();
-
             return _mapper.Map<IEnumerable<MaintenanceRequestDTO>>(requests);
         }
 
@@ -147,9 +147,8 @@ namespace TequipWiseServer.Services
         public async Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForSapControllerAsync(string controllerId)
         {
             var requests = await _dbContext.MaintenanceRequests
-                                 .Where(r => (r.User.SapNumber.Idcontroller == controllerId ||
-                                              r.User.SapNumber.Controller.BackupaproverId == controllerId) &&
-                                              r.offer != null)
+                                 .Where(r => ((r.User.SapNumber.Idcontroller == controllerId ||
+                                              r.User.SapNumber.Controller.BackupaproverId == controllerId) && r.DepartmangconfirmStatus == true))
                                  .OrderByDescending(r => r.RequestDate)
                                   .Include(r => r.User)
                                    .ThenInclude(rs => rs.SapNumber)
@@ -159,7 +158,6 @@ namespace TequipWiseServer.Services
                                    .Include(sb => sb.supplier)
                                  .AsNoTracking()
                                  .ToListAsync();
-
             return _mapper.Map<IEnumerable<MaintenanceRequestDTO>>(requests);
         }
         public async Task<IEnumerable<MaintenanceRequestDTO>> GetRequestsForAdminAsync(string controllerId)
@@ -178,7 +176,7 @@ namespace TequipWiseServer.Services
             return _mapper.Map<IEnumerable<MaintenanceRequestDTO>>(requests);
         }
 
-        public async Task<MaintenanceRequest?> UpdateRequestAsync(int equipmentRequestId, MaintenanceRequest updatedRequest)
+        public async Task<MaintenanceRequest?> UpdateRequestAsync(int equipmentRequestId, MaintenanceRequest updatedRequest, IFormFile? file)
         {
             // Retrieve the current sub-request details from the database
             var currentSubRequestDetails = await GetRequestByIdAsync(updatedRequest.MaintenanceId);
@@ -187,7 +185,6 @@ namespace TequipWiseServer.Services
                 Console.WriteLine("Request details not found");
                 return null;
             }
-            var requestUserdetails = await _authService.GetUserByIdAsync(updatedRequest.UserId);
             // Retrieve the authenticated user info
             var userResult = await _authService.GetAuthenticatedUserAsync();
             var okResult = userResult as OkObjectResult;
@@ -197,18 +194,42 @@ namespace TequipWiseServer.Services
                 Console.WriteLine("Authenticated user not found");
                 return null;
             }
-
+            var Userdetails = await _authService.GetUserByIdAsync(updatedRequest.UserId);
             bool statusChanged = false;
+            if (updatedRequest.offer != currentSubRequestDetails.offer)
+            {
+                var fileUploadHelper = new FileUploadHelper();
+                try
+                {
+                    updatedRequest.offer  = await fileUploadHelper.UploadFileAsync(file);
+                }
+                catch (ArgumentException ex)
+                {
+                }
+                var requestUserdetails = await _authService.GetUserByIdAsync(updatedRequest.UserId);
+                Console.WriteLine("=================", updatedRequest.UserId);
 
-            // Check if 'DepartmangconfirmStatus' has been modified
-            if (updatedRequest.DepartmangconfirmStatus != currentSubRequestDetails.DepartmangconfirmStatus)
+                Console.WriteLine("=================", requestUserdetails?.ManagerEmail);
+                var userDeptmangEmail = requestUserdetails?.ManagerEmail;
+                if (!string.IsNullOrEmpty(userDeptmangEmail))
+                {
+                    var rejectionLink = FixedemailLink + "MaintenanceConfirmation";
+                    var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
+                    var emailContent = emailTemplate.Replace("{{resetLink}}", rejectionLink);
+                    var message = new Message(new[] { userDeptmangEmail }, "Maintenance Request Approval", emailContent, isHtml: true);
+                    _emailService.SendEmail(message);
+                }
+            }
+                // Check if 'DepartmangconfirmStatus' has been modified
+                if (updatedRequest.DepartmangconfirmStatus != currentSubRequestDetails.DepartmangconfirmStatus)
             {
                 updatedRequest.deptManagId = userDetails.Id;
                 updatedRequest.DepartmangconfirmedAt = DateTime.Now;
                 statusChanged = true;
 
                 // Send email to IT Approver or Backup when the manager approves
-                await SendEmailAsync(currentSubRequestDetails, "Manager Approval", "maintenanceRequestlist", "RequestApprovalTemplate.html", "Maintenance Request Confirmation Link");
+                await SendEmailAsync(Userdetails, "Manager Approval", "maintenanceRequestlist", "RequestApprovalTemplate.html", "Maintenance Request Confirmation Link");
             }
 
             // Check if the finance status has been changed
@@ -217,7 +238,7 @@ namespace TequipWiseServer.Services
                 updatedRequest.ControllerId = userDetails.Id;
                 updatedRequest.ControllerconfirmedAt = DateTime.Now;
                 statusChanged = true;
-                await SendEmailAsync(currentSubRequestDetails, "Controller Approval", "maintenanceRequestlist", "RequestApprovalTemplate.html", "Maintenance Request Confirmation Link");
+                await SendEmailAsync(Userdetails, "Controller Approval", "maintenanceRequestlist", "RequestApprovalTemplate.html", "Maintenance Request Confirmation Link");
             }
 
             // Check if PR_Status has been changed
@@ -229,7 +250,7 @@ namespace TequipWiseServer.Services
                 if (updatedRequest.PR_Status == false)
                 {
                     updatedRequest.RequestStatus = false;
-                    await SendEmailAsync(currentSubRequestDetails, "Rejection", "maintenanceRequestlist", "EmailRequestConfirmed.html", "Maintenance Request Rejection");
+                    await SendEmailAsync(Userdetails, "Rejection", "maintenanceRequestlist", "EmailRequestConfirmed.html", "Maintenance Request Rejection");
                     Console.WriteLine("=================== the request is rejected ");
                 }
                 statusChanged = true;
@@ -243,7 +264,7 @@ namespace TequipWiseServer.Services
                 updatedRequest.ITconfirmedAt = DateTime.Now;
                 updatedRequest.RequestStatus = true;
 
-                var Useremail = updatedRequest?.User?.Email;
+                var Useremail = Userdetails.ItApproverEmail;
                 if (!string.IsNullOrEmpty(Useremail))
                 {
                     var rejectionLink = FixedemailLink + "maintenanceRequestlist";
@@ -251,7 +272,7 @@ namespace TequipWiseServer.Services
                     var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                     var emailContent = emailTemplate
                         .Replace("{{resetLink}}", rejectionLink)
-                        .Replace("{{TeNum}}", updatedRequest.User.TeNum);
+                        .Replace("{{TeNum}}", Userdetails.ItApproverName);
                     var message = new Message(new[] { Useremail }, "Maintenance Request Approval", emailContent, isHtml: true);
                     _emailService.SendEmail(message);
                 }
@@ -266,11 +287,11 @@ namespace TequipWiseServer.Services
                 var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                 var emailContent = emailTemplate
                     .Replace("{{resetLink}}", rejectionLink)
-                    .Replace("{{UserName}}", updatedRequest.User.TeNum);
+                    .Replace("{{UserName}}", Userdetails.ItApproverName);
 
                 updatedRequest.RequestStatus = false;
 
-                var userEmail = updatedRequest.User?.Email;
+                var userEmail = Userdetails.Email;
                 if (!string.IsNullOrEmpty(userEmail))
                 {
                     var message = new Message(new[] { userEmail }, "Maintenance Request Rejection", emailContent, isHtml: true);
@@ -305,10 +326,10 @@ namespace TequipWiseServer.Services
             return currentSubRequestDetails;
         }
 
-        private async Task SendEmailAsync(MaintenanceRequest equipmentRequest, string emailType, string linkPath, string templateName, string subject)
+        private async Task SendEmailAsync(UserDetailsDTO equipmentRequest, string emailType, string linkPath, string templateName, string subject)
         {
-            var itApproverEmail = equipmentRequest.User?.Plant?.ItApprover?.Email;
-            var itApproverBackup = equipmentRequest.User?.Plant?.ItApprover?.Backupaprover?.Email;
+            var itApproverEmail = equipmentRequest.ItApproverEmail;
+            var itApproverBackup = equipmentRequest.ManagerBackupApproverEmail;
 
             if (itApproverEmail == null)
             {
@@ -335,9 +356,9 @@ namespace TequipWiseServer.Services
                 var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                 var emailContent = emailTemplate
                     .Replace("{{resetLink}}", itApproverLink)
-                    .Replace("{{TeNum}}", equipmentRequest.User.TeNum);
+                    .Replace("{{TeNum}}", equipmentRequest.TeNum);
 
-                if (equipmentRequest.User?.Plant?.ItApprover?.backupActive == true && !string.IsNullOrEmpty(itApproverBackup))
+                if (equipmentRequest.backupActive == true && !string.IsNullOrEmpty(itApproverBackup))
                 {
                     var message = new Message(new[] { itApproverBackup }, subject, emailContent, isHtml: true);
                     _emailService.SendEmail(message);
@@ -367,5 +388,146 @@ namespace TequipWiseServer.Services
                                   .Include(sb => sb.supplier)
                                   .FirstOrDefaultAsync(s => s.MaintenanceId == RequestId);
         }
+
+        public async Task<IActionResult> UpdateMaintenanceRequestforAdmin(int requestId, MaintenanceRequest updatedRequest)
+        {
+            // Find the existing phone request in the database
+            var existingRequest = await GetRequestByIdAsync(requestId);
+
+            if (existingRequest == null)
+            {
+                return new NotFoundObjectResult(new Response { Status = "Error", Message = "Request not found." });
+            }
+
+            // Get the authenticated user
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return new ObjectResult(new Response { Status = "Unauthorized", Message = "Authenticated user not retrieved!" });
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return new ObjectResult(new Response { Status = "Unauthorized", Message = "Authenticated user not retrieved!" });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null || userDetails.Department == null || userDetails.Department.Manager == null)
+            {
+                return new ObjectResult(new Response { Status = "Error", Message = "Authenticated user information not retrieved!" });
+            }
+            if (updatedRequest.PONum!=null)
+            {
+                updatedRequest.ITconfirmedAt = DateTime.Now;
+                updatedRequest.RequestStatus = true;
+
+            }
+
+            // Update only the fields that are not null in the updatedRequest object
+            _dbContext.Entry(existingRequest).CurrentValues.SetValues(updatedRequest);
+
+            // Save the changes to the database
+            await _dbContext.SaveChangesAsync();
+
+            return new OkObjectResult(new Response { Status = "Success", Message = "Request updated successfully." });
+        }
+
+        public async Task<IActionResult> UpdateMaintenanceRequestgenerale( MaintenanceRequest Request)
+        {
+            // Find the existing phone request in the database
+
+            // Get the authenticated user details
+            var userResult = await _authService.GetAuthenticatedUserAsync();
+
+            if (userResult is UnauthorizedResult)
+            {
+                return new ObjectResult(new Response { Status = "Unauthorized", Message = "Authenticated user not retrieved!" });
+            }
+
+            var okResult = userResult as OkObjectResult;
+            if (okResult == null || okResult.Value == null)
+            {
+                return new ObjectResult(new Response { Status = "Unauthorized", Message = "Authenticated user not retrieved!" });
+            }
+
+            var userDetails = okResult.Value as UserDetailsDTO;
+            if (userDetails == null || userDetails.Department == null || userDetails.Department.Manager == null)
+            {
+                return new ObjectResult(new Response { Status = "Error", Message = "Authenticated user information not retrieved!" });
+            }
+
+            // Assign the request to the authenticated user
+            Request.itId = userDetails.Id;
+            // Set the actual date
+            Request.RequestDate = DateTime.Now;
+
+            // Update only the fields that are not null in the updatedRequest object
+            _dbContext.MaintenanceRequests.Add(Request);
+            await _dbContext.SaveChangesAsync();
+
+            return new OkObjectResult(new Response { Status = "Success", Message = "Request updated successfully." });
+        }
+
+        //KPIs methods
+        public int GetRejectedMaintenanceRequestsCount()
+        {
+            return _dbContext.MaintenanceRequests
+                .Count(mr => mr.DepartmangconfirmStatus == false ||
+                             mr.ITconfirmSatuts == false ||
+                             mr.ControllerconfirmSatuts == false ||
+                             mr.PR_Status == false);
+        }
+
+        public int GetApprovedMaintenanceRequestsCount()
+        {
+            return _dbContext.MaintenanceRequests
+                .Count(mr => mr.PR_Status == true &&
+                             mr.PONum != null &&
+                             mr.RequestStatus == true);
+        }
+
+        public int GetWaitingForPOMaintenanceRequestsCount()
+        {
+            return _dbContext.MaintenanceRequests
+                .Count(mr => mr.PR_Status == true &&
+                             mr.PONum == null);
+        }
+
+        public int GetWaitingForPRMaintenanceRequestsCount()
+        {
+            return _dbContext.MaintenanceRequests
+                .Count(mr => mr.DepartmangconfirmStatus == true &&
+                             mr.ControllerconfirmSatuts == true &&
+                             mr.PR_Status == null);
+        }
+
+        public int GetWaitingForFinanceApprovalMaintenanceRequestsCount()
+        {
+            return _dbContext.MaintenanceRequests
+                .Count(mr => mr.DepartmangconfirmStatus == true &&
+                             mr.ITconfirmSatuts == null);
+        }
+
+        public int GetOpenMaintenanceRequestsCount()
+        {
+            return _dbContext.MaintenanceRequests
+                .Count(mr => !(
+                    mr.DepartmangconfirmStatus == false ||
+                    mr.ITconfirmSatuts == false ||
+                    mr.ControllerconfirmSatuts == false ||
+                    mr.PR_Status == false ||
+                    (mr.PR_Status == true && mr.PONum == null) ||
+                    (mr.DepartmangconfirmStatus == true && mr.ControllerconfirmSatuts == true && mr.PR_Status == null) ||
+                    (mr.DepartmangconfirmStatus == true && mr.ITconfirmSatuts == null) ||
+                    (mr.PR_Status == true && mr.PONum != null && mr.RequestStatus== true)
+                ));
+        }
+        public async Task<int> GetRequestCount()
+        {
+            return await _dbContext.MaintenanceRequests.CountAsync();
+        }
+
     }
 }
