@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\1e7601a9-4a9d-4000-b055-4a3de01903f3_Process.pdf",
+      "PackagePath": "staticwebassets\\uploads\\1e7601a9-4a9d-4000-b055-4a3de01903f3_Process.pdf"
+    },
+    {
       "Id": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\1f8b3a72-88c4-4655-be55-7c00efb9e254_OFFER.pdf",
       "PackagePath": "staticwebassets\\uploads\\1f8b3a72-88c4-4655-be55-7c00efb9e254_OFFER.pdf"
     },

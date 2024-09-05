@@ -65,7 +65,7 @@ namespace TequipWiseServer.Services
             var userDeptmangEmail = requestUserdetails?.ManagerEmail;
             if (!string.IsNullOrEmpty(userDeptmangEmail))
             {
-                var rejectionLink = FixedemailLink + "MaintenanceConfirmation";
+                var rejectionLink = FixedemailLink + "maintenanceRequestlist";
                 var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
                 var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                 var emailContent = emailTemplate.Replace("{{resetLink}}", rejectionLink);
@@ -213,7 +213,7 @@ namespace TequipWiseServer.Services
                 var userDeptmangEmail = requestUserdetails?.ManagerEmail;
                 if (!string.IsNullOrEmpty(userDeptmangEmail))
                 {
-                    var rejectionLink = FixedemailLink + "MaintenanceConfirmation";
+                    var rejectionLink = FixedemailLink + "maintenanceRequestlist";
                     var emailTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "RequestApprovalTemplate.html");
                     var emailTemplate = await System.IO.File.ReadAllTextAsync(emailTemplatePath);
                     var emailContent = emailTemplate.Replace("{{resetLink}}", rejectionLink);

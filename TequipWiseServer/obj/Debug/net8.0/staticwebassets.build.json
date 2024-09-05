@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "arwB64zkdt08XwFqv7Ryp0UwJJsuTQKK8Pi9SSkfHdU=",
+  "Hash": "dwotq5b0JNNEjfinybPEz8laC4q8yDnGHh5n42MJ+GM=",
   "Source": "TequipWiseServer",
   "BasePath": "_content/TequipWiseServer",
   "Mode": "Default",
@@ -16,6 +16,25 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\1e7601a9-4a9d-4000-b055-4a3de01903f3_Process.pdf",
+      "SourceId": "TequipWiseServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\",
+      "BasePath": "_content/TequipWiseServer",
+      "RelativePath": "uploads/1e7601a9-4a9d-4000-b055-4a3de01903f3_Process.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\1e7601a9-4a9d-4000-b055-4a3de01903f3_Process.pdf"
+    },
     {
       "Identity": "C:\\Users\\hp\\Desktop\\perso\\PFE\\TequipWise(FullStack)\\TequipWiseServer\\TequipWiseServer\\wwwroot\\uploads\\1f8b3a72-88c4-4655-be55-7c00efb9e254_OFFER.pdf",
       "SourceId": "TequipWiseServer",
