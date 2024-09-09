@@ -49,39 +49,65 @@ namespace TequipWiseServer.Services
             }
 
             var userDetails = okResult.Value as UserDetailsDTO;
-            if (userDetails == null || userDetails.Department == null || userDetails.Department.Manager == null)
+            if (userDetails?.Department?.Manager == null)
             {
                 return new ObjectResult(new Response { Status = "Error", Message = "Authenticated user information not retrieved!" });
             }
 
-            // Check if the request type is "Replacement" and ReplacementType is "renewal"
-            if (request.phoneRequestType == "Replacement" && request.ReplacemnetType == "renewal")
+            // Check if the request type is "Replacement" and ReplacementType is "Renewal"
+            if (request.phoneRequestType == "Replacement" && request.ReplacemnetType == "Renewal")
             {
                 // Get the last assigned phone for the user
                 var lastPhoneRequest = await _dbContext.PhoneRequests
                     .Where(pr => pr.UserId == userDetails.Id)
                     .OrderByDescending(pr => pr.RequestDate)
                     .FirstOrDefaultAsync();
-                Console.WriteLine("===========" + lastPhoneRequest.RequestDate);
+
                 if (lastPhoneRequest != null)
                 {
-                    // Check if the last phone was assigned less than 2 years ago
-                    var twoYearsAgo = DateTime.Now.AddYears(-2);
-                    if (lastPhoneRequest.RequestDate > twoYearsAgo)
+                    var lastRequestDate = lastPhoneRequest.RequestDate.Date;
+                    var currentDate = DateTime.Now.Date;
+
+                    var oneYearAgo = currentDate.AddYears(-1);
+                    var twoYearsAgo = currentDate.AddYears(-2);
+
+                    // Case: Denied if the last phone was assigned less than 1 year ago
+                    if (lastRequestDate > oneYearAgo)
                     {
-                        // Return an error message without saving the request
+                        // Return "Denied" and exit method
                         return new ObjectResult(new Response
                         {
                             Status = "Denied",
-                            Message = "You are not allowed to pass the request because the last assigned phone is under 2 years old."
+                            Message = "You are not allowed to pass the request because the last assigned phone is less than 1 year old."
                         });
                     }
+
+                    // Case: Success if the last phone was assigned more than 2 years ago
+                    if (lastRequestDate <= twoYearsAgo)
+                    {
+                        request.UserId = userDetails.Id;
+                        request.RequestDate = DateTime.Now;
+
+                        _dbContext.PhoneRequests.Add(request);
+                        await _dbContext.SaveChangesAsync();
+
+                        await SendEmailForApprovalAsync(userDetails);
+
+                        // Return "Success" and exit method
+                        return new OkObjectResult(new Response { Status = "Success", Message = "Request passed successfully!" });
+                    }
+
+                    // Case: Error if the last phone was assigned between 1 and 2 years ago
+                    return new ObjectResult(new Response
+                    {
+                        Status = "Error",
+                        Message = "The last assigned phone is between 1 and 2 years old. You can request a new phone after 2 years."
+                    });
                 }
             }
 
-            // Assign the request to the authenticated user
+            // If not a replacement/renewal or no previous phone request, proceed with request
             request.UserId = userDetails.Id;
-            // Set the actual date
             request.RequestDate = DateTime.Now;
 
             _dbContext.PhoneRequests.Add(request);
@@ -89,8 +115,10 @@ namespace TequipWiseServer.Services
 
             await SendEmailForApprovalAsync(userDetails);
 
+            // Return "Success" for non-replacement/renewal cases
             return new OkObjectResult(new Response { Status = "Success", Message = "Request passed successfully!" });
         }
+
         public async Task<IEnumerable<PhoneRequestDTO>> GetRequestsForApproverAsync(string managerId)
         {
             var requests = await _dbContext.PhoneRequests

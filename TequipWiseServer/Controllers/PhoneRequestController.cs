@@ -29,14 +29,12 @@ namespace TequipWiseServer.Controllers
         [HttpPost("PassPhoneRequest")]
         public async Task<IActionResult> PassRequest([FromBody] PhoneRequest newrequest)
         {
-           
-          
-            // Save the request in the database
-             await _PhonerequestService.PassPhoneRequest(newrequest);
-         
 
-            return StatusCode(StatusCodes.Status200OK,
-                new Response { Status = "Success", Message = "Request processed and notification sent." });
+            // Call the service method and get the result
+            var result = await _PhonerequestService.PassPhoneRequest(newrequest);
+
+            // Return the exact result returned by the service
+            return result;
 
         }
         ////get the phone requests of the authenticated user
